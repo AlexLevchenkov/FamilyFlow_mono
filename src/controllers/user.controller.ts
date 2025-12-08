@@ -1,0 +1,116 @@
+import { Request, Response } from "express";
+import { GetUsersInput, RegisterInput, UpdateUserInput } from "@middleware/validation";
+import userService from "@services/user.service";
+import apiResponse from "@utils/response";
+import { RequestTU } from "@middleware/cookieExtractor";
+
+class UserController {
+  async getUsers(req: Request, res: Response): Promise<void> {
+    try {
+      const { page, partName, partEmail }: GetUsersInput = req.query;
+
+      const data = await userService.getUsers({ page, partName, partEmail });
+      if (!data) {
+        apiResponse(res, null, 404, "Can't get users");
+        return;
+      }
+
+      apiResponse(res, data, 200);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, 500, errorMessage);
+    }
+  }
+
+  async register(req: Request, res: Response): Promise<void> {
+    try {
+      const { email, password, name } = req.body as RegisterInput;
+      const user = await userService.register({ email, password, name });
+
+      if (!user) {
+        apiResponse(res, null, 400, "Registration failed");
+        return;
+      }
+
+      apiResponse(res, user, 201);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, 500, errorMessage);
+    }
+  }
+
+  async getUserById(req: Request, res: Response): Promise<void> {
+    try {
+      const userIdParam = req.params.id;
+
+      const userId = Number(userIdParam);
+
+      if (!userIdParam || Number.isNaN(userId) || userId <= 0) {
+        apiResponse(res, null, 400, "Invalid or missing userId parameter");
+        return;
+      }
+
+      const data = await userService.getUserById({ userId });
+      if (!data) {
+        apiResponse(res, null, 404, "User not found");
+        return;
+      }
+
+      apiResponse(res, data, 200);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, 500, errorMessage);
+    }
+  }
+
+  async updateUser(req: RequestTU, res: Response): Promise<void> {
+    try {
+      const { user } = req;
+
+      const userId = Number(user?.id);
+      const { email, name, avatar } = req.body as UpdateUserInput;
+
+      if (Number.isNaN(userId) || userId <= 0) {
+        apiResponse(res, null, 400, "Invalid or missing userId parameter");
+        return;
+      }
+
+      const data = await userService.updateUser({ userId, name, avatar, email });
+      if (!data) {
+        apiResponse(res, null, 404, "Failed to update user");
+        return;
+      }
+
+      apiResponse(res, data, 200);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, 500, errorMessage);
+    }
+  }
+
+  async deleteUser(req: RequestTU, res: Response): Promise<void> {
+    try {
+      const { user } = req;
+
+      const userId = Number(user?.id);
+
+      if (Number.isNaN(userId) || userId <= 0) {
+        apiResponse(res, null, 400, "Invalid or missing userId parameter");
+        return;
+      }
+
+      const data = await userService.deleteUser({ userId });
+      if (!data) {
+        apiResponse(res, null, 404, "User not found");
+        return;
+      }
+
+      apiResponse(res, undefined, 200);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, 500, errorMessage);
+    }
+  }
+}
+
+export default new UserController();
