@@ -69,7 +69,7 @@ Server/
 - **Validation:** Zod / express-validator
 - **API Documentation:** Swagger (swagger-jsdoc, swagger-ui-express)
 - **Cookie Handling:** cookie-parser
-- **Path Aliases:** module-alias, tsconfig-paths
+- **Path Aliases:** tsc-alias, tsconfig-paths
 - **Development:** nodemon, ts-node, ts-node-dev
 
 ### Frontend (Future)
