@@ -1,5 +1,5 @@
 import { ChangePasswordResponse, LoginResponse, RefreshResponse, SetPasswordResponse } from "@appTypes/auth.types";
-import { LoginInput } from '@utils/validation';
+import { LoginInput } from '@middleware/auth';
 import { interfaceToOpenAPI } from "@utils/interfaceToOpenAPI";
 
 export const authSchemas = {
