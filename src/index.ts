@@ -1,4 +1,3 @@
-import 'module-alias/register';
 import '@cron/cleanupTokens';
 import swaggerUi from 'swagger-ui-express';
 import setupRoutes from '@config/routes';

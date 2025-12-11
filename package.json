@@ -4,8 +4,8 @@
   "description": "Backend API для застосунку управління домашніми справами.",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec ts-node src/index.ts",
-    "build": "tsc",
+    "dev": "ts-node-dev -r tsconfig-paths/register src/index.ts",
+    "build": "tsc && tsc-alias",
     "start": "node dist/index.js",
     "prisma:studio": "prisma studio",
     "prisma:build": "node prisma/index.js",
@@ -26,7 +26,6 @@
     "express": "^5.2.1",
     "express-validator": "^7.3.1",
     "jsonwebtoken": "^9.0.2",
-    "module-alias": "^2.2.3",
     "mysql2": "^3.15.3",
     "node-cron": "^4.2.1",
     "swagger-jsdoc": "^6.2.8",
@@ -39,7 +38,6 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/module-alias": "^2.0.4",
     "@types/node": "^24.10.1",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
@@ -47,21 +45,10 @@
     "prisma": "^7.1.0",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
+    "tsc-alias": "^1.8.16",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.3"
   },
   "author": "Alex Lev",
-  "license": "ISC",
-  "_moduleAliases": {
-    "@config": "src/config",
-    "@controllers": "src/controllers",
-    "@cron": "src/cron",
-    "@middleware": "src/middleware",
-    "@models": "src/models",
-    "@routes": "src/routes",
-    "@services": "src/services",
-    "@appTypes": "src/types",
-    "@utils": "src/utils",
-    "@root": "src"
-  }
+  "license": "ISC"
 }
