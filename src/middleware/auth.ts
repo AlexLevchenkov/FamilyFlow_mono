@@ -1,8 +1,10 @@
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import z from 'zod';
 import keyRotationService from '@services/keyRotationService';
 import { AppError, unauthorizedError } from '@utils/errors';
 import { RequestTU } from './cookieExtractor';
+import { makeValidator } from '@utils/validation';
 
 export default function authenticate(req: RequestTU, res: Response, next: NextFunction): void {
   try {
@@ -46,3 +48,35 @@ export default function authenticate(req: RequestTU, res: Response, next: NextFu
     next(new AppError('Authentication middleware error', 500));
   }
 }
+
+const changePasswordSchema = z.object({
+  userId: z.number().optional(),
+  oldPassword: z.string(),
+  newPassword: z.string(),
+})
+
+const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+  deviceId: z.string().optional(),
+  ipAddress: z.string().optional(),
+});
+
+const logoutSchema = z.object({
+  userId: z.number(),
+  deviceId: z.string().optional(),
+})
+
+const refreshTokenSchema = z.object({
+  userId: z.number(),
+  refreshToken: z.string(),
+})
+
+export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
+export type LoginInput = z.infer<typeof loginSchema>;
+export type LogoutInput = z.infer<typeof logoutSchema>;
+export type RefreshTokenInput = z.infer<typeof refreshTokenSchema>;
+
+export const validateLogin = makeValidator(loginSchema);
+export const validateLogout = makeValidator(logoutSchema);
+export const validateChangePassword = makeValidator(changePasswordSchema);

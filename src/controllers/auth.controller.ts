@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import authService from "@services/auth.service";
 import apiResponse from "@utils/response";
-import { ChangePasswordInput, LoginInput, LogoutInput } from "@middleware/validation";
 import { RequestTU } from "@middleware/cookieExtractor";
 import { logError } from "@utils/logger";
+import { ChangePasswordInput, LoginInput, LogoutInput } from "@middleware/auth";
 
 class AuthController {
   async login(req: Request, res: Response): Promise<void> {

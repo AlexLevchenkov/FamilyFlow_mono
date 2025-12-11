@@ -1,7 +1,7 @@
 import { User } from "@appTypes/auth.types";
 import { PaginatedResponse } from "@appTypes/common.types";
 import { UpdateUserRequest } from "@appTypes/users.types";
-import { RegisterInput } from "@middleware/validation";
+import { RegisterInput } from "@utils/validation";
 import { interfaceToOpenAPI } from "@utils/interfaceToOpenAPI";
 
 export const usersSchemas = {

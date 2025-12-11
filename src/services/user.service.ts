@@ -1,11 +1,11 @@
 import prisma from "@config/prisma";
 import {
-  DeleteUserInput,
-  GetUserByIdInput,
   GetUsersInput,
   RegisterInput,
   UpdateUserInput,
-} from "@middleware/validation";
+  GetUserByIdInput,
+  DeleteUserInput,
+} from "@middleware/user";
 import { badRequestError } from "@utils/errors";
 import bcryptjs from "bcryptjs";
 

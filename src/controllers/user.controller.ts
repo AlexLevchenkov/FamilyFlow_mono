@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { GetUsersInput, RegisterInput, UpdateUserInput } from "@middleware/validation";
+import { GetUsersInput, RegisterInput, UpdateUserInput } from "@middleware/user";
 import userService from "@services/user.service";
 import apiResponse from "@utils/response";
 import { RequestTU } from "@middleware/cookieExtractor";

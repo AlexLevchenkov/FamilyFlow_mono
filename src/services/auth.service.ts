@@ -1,5 +1,5 @@
 import prisma from "@config/prisma";
-import { ChangePasswordInput, LoginInput, RefreshTokenInput, LogoutInput } from "@middleware/validation";
+import { ChangePasswordInput, LoginInput, RefreshTokenInput, LogoutInput } from "@middleware/auth";
 import { badRequestError } from "@utils/errors";
 import { generateAccessToken, generateRefreshToken } from "@utils/tokens";
 import bcryptjs from "bcryptjs";
