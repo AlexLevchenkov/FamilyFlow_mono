@@ -100,6 +100,7 @@ class UserController {
       }
 
       const data = await userService.deleteUser({ userId });
+      
       if (!data) {
         apiResponse(res, null, 404, "User not found");
         return;

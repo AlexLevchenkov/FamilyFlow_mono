@@ -11,7 +11,6 @@ import bcryptjs from "bcryptjs";
 
 class UserService {
   async getUsers({ page, partName, partEmail }: GetUsersInput) {
-    
     const where = {
       AND: [
         partEmail ? { email: { contains: partEmail } } : {},
@@ -44,11 +43,6 @@ class UserService {
   }
   
   async register({ email, password, name }: RegisterInput) {
-    if (!email || !password || !name) {
-      badRequestError("Missing required fields");
-      return;
-    }
-
     const haveUser = await prisma.user.findFirst({
       where: {
         email,
@@ -72,11 +66,6 @@ class UserService {
   }
 
   async getUserById({ userId }: GetUserByIdInput) {
-    if (!userId) {
-      badRequestError("Missing required fields");
-      return;
-    }
-
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
@@ -88,11 +77,6 @@ class UserService {
   }
 
   async updateUser({ userId, name, avatar, email }: UpdateUserInput) {
-    if (!userId) {
-      badRequestError("Missing required fields");
-      return;
-    }
-
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
@@ -114,11 +98,6 @@ class UserService {
   }
 
   async deleteUser({ userId }: DeleteUserInput) {
-    if (!userId) {
-      badRequestError("Missing required fields");
-      return;
-    }
-
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
@@ -127,6 +106,7 @@ class UserService {
     }
 
     const result = await prisma.user.delete({ where: { id: userId } });
+    await prisma.refreshToken.deleteMany({ where: { userId } });
 
     if (!result) {
       badRequestError("Failed to delete user");

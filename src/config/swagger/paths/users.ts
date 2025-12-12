@@ -1,7 +1,7 @@
 export const userPaths = {
-  '/users': {
+  '/user': {
     get: {
-      tags: ['Users'],
+      tags: ['User'],
       summary: 'Get all users',
       security: [{ bearerAuth: [] }],
       parameters: [
@@ -41,7 +41,7 @@ export const userPaths = {
       },
     },
     post: {
-      tags: ['Users'],
+      tags: ['User'],
       summary: 'Create new user',
       security: [{ bearerAuth: [] }],
       requestBody: {
@@ -71,7 +71,7 @@ export const userPaths = {
       },
     },
     put: {
-      tags: ['Users'],
+      tags: ['User'],
       summary: 'Update user by ID',
       security: [{ bearerAuth: [] }],
       requestBody: {
@@ -102,7 +102,7 @@ export const userPaths = {
       },
     },
     delete: {
-      tags: ['Users'],
+      tags: ['User'],
       summary: 'Delete user by ID',
       security: [{ bearerAuth: [] }],
       parameters: [
@@ -123,9 +123,9 @@ export const userPaths = {
       },
     },
   },
-  '/users/{id}': {
+  '/user/{id}': {
     get: {
-      tags: ['Users'],
+      tags: ['User'],
       summary: 'Get user by ID',
       security: [{ bearerAuth: [] }],
       parameters: [

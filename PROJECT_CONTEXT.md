@@ -40,16 +40,16 @@ ToDoProject/
 Server/
 ├── src/
 │   ├── index.ts              # Application entry point
-│   ├── routes/               # API route definitions
+│   ├── config/               # Configuration files
 │   ├── controllers/          # Request handlers
-│   ├── services/             # Business logic
+│   ├── cron/                 # Scheduled tasks (optional)
 │   ├── middleware/          # Custom middleware (auth, validation)
+│   ├── models/               # Data models
+│   ├── routes/               # API route definitions
+│   ├── services/             # Business logic
 │   ├── schemas/              # Validation schemas (Zod)
 │   ├── types/                # TypeScript type definitions
-│   ├── models/               # Data models
-│   ├── lib/                  # Utilities (Prisma client, helpers)
-│   ├── config/               # Configuration files
-│   └── cron/                 # Scheduled tasks (optional)
+│   └── utils/                # Extra functions
 ├── prisma/
 │   ├── schema.prisma         # Database schema
 │   └── migrations/           # Database migrations

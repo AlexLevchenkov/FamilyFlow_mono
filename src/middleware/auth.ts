@@ -59,7 +59,7 @@ const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
   deviceId: z.string().optional(),
-  ipAddress: z.string().optional(),
+  ipAddress: z.ipv4().optional(),
 });
 
 const logoutSchema = z.object({

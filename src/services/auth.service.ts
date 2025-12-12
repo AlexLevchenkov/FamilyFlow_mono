@@ -6,11 +6,6 @@ import bcryptjs from "bcryptjs";
 
 class AuthService {
   async login({ email, password, deviceId, ipAddress }: LoginInput) {
-    if (!email || !password) {
-      badRequestError("Missing required fields");
-      return;
-    }
-
     const user = await prisma.user.findUnique({
       where: {
         email: email,
@@ -55,11 +50,6 @@ class AuthService {
   }
 
   async logout({ userId, deviceId }: LogoutInput) {
-    if (!userId) {
-      badRequestError("Missing required fields");
-      return;
-    }
-
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
       badRequestError("User not found");
@@ -78,11 +68,6 @@ class AuthService {
   }
 
   async refreshToken({ userId, refreshToken }: RefreshTokenInput) {
-    if (!userId || !refreshToken) {
-      badRequestError("Missing required fields");
-      return;
-    }
-
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
       badRequestError("User not found");
@@ -145,16 +130,7 @@ class AuthService {
     };
   }
 
-  async changePassword({
-    userId,
-    oldPassword,
-    newPassword,
-  }: ChangePasswordInput) {
-    if (!userId || !oldPassword || !newPassword) {
-      badRequestError("Missing required fields");
-      return;
-    }
-
+  async changePassword({ userId, oldPassword, newPassword }: ChangePasswordInput) {
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
       badRequestError("User not found");
@@ -180,11 +156,6 @@ class AuthService {
   }
 
   async setPassword({ userId, newPassword, }: { userId: number; newPassword: string; }) {
-    if (!userId || !newPassword) {
-      badRequestError("Missing required fields");
-      return;
-    }
-
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
       badRequestError("User not found");

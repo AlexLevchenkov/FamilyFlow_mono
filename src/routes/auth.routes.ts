@@ -1,4 +1,5 @@
-import { Router } from "express"; import authController from "@controllers/auth.controller";
+import { Router } from "express";
+import authController from "@controllers/auth.controller";
 import { validateChangePassword, validateLogin, validateLogout } from "@middleware/auth";
 import cookieExtractor from "@middleware/cookieExtractor";
 
