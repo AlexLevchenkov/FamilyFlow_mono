@@ -7,6 +7,7 @@ export interface RequestTU extends Request {
     role?: string;
   };
   refreshToken?: string
+  validated?: any
 }
 
 // middleware: takes refreshToken from cookie (if present) and attaches to req.refreshToken

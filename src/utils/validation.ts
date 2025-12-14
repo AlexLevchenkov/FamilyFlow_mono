@@ -1,24 +1,42 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import { AppError, ValidationError } from '@utils/errors';
 import z from 'zod';
+import { RequestTU } from '@middleware/cookieExtractor';
 
-export const makeValidator = (schema: z.ZodTypeAny, messagePrefix = 'Validation error: ') => {
-  return (req: Request, res: Response, next: NextFunction): void => {
+type ValidatorSources = {
+  body?: boolean;
+  query?: boolean;
+  params?: boolean;
+};
+
+export const makeValidator = (
+  schema: z.ZodTypeAny,
+  sources: ValidatorSources = { body: true },
+  messagePrefix = 'Validation error: '
+) => {
+  return (req: RequestTU, res: Response, next: NextFunction): void => {
     try {
-      if (!req.body || typeof req.body !== 'object') {
-        next(new ValidationError('Invalid request body'));
+      const data = {
+        ...(sources.body ? req.body : {}),
+        ...(sources.query ? req.query : {}),
+        ...(sources.params ? req.params : {}),
+      };
+
+      const parseResult = schema.safeParse(data);
+
+      if (!parseResult.success) {
+        next(
+          new ValidationError(
+            messagePrefix + JSON.stringify(parseResult.error.format())
+          )
+        );
         return;
       }
 
-      const parseResult = schema.safeParse(req.body);
-      if (!parseResult.success) {
-        const msg = messagePrefix.endsWith(' ') ? messagePrefix + JSON.stringify(parseResult.error.format()) : messagePrefix + JSON.stringify(parseResult.error.format());
-        next(new ValidationError(msg));
-        return;
-      }
+      req.validated = parseResult.data;
 
       next();
-    } catch (error) {
+    } catch {
       next(new AppError('Validation middleware error', 500));
     }
   };

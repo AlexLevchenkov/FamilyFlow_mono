@@ -8,6 +8,7 @@ declare global {
         role?: string;
       };
       refreshToken?: string
+      validated?: any
     }
   }
 }

@@ -4,8 +4,8 @@ import { interfaceToOpenAPI } from "@utils/interfaceToOpenAPI";
 
 export const authSchemas = {
   LoginRequest: interfaceToOpenAPI<LoginInput>({
-    email: 'user@example.com',
-    password: 'password123',
+    email: 'super@gmail.com',
+    password: 'password',
     deviceId: '123456789',
     ipAddress: '192.0.0.1'
   }),
@@ -14,7 +14,6 @@ export const authSchemas = {
     user: {
       id: 1,
       email: 'user@example.com',
-      password: '',
       name: 'John Doe',
       createdAt: new Date(),
       updatedAt: new Date(),

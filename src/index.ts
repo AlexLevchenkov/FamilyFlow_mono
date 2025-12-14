@@ -24,6 +24,6 @@ const startServer = async (): Promise<void> => {
     }
 };
 
-// app.use(errorHandler)
+app.use(errorHandler)
 
 startServer();

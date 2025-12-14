@@ -9,29 +9,51 @@ datasource db {
 
 
 
-model RefreshToken {
-    id        Int      @id @default(autoincrement())
-    token     String
-    userId    Int
-    user      User     @relation(fields: [userId], references: [id])
-    deviceId  String?
-    ipAddress String?
-    expiresAt DateTime
-    createdAt DateTime @default(now())
+model List {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+  title       String
+  type        Type
+  color       String?
+  icon        String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
-    @@index([userId])
-    @@index([deviceId])
-    @@unique([userId, deviceId])
+  @@index([userId])
+}
+
+enum Type {
+  shopping
+  tasks
+  events
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  deviceId  String?
+  ipAddress String?
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([deviceId])
+  @@unique([userId, deviceId])
 }
 
 
 model User {
-    id             Int            @id @default(autoincrement())
-    email          String         @unique
-    password       String
-    name           String?
-    createdAt      DateTime       @default(now())
-    updatedAt      DateTime       @updatedAt
-    avatar         String?
-    RefreshToken   RefreshToken[]
+  id             Int            @id @default(autoincrement())
+  email          String         @unique
+  password       String
+  name           String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  avatar         String?
+  
+  RefreshToken   RefreshToken[]
+  List           List[]
 }
