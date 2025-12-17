@@ -151,4 +151,67 @@ export const listPaths = {
       },
     },
 	},
+  '/list/share': {
+    post: {
+      tags: ['List'],
+      summary: 'Create share list',
+      security: [{ bearerAuth: [] }],
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/shareListRequest',
+            },
+          },
+        },
+      },
+      responses: {
+        '201': {
+          description: 'User created successfully',
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/shareListResponse',
+              },
+            },
+          },
+        },
+        '400': { description: 'Registration failed' },
+        '401': { description: 'Unauthorized' },
+        '500': { description: 'Internal server error' },
+      },
+    },
+    delete: {
+      tags: ['List'],
+      summary: 'Create share list',
+      security: [{ bearerAuth: [] }],
+      parameters: [
+        {
+          in: 'query',
+          name: 'listId',
+          description: 'List id',
+          schema: { type: 'integer' },
+        },
+        {
+          in: 'query',
+          name: 'ownerId',
+          description: 'User Id who own this list',
+          schema: { type: 'integer' },
+        },
+        {
+          in: 'query',
+          name: 'recipientId',
+          description: 'User Id that has access to the list',
+          schema: { type: 'integer' },
+        },
+      ],
+      responses: {
+        '201': { description: 'User has access to the list' },
+        '400': { description: 'Registration failed' },
+        '401': { description: 'Unauthorized' },
+        '500': { description: 'Internal server error' },
+      },
+    },
+  }
 }

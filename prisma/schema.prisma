@@ -20,6 +20,8 @@ model List {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
+  sharedWith SharedLists[]
+
   @@index([userId])
 }
 
@@ -45,15 +47,32 @@ model RefreshToken {
 }
 
 
+model SharedLists {
+  id          Int      @id @default(autoincrement())
+  ownerId     Int
+  owner       User     @relation("SharedListOwner", fields: [ownerId], references: [id])
+  recipientId Int
+  recipient   User     @relation("SharedListRecipient", fields: [recipientId], references: [id])
+  listId      Int
+  list        List     @relation(fields: [listId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@unique([ownerId, recipientId, listId])
+}
+
+
 model User {
-  id             Int            @id @default(autoincrement())
-  email          String         @unique
-  password       String
-  name           String?
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  avatar         String?
+  id                   Int            @id @default(autoincrement())
+  email                String         @unique
+  password             String
+  name                 String?
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+  avatar               String?
   
-  RefreshToken   RefreshToken[]
-  List           List[]
+  RefreshToken         RefreshToken[]
+  List                 List[]
+
+  ownedSharedLists     SharedLists[] @relation("SharedListOwner")
+  receivedSharedLists  SharedLists[] @relation("SharedListRecipient")
 }

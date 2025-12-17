@@ -1,5 +1,7 @@
 import { PaginatedResponse } from "@appTypes/common.types";
 import { CreateListRequest, List, UpdateListRequest } from "@appTypes/list.types";
+import { ShareListInput } from "@middleware/list";
+import { SharedLists } from "@prisma/client";
 import { interfaceToOpenAPI } from "@utils/interfaceToOpenAPI";
 
 export const listsSchemas = {
@@ -43,4 +45,15 @@ export const listsSchemas = {
     createdAt: new Date(),
     updatedAt: new Date(),
   }),
+  shareListRequest: interfaceToOpenAPI<ShareListInput>({
+    listId: 1,
+    recipientId: 2,
+  }),
+  shareListResponse: interfaceToOpenAPI<SharedLists>({
+    id: 1,
+    listId: 1,
+    ownerId: 1,
+    recipientId: 2,
+    createdAt: new Date(),
+  })
 }

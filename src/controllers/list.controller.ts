@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { RequestTU } from "@middleware/cookieExtractor";
-import { GetUserListsInput, CreateListInput, UpdateListInput } from "@middleware/list";
+import { GetUserListsInput, CreateListInput, UpdateListInput, ShareListInput } from "@middleware/list";
 import apiResponse from "@utils/response";
 import listService from "@services/list.service";
 
@@ -125,6 +125,59 @@ class ListController {
       }
 
       apiResponse(res, undefined, 200);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, 500, errorMessage);
+    }
+  }
+
+  async shareList(req: RequestTU, res: Response): Promise<void> {
+    try {
+      const { user } = req;
+      const { listId, recipientId }: Omit<ShareListInput, 'ownerId'> = req.body;
+
+      if (!user || !user.id || !listId || !recipientId) {
+        apiResponse(res, null, 400, "Could not get user, listId or recipientId");
+        return;
+      }
+
+      const data = await listService.shareList({ listId, userId: user.id, recipientId });
+
+      if (!data) {
+        apiResponse(res, null, 401, "Invalid credentials");
+        return;
+      }
+
+      apiResponse(res, data, 201);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, 500, errorMessage);
+    }
+  }
+
+  async removeSharingList(req: RequestTU, res: Response): Promise<void> {
+    try {
+      const listId = req.query.listId;
+      const ownerId = req.query.ownerId;
+      const recipientId = req.query.recipientId;
+
+      if (!listId || !ownerId || !recipientId) {
+        apiResponse(res, null, 400, "Could not get user, listId, ownerId or recipientId");
+        return;
+      }
+
+      const data = await listService.removeSharingList({
+        listId: Number(listId),
+        userId: Number(ownerId),
+        recipientId: Number(recipientId)
+      });
+
+      if (!data) {
+        apiResponse(res, null, 401, "Invalid credentials");
+        return;
+      }
+
+      apiResponse(res, undefined, 201);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An error occurred";
       apiResponse(res, null, 500, errorMessage);

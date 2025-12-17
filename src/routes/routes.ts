@@ -7,7 +7,7 @@ import authenticate from '@middleware/auth';
 function setupRoutes(app: Express): void {
   app.use('/auth', authRouter);
   app.use('/list', authenticate, listRouter);
-  app.use('/user', authenticate, userRouter);
+  app.use('/user', userRouter);
 }
 
 export default setupRoutes;

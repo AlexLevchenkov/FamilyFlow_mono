@@ -43,7 +43,6 @@ export const userPaths = {
     post: {
       tags: ['User'],
       summary: 'Create new user',
-      security: [{ bearerAuth: [] }],
       requestBody: {
         required: true,
         content: {
