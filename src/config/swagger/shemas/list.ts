@@ -51,6 +51,7 @@ export const listsSchemas = {
   shareListRequest: interfaceToOpenAPI<ShareListInput>({
     listId: 1,
     recipientId: 2,
+    accessTypes: "fullAccess",
   }),
   shareListResponse: interfaceToOpenAPI<SharedLists>({
     id: 1,
@@ -58,5 +59,6 @@ export const listsSchemas = {
     ownerId: 1,
     recipientId: 2,
     createdAt: new Date(),
+    accessTypes: "fullAccess",
   }),
 };

@@ -1,6 +1,19 @@
 import prisma from "@config/prisma";
 import { DeleteListInput, GetListInput, GetUserListsInput, CreateListInput, UpdateListInput, WithUserId, ShareListInput } from "@middleware/schemas/list";
+import { AccessTypes } from "@prisma/client";
 import { badRequestError } from "@utils/errors";
+
+interface enoughRightInterface {
+  userId: number,
+  listId: number,
+  accessTypes: AccessTypes
+}
+
+const ACCESS_LEVEL: Record<AccessTypes, number> = {
+  watch: 1,
+  edit: 2,
+  fullAccess: 3,
+};
 
 class ListServices {
   async getUserLists({ userId, page }: WithUserId<GetUserListsInput>) {
@@ -98,9 +111,9 @@ class ListServices {
     return true;
   }
 
-  async shareList({ listId, userId, recipientId }: WithUserId<ShareListInput>) {
+  async shareList({ listId, userId, recipientId, accessTypes }: WithUserId<ShareListInput>) {
     const sharedWith = await prisma.sharedLists.create({
-      data: { listId, ownerId: userId, recipientId },
+      data: { listId, ownerId: userId, recipientId, accessTypes },
     });
 
     if (!sharedWith) {
@@ -111,7 +124,7 @@ class ListServices {
     return sharedWith;
   }
 
-  async removeSharingList({ listId, userId, recipientId }: WithUserId<ShareListInput>) {
+  async removeSharingList({ listId, userId, recipientId }: WithUserId<Omit<ShareListInput, "accessTypes">>) {
     const sharedWith = await prisma.sharedLists.findFirst({
       where: { listId, ownerId: userId, recipientId },
     });
@@ -138,6 +151,33 @@ class ListServices {
 
     return true;
   }
+
+  async _canIDoSomething({ userId, listId, accessTypes }: enoughRightInterface) {
+    const list = await prisma.list.findFirst({
+      where: { id: listId },
+      select: {
+        userId: true,
+        sharedWith: {
+          where: { recipientId: userId },
+          select: { accessTypes: true },
+        },
+      },
+    });
+
+    if (!list) return false;
+    
+    if (list.userId === userId) return true;
+
+    const shared = list.sharedWith[0];
+
+    if (!shared) return false;
+
+    return this._hasEnoughRight(shared.accessTypes, accessTypes);
+  }
+
+  _hasEnoughRight(required: AccessTypes, current: AccessTypes) {
+    return ACCESS_LEVEL[current] >= ACCESS_LEVEL[required];
+  };
 }
 
 export default new ListServices();

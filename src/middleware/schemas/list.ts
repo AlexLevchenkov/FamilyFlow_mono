@@ -1,10 +1,11 @@
 import z from "zod";
 import { makeValidator } from "@utils/validation";
-import { Type } from "@prisma/client";
+import { AccessTypes, Type } from "@prisma/client";
 
 export type WithUserId<T> = T & { userId: number };
 
 const type = ["shopping", "tasks", "events"] as Type[];
+const accessTypes = ["edit", "fullAccess", "watch"] as AccessTypes[];
 
 const getUserListsSchema = z.object({
   page: z.coerce.string().optional(),
@@ -36,6 +37,7 @@ const deleteListSchema = z.object({
 const shareListSchema = z.object({
   listId: z.number(),
   recipientId: z.number(),
+  accessTypes: z.enum(accessTypes)
 });
 
 export type GetUserListsInput = z.infer<typeof getUserListsSchema>;
@@ -45,9 +47,18 @@ export type UpdateListInput = z.infer<typeof updateListSchema>;
 export type DeleteListInput = z.infer<typeof deleteListSchema>;
 export type ShareListInput = z.infer<typeof shareListSchema>;
 
-export const validateGetUserLists = makeValidator(getUserListsSchema, { params: true });
+export const validateGetUserLists = makeValidator(getUserListsSchema, {
+  params: true,
+});
 export const validateGetList = makeValidator(getListSchema, { params: true });
-export const validateCreateList = makeValidator(createListSchema, { body: true });
-export const validateUpdateList = makeValidator(updateListSchema, { body: true, params: true });
-export const validateDeleteList = makeValidator(deleteListSchema, { params: true });
+export const validateCreateList = makeValidator(createListSchema, {
+  body: true,
+});
+export const validateUpdateList = makeValidator(updateListSchema, {
+  body: true,
+  params: true,
+});
+export const validateDeleteList = makeValidator(deleteListSchema, {
+  params: true,
+});
 export const validateShareList = makeValidator(shareListSchema, { body: true });

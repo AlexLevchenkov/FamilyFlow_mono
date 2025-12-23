@@ -62,7 +62,13 @@ class ListController {
         return;
       }
 
-      const data = await listService.createList({ userId: user.id, title, type, color, icon });
+      const data = await listService.createList({
+        userId: user.id,
+        title,
+        type,
+        color,
+        icon,
+      });
 
       if (data === null) {
         apiResponse(res, null, 402, "List already exists");
@@ -92,7 +98,14 @@ class ListController {
         return;
       }
 
-      const data = await listService.updateList({ userId: user.id, id, title, type, color, icon });
+      const data = await listService.updateList({
+        userId: user.id,
+        id,
+        title,
+        type,
+        color,
+        icon,
+      });
 
       if (!data) {
         apiResponse(res, null, 401, "Invalid credentials");
@@ -133,14 +146,24 @@ class ListController {
   async shareList(req: RequestTU, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { listId, recipientId }: Omit<ShareListInput, 'ownerId'> = req.body;
+      const { listId, recipientId, accessTypes }: ShareListInput = req.body;
 
-      if (!user || !user.id || !listId || !recipientId) {
-        apiResponse(res, null, 400, "Could not get user, listId or recipientId");
+      if (!user || !user.id || !listId || !recipientId || !accessTypes) {
+        apiResponse(
+          res,
+          null,
+          400,
+          "Could not get user, listId or recipientId"
+        );
         return;
       }
 
-      const data = await listService.shareList({ listId, userId: user.id, recipientId });
+      const data = await listService.shareList({
+        listId,
+        userId: user.id,
+        recipientId,
+        accessTypes,
+      });
 
       if (!data) {
         apiResponse(res, null, 401, "Invalid credentials");
@@ -156,19 +179,34 @@ class ListController {
 
   async removeSharingList(req: RequestTU, res: Response): Promise<void> {
     try {
-      const listId = req.query.listId;
-      const ownerId = req.query.ownerId;
-      const recipientId = req.query.recipientId;
+      const { user } = req;
+      const listId = Number(req.query.listId);
+      const ownerId = Number(req.query.ownerId);
+      const recipientId = Number(req.query.recipientId);
 
-      if (!listId || !ownerId || !recipientId) {
-        apiResponse(res, null, 400, "Could not get user, listId, ownerId or recipientId");
+      if (!user || !user.id || !listId || !ownerId || !recipientId) {
+        apiResponse(
+          res,
+          null,
+          400,
+          "Could not get user, listId, ownerId or recipientId"
+        );
         return;
       }
 
+      if (user.id != ownerId && user.id != recipientId) {
+        apiResponse(
+          res,
+          null,
+          400,
+          "You can't remove this sharing"
+        );
+      }
+
       const data = await listService.removeSharingList({
-        listId: Number(listId),
-        userId: Number(ownerId),
-        recipientId: Number(recipientId)
+        listId: listId,
+        userId: ownerId,
+        recipientId: recipientId,
       });
 
       if (!data) {
@@ -178,10 +216,11 @@ class ListController {
 
       apiResponse(res, undefined, 201);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "An error occurred";
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
       apiResponse(res, null, 500, errorMessage);
     }
   }
 }
 
-export default new ListController()
+export default new ListController();

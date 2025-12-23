@@ -24,10 +24,30 @@ model List {
   @@index([userId])
 }
 
+model SharedLists {
+  id              Int      @id @default(autoincrement())
+  ownerId         Int
+  owner           User     @relation("SharedListOwner", fields: [ownerId], references: [id])
+  recipientId     Int
+  recipient       User     @relation("SharedListRecipient", fields: [recipientId], references: [id])
+  listId          Int
+  list            List     @relation(fields: [listId], references: [id])
+  accessTypes     AccessTypes
+  createdAt       DateTime @default(now())
+
+  @@unique([ownerId, recipientId, listId])
+}
+
 enum Type {
   shopping
   tasks
   events
+}
+
+enum AccessTypes {
+  watch
+  edit
+  fullAccess
 }
 
 
@@ -44,20 +64,6 @@ model RefreshToken {
   @@index([userId])
   @@index([deviceId])
   @@unique([userId, deviceId])
-}
-
-
-model SharedLists {
-  id          Int      @id @default(autoincrement())
-  ownerId     Int
-  owner       User     @relation("SharedListOwner", fields: [ownerId], references: [id])
-  recipientId Int
-  recipient   User     @relation("SharedListRecipient", fields: [recipientId], references: [id])
-  listId      Int
-  list        List     @relation(fields: [listId], references: [id])
-  createdAt   DateTime @default(now())
-
-  @@unique([ownerId, recipientId, listId])
 }
 
 
