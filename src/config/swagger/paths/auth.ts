@@ -1,130 +1,129 @@
-export const authPaths = {
-  '/auth/login': {
+export const authPaths = {  "/auth/login": {
     post: {
-      tags: ['Auth'],
-      summary: 'User login',
+      tags: ["Auth"],
+      summary: "User login",
       requestBody: {
         required: true,
         content: {
-          'application/json': {
+          "application/json": {
             schema: {
-              $ref: '#/components/schemas/LoginRequest',
+              $ref: "#/components/schemas/LoginRequest",
             },
           },
         },
       },
       responses: {
         200: {
-          description: 'Successful login',
+          description: "Successful login",
           content: {
-            'application/json': {
+            "application/json": {
               schema: {
-                $ref: '#/components/schemas/LoginResponse',
+                $ref: "#/components/schemas/LoginResponse",
               },
             },
           },
         },
         400: {
-          description: 'Invalid data',
+          description: "Invalid data",
         },
         401: {
-          description: 'Invalid credentials'
+          description: "Invalid credentials",
         },
       },
     },
   },
-  '/auth/logout': {
+  "/auth/logout": {
     get: {
-      tags: ['Auth'],
-      summary: 'User logout',
+      tags: ["Auth"],
+      summary: "User logout",
       security: [{ bearerAuth: [] }],
       responses: {
         200: {
-          description: 'Logged out successfully',
+          description: "Logged out successfully",
         },
         400: {
-          description: 'Logout failed',
+          description: "Logout failed",
         },
       },
     },
   },
-  '/auth/refresh': {
+  "/auth/refresh": {
     post: {
-      tags: ['Auth'],
-      summary: 'Token refresh',
+      tags: ["Auth"],
+      summary: "Token refresh",
       security: [{ bearerAuth: [] }],
       responses: {
         200: {
-          description: 'New tokens',
+          description: "New tokens",
           content: {
-            'application/json': {
+            "application/json": {
               schema: {
-                $ref: '#/components/schemas/RefreshResponse',
+                $ref: "#/components/schemas/RefreshResponse",
               },
             },
           },
         },
         400: {
-          description: 'Unauthorized',
+          description: "Unauthorized",
         },
         401: {
-          description: 'Unauthorized',
+          description: "Unauthorized",
         },
       },
     },
   },
-  '/auth/change-password': {
+  "/auth/change-password": {
     post: {
-      tags: ['Auth'],
-      summary: 'Token refresh',
+      tags: ["Auth"],
+      summary: "Token refresh",
       security: [{ bearerAuth: [] }],
       requestBody: {
         required: true,
         content: {
-          'application/json': {
+          "application/json": {
             schema: {
-              $ref: '#/components/schemas/ChangePasswordRequest',
+              $ref: "#/components/schemas/ChangePasswordRequest",
             },
           },
         },
       },
       responses: {
         200: {
-          description: 'Change password',
+          description: "Change password",
         },
         400: {
-          description: 'Could not get user',
+          description: "Could not get user",
         },
         401: {
-          description: 'Unauthorized',
+          description: "Unauthorized",
         },
       },
     },
   },
-  '/auth/set-password': {
+  "/auth/set-password": {
     post: {
-      tags: ['Auth'],
-      summary: 'Token refresh',
+      tags: ["Auth"],
+      summary: "Token refresh",
       security: [{ bearerAuth: [] }],
       requestBody: {
         required: true,
         content: {
-          'application/json': {
+          "application/json": {
             schema: {
-              $ref: '#/components/schemas/SetPasswordRequest',
+              $ref: "#/components/schemas/SetPasswordRequest",
             },
           },
         },
       },
       responses: {
         200: {
-          description: 'Set new password',
+          description: "Set new password",
         },
         400: {
-          description: 'Could not get user',
+          description: "Could not get user",
         },
         401: {
-          description: 'Unauthorized',
+          description: "Unauthorized",
         },
       },
     },

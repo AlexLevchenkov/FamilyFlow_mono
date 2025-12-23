@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { GetUsersInput, RegisterInput, UpdateUserInput } from "@middleware/user";
+import { GetUsersInput, RegisterInput, UpdateUserInput } from "@middleware/schemas/user";
 import userService from "@services/user.service";
 import apiResponse from "@utils/response";
 import { RequestTU } from "@middleware/cookieExtractor";
@@ -75,7 +75,13 @@ class UserController {
         return;
       }
 
-      const data = await userService.updateUser({ userId, name, avatar, email });
+      const data = await userService.updateUser({
+        userId,
+        name,
+        avatar,
+        email,
+      });
+
       if (!data) {
         apiResponse(res, null, 404, "Failed to update user");
         return;
@@ -100,7 +106,7 @@ class UserController {
       }
 
       const data = await userService.deleteUser({ userId });
-      
+
       if (!data) {
         apiResponse(res, null, 404, "User not found");
         return;

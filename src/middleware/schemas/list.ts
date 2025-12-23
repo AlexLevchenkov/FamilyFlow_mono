@@ -1,42 +1,42 @@
-import z from 'zod';
-import { makeValidator } from '@utils/validation';
-import { Type } from '@prisma/client';
+import z from "zod";
+import { makeValidator } from "@utils/validation";
+import { Type } from "@prisma/client";
 
 export type WithUserId<T> = T & { userId: number };
 
 const type = ["shopping", "tasks", "events"] as Type[];
 
 const getUserListsSchema = z.object({
-	page: z.coerce.string().optional(),
-})
+  page: z.coerce.string().optional(),
+});
 
 const getListSchema = z.object({
-	id: z.coerce.number(),
-})
+  id: z.coerce.number(),
+});
 
 const createListSchema = z.object({
-	title: z.string(),
-	type: z.enum(type),
-	color: z.string(),
-	icon: z.string(),
-})
+  title: z.string(),
+  type: z.enum(type),
+  color: z.string(),
+  icon: z.string(),
+});
 
 const updateListSchema = z.object({
-	id: z.coerce.number(),
-	title: z.string(),
-	type: z.enum(type),
-	color: z.string(),
-	icon: z.string(),
-})
+  id: z.coerce.number(),
+  title: z.string(),
+  type: z.enum(type),
+  color: z.string(),
+  icon: z.string(),
+});
 
 const deleteListSchema = z.object({
-	id: z.coerce.number(),
-})
+  id: z.coerce.number(),
+});
 
 const shareListSchema = z.object({
-	listId: z.number(),
-	recipientId: z.number(),
-})
+  listId: z.number(),
+  recipientId: z.number(),
+});
 
 export type GetUserListsInput = z.infer<typeof getUserListsSchema>;
 export type GetListInput = z.infer<typeof getListSchema>;

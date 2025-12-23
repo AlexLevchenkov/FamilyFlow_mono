@@ -1,5 +1,6 @@
 import prisma from "@config/prisma";
-import { ChangePasswordInput, LoginInput, RefreshTokenInput, LogoutInput } from "@middleware/auth";
+import { ChangePasswordInput, LoginInput, RefreshTokenInput, LogoutInput } from "@middleware/schemas/auth";
+import { WithUserId } from "@middleware/schemas/list";
 import { badRequestError } from "@utils/errors";
 import { generateAccessToken, generateRefreshToken } from "@utils/tokens";
 import bcryptjs from "bcryptjs";
@@ -49,7 +50,7 @@ class AuthService {
     };
   }
 
-  async logout({ userId, deviceId }: LogoutInput) {
+  async logout({ userId, deviceId }: WithUserId<LogoutInput>) {
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
       badRequestError("User not found");
@@ -67,7 +68,7 @@ class AuthService {
     return true;
   }
 
-  async refreshToken({ userId, refreshToken }: RefreshTokenInput) {
+  async refreshToken({ userId, refreshToken }: WithUserId<RefreshTokenInput>) {
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
       badRequestError("User not found");
@@ -130,7 +131,7 @@ class AuthService {
     };
   }
 
-  async changePassword({ userId, oldPassword, newPassword }: ChangePasswordInput) {
+  async changePassword({ userId, oldPassword, newPassword }: WithUserId<ChangePasswordInput>) {
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
       badRequestError("User not found");

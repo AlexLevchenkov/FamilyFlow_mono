@@ -5,7 +5,7 @@ import {
   UpdateUserInput,
   GetUserByIdInput,
   DeleteUserInput,
-} from "@middleware/user";
+} from "@middleware/schemas/user";
 import { badRequestError } from "@utils/errors";
 import bcryptjs from "bcryptjs";
 
@@ -15,7 +15,7 @@ class UserService {
       AND: [
         partEmail ? { email: { contains: partEmail } } : {},
         partName ? { name: { contains: partName } } : {},
-      ]
+      ],
     };
 
     const users = await prisma.user.findMany({
@@ -23,25 +23,25 @@ class UserService {
       skip: page ? Number(page) * 20 : 0,
       take: 20,
     });
-  
+
     const total = await prisma.user.count({ where });
 
     if (users.length === 0) {
       badRequestError("Can't get any users");
-      return;
+      return;``
     }
 
     return {
-      data: users.map((user) => ({...user, password: undefined})),
+      data: users.map((user) => ({ ...user, password: undefined })),
       pagination: {
         total,
         page: page || 1,
         limit: 20,
-        totalPages: Math.ceil(total/20)
-      }
-    }
+        totalPages: Math.ceil(total / 20),
+      },
+    };
   }
-  
+
   async register({ email, password, name }: RegisterInput) {
     const haveUser = await prisma.user.findFirst({
       where: {
@@ -91,10 +91,10 @@ class UserService {
         name,
         email,
         updatedAt: new Date(),
-      }
-    })
+      },
+    });
 
-    return updatedUser
+    return updatedUser;
   }
 
   async deleteUser({ userId }: DeleteUserInput) {

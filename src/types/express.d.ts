@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import { Request } from "express";
 
 declare global {
   namespace Express {
@@ -7,8 +7,8 @@ declare global {
         id: number;
         role?: string;
       };
-      refreshToken?: string
-      validated?: any
+      refreshToken?: string;
+      validated?: any;
     }
   }
 }

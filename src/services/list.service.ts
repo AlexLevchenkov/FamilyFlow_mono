@@ -1,21 +1,18 @@
 import prisma from "@config/prisma";
-import { DeleteListInput, GetListInput, GetUserListsInput, CreateListInput, UpdateListInput, WithUserId, ShareListInput } from "@middleware/list";
+import { DeleteListInput, GetListInput, GetUserListsInput, CreateListInput, UpdateListInput, WithUserId, ShareListInput } from "@middleware/schemas/list";
 import { badRequestError } from "@utils/errors";
 
 class ListServices {
   async getUserLists({ userId, page }: WithUserId<GetUserListsInput>) {
     const where = {
-      OR: [
-        { userId },
-        { sharedWith: { some: { recipientId: userId } } }
-      ],
-    }
+      OR: [{ userId }, { sharedWith: { some: { recipientId: userId } } }],
+    };
 
     const lists = await prisma.list.findMany({
       where,
       skip: page ? Number(page) * 20 : 0,
       take: 20,
-      orderBy: { updatedAt: 'desc' },
+      orderBy: { updatedAt: "desc" },
     });
 
     if (lists.length === 0) {
@@ -31,28 +28,26 @@ class ListServices {
         total,
         page: page || 1,
         limit: 20,
-        totalPages: Math.ceil(total / 20)
-      }
-    }
+        totalPages: Math.ceil(total / 20),
+      },
+    };
   }
 
-  async getListById({ userId, id }: WithUserId<GetListInput>) {
-    const list = await prisma.list.findFirst({
-      where: { userId, id },
-    })
+  async getListById({ id }: GetListInput) {
+    const list = await prisma.list.findFirst({ where: { id } });
 
     if (!list) {
       badRequestError("List not found");
       return;
     }
 
-    return list
+    return list;
   }
 
   async createList({ userId, title, type, color, icon }: WithUserId<CreateListInput>) {
     const haveList = await prisma.list.findFirst({
-      where: { userId, title, type }
-    })
+      where: { userId, title, type },
+    });
 
     if (haveList) {
       badRequestError("List already exists");
@@ -60,16 +55,16 @@ class ListServices {
     }
 
     const newList = await prisma.list.create({
-      data: { userId, title, type, color, icon }
-    })
+      data: { userId, title, type, color, icon },
+    });
 
     return newList;
   }
 
   async updateList({ userId, id, title, type, color, icon }: WithUserId<UpdateListInput>) {
     const haveList = await prisma.list.findFirst({
-      where: { userId, id }
-    })
+      where: { userId, id },
+    });
 
     if (!haveList) {
       badRequestError("List not found");
@@ -78,16 +73,16 @@ class ListServices {
 
     const updatedList = await prisma.list.update({
       where: { userId, id },
-      data: { title, type, color, icon }
-    })
+      data: { title, type, color, icon },
+    });
 
-    return updatedList
+    return updatedList;
   }
 
   async deleteList({ userId, id }: WithUserId<DeleteListInput>) {
     const haveList = await prisma.list.findFirst({
-      where: { userId, id }
-    })
+      where: { userId, id },
+    });
 
     if (!haveList) {
       return true;
@@ -105,8 +100,8 @@ class ListServices {
 
   async shareList({ listId, userId, recipientId }: WithUserId<ShareListInput>) {
     const sharedWith = await prisma.sharedLists.create({
-      data: { listId, ownerId: userId, recipientId }
-    })
+      data: { listId, ownerId: userId, recipientId },
+    });
 
     if (!sharedWith) {
       badRequestError("Failed to create share list");
@@ -116,10 +111,10 @@ class ListServices {
     return sharedWith;
   }
 
-  async removeSharingList ({listId, userId, recipientId}: WithUserId<ShareListInput>) {
+  async removeSharingList({ listId, userId, recipientId }: WithUserId<ShareListInput>) {
     const sharedWith = await prisma.sharedLists.findFirst({
-      where: { listId, ownerId: userId, recipientId }
-    })
+      where: { listId, ownerId: userId, recipientId },
+    });
 
     if (!sharedWith) {
       badRequestError("Failed to find share connect");
@@ -133,8 +128,8 @@ class ListServices {
           recipientId,
           listId,
         },
-      }
-    })
+      },
+    });
 
     if (!result) {
       badRequestError("Failed to delete share connect");
@@ -145,4 +140,4 @@ class ListServices {
   }
 }
 
-export default new ListServices()
+export default new ListServices();

@@ -1,11 +1,11 @@
-import z from 'zod';
-import { makeValidator } from '@utils/validation';
+import z from "zod";
+import { makeValidator } from "@utils/validation";
 
 const getUsersSchema = z.object({
   page: z.string().optional(),
   partName: z.string().optional(),
   partEmail: z.string().optional(),
-})
+});
 
 const registerSchema = z.object({
   email: z.string().email(),
@@ -18,15 +18,15 @@ const updateUserSchema = z.object({
   email: z.string().email().optional(),
   name: z.string().optional(),
   avatar: z.string().optional(),
-})
+});
 
 const getUserByIdSchema = z.object({
   userId: z.number(),
-})
+});
 
 const deleteUserSchema = z.object({
   userId: z.number(),
-})
+});
 
 export type GetUsersInput = z.infer<typeof getUsersSchema>;
 export type RegisterInput = z.infer<typeof registerSchema>;

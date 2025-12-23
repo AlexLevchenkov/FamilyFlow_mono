@@ -8,7 +8,6 @@ datasource db {
 }
 
 
-
 model List {
   id          Int       @id @default(autoincrement())
   userId      Int
@@ -30,6 +29,7 @@ enum Type {
   tasks
   events
 }
+
 
 model RefreshToken {
   id        Int      @id @default(autoincrement())

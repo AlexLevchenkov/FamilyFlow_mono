@@ -1,27 +1,27 @@
 export interface User {
-  id: number
-  email: string
-  password?: string
+  id: number;
+  email: string;
+  password?: string;
   name?: string;
   createdAt: Date;
   updatedAt: Date;
-  avatar?: string
+  avatar?: string;
 }
 
 export interface LoginResponse {
-  accessToken: string
-  user: User
+  accessToken: string;
+  user: User;
 }
 
 export interface RefreshResponse {
-  accessToken: string
+  accessToken: string;
 }
 
 export interface ChangePasswordResponse {
-  oldPassword: string
-  newPassword: string
+  oldPassword: string;
+  newPassword: string;
 }
 
 export interface SetPasswordResponse {
-  newPassword: string
+  newPassword: string;
 }

@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { RequestTU } from "@middleware/cookieExtractor";
-import { GetUserListsInput, CreateListInput, UpdateListInput, ShareListInput } from "@middleware/list";
+import { GetUserListsInput, CreateListInput, UpdateListInput, ShareListInput } from "@middleware/schemas/list";
 import apiResponse from "@utils/response";
 import listService from "@services/list.service";
 
@@ -31,15 +31,14 @@ class ListController {
 
   async getListById(req: RequestTU, res: Response): Promise<void> {
     try {
-      const { user } = req;
       const id: number = Number(req.params.id);
 
-      if (!user || !user.id || !id) {
-        apiResponse(res, null, 400, "Could not get user or list Id");
+      if (!id) {
+        apiResponse(res, null, 400, "Could not get list Id");
         return;
       }
 
-      const data = await listService.getListById({ userId: user.id, id });
+      const data = await listService.getListById({ id });
 
       if (!data) {
         apiResponse(res, null, 401, "Invalid credentials");

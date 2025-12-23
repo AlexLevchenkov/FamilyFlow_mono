@@ -1,4 +1,4 @@
-import jwt, { DecodeOptions, SignOptions } from "jsonwebtoken";
+import jwt, { SignOptions } from "jsonwebtoken";
 
 export const generateAccessToken = (userId: number) => {
   const secret = process.env.ACCESS_SECRET;
@@ -9,7 +9,7 @@ export const generateAccessToken = (userId: number) => {
   }
 
   return jwt.sign({ userId }, secret, { expiresIn } as SignOptions);
-}
+};
 
 export const generateRefreshToken = (userId: number) => {
   const secret = process.env.REFRESH_SECRET;
@@ -20,22 +20,22 @@ export const generateRefreshToken = (userId: number) => {
   }
 
   return jwt.sign({ userId }, secret, { expiresIn } as SignOptions);
-}
+};
 
 export const getDataFromAccessToken = (token: string) => {
   const secret = process.env.ACCESS_SECRET;
   if (!secret) return;
 
-  const data = jwt.verify(token, secret)
+  const data = jwt.verify(token, secret);
 
-  return data
-}
+  return data;
+};
 
 export const getDataFromRefreshToken = (token: string) => {
   const secret = process.env.REFRESH_SECRET;
   if (!secret) return;
 
-  const data = jwt.verify(token, secret)
+  const data = jwt.verify(token, secret);
 
-  return data
-}
+  return data;
+};

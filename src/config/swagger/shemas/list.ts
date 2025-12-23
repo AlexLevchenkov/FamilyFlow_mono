@@ -1,6 +1,9 @@
-import { PaginatedResponse } from "@appTypes/common.types";
-import { CreateListRequest, List, UpdateListRequest } from "@appTypes/list.types";
-import { ShareListInput } from "@middleware/list";
+import { PaginatedResponse } from "@appTypes/common.types";import {
+  CreateListRequest,
+  List,
+  UpdateListRequest,
+} from "@appTypes/list.types";
+import { ShareListInput } from "@middleware/schemas/list";
 import { SharedLists } from "@prisma/client";
 import { interfaceToOpenAPI } from "@utils/interfaceToOpenAPI";
 
@@ -9,10 +12,10 @@ export const listsSchemas = {
     data: [
       {
         id: 1,
-        title: 'New list',
-        type: 'tasks',
-        color: 'Red',
-        icon: 'Box',
+        title: "New list",
+        type: "tasks",
+        color: "Red",
+        icon: "Box",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -25,23 +28,23 @@ export const listsSchemas = {
     },
   }),
   CreateListRequest: interfaceToOpenAPI<CreateListRequest>({
-    title: 'New list',
-    type: 'tasks',
-    color: 'Red',
-    icon: 'Box',
+    title: "New list",
+    type: "tasks",
+    color: "Red",
+    icon: "Box",
   }),
   UpdateListRequest: interfaceToOpenAPI<UpdateListRequest>({
-    title: 'New list',
-    type: 'tasks',
-    color: 'Red',
-    icon: 'Box',
+    title: "New list",
+    type: "tasks",
+    color: "Red",
+    icon: "Box",
   }),
   ListResponse: interfaceToOpenAPI<List>({
     id: 1,
-    title: 'New list',
-    type: 'tasks',
-    color: 'Red',
-    icon: 'Box',
+    title: "New list",
+    type: "tasks",
+    color: "Red",
+    icon: "Box",
     createdAt: new Date(),
     updatedAt: new Date(),
   }),
@@ -55,5 +58,5 @@ export const listsSchemas = {
     ownerId: 1,
     recipientId: 2,
     createdAt: new Date(),
-  })
-}
+  }),
+};
