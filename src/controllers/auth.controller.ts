@@ -42,7 +42,7 @@ class AuthController {
     }
   }
 
-  async logout(req: Request, res: Response): Promise<void> {
+  async logout(req: RequestTU, res: Response): Promise<void> {
     try {
       const { user } = req;
       const { deviceId } = req.body as LogoutInput;
