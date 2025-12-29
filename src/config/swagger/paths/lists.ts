@@ -91,7 +91,7 @@ export const listPaths = {
     },
     put: {
       tags: ["List"],
-      summary: "Get list by ID",
+      summary: "Update list by ID",
       security: [{ bearerAuth: [] }],
       parameters: [
         {
@@ -131,7 +131,7 @@ export const listPaths = {
     },
     delete: {
       tags: ["List"],
-      summary: "Get list by ID",
+      summary: "Delete list by ID",
       security: [{ bearerAuth: [] }],
       parameters: [
         {
@@ -184,7 +184,7 @@ export const listPaths = {
     },
     delete: {
       tags: ["List"],
-      summary: "Create share list",
+      summary: "Delete shared list connect",
       security: [{ bearerAuth: [] }],
       parameters: [
         {

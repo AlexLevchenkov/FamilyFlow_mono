@@ -8,7 +8,7 @@ export interface Keys {
   previousRefresh?: string;
 }
 
-class KeyRotationService {
+class KeyRotation {
   private keys: Keys;
   private lastRotation: Date | null;
   private readonly ROTATION_INTERVAL: number;
@@ -82,4 +82,4 @@ class KeyRotationService {
   }
 }
 
-export default new KeyRotationService();
+export default new KeyRotation();

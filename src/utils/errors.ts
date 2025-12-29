@@ -2,12 +2,14 @@ import { logError } from "./logger";
 
 export class AppError extends Error {
   public statusCode: number;
+  public textMessage: string;
 
   constructor(message: string, statusCode: number = 500) {
+    logError(message);
     super(message);
     this.statusCode = statusCode;
+    this.textMessage = message;
     Object.setPrototypeOf(this, AppError.prototype);
-    logError(message);
   }
 }
 

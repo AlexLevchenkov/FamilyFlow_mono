@@ -1,10 +1,7 @@
-import { PaginatedResponse } from "@appTypes/common.types";import {
-  CreateListRequest,
-  List,
-  UpdateListRequest,
-} from "@appTypes/list.types";
+import { PaginatedResponse } from "@appTypes/common.types";
+import { CreateListRequest, UpdateListRequest } from "@appTypes/list.types";
 import { ShareListInput } from "@middleware/schemas/list";
-import { SharedLists } from "@prisma/client";
+import { List, SharedLists } from "@prisma/client";
 import { interfaceToOpenAPI } from "@utils/interfaceToOpenAPI";
 
 export const listsSchemas = {
@@ -12,6 +9,7 @@ export const listsSchemas = {
     data: [
       {
         id: 1,
+        userId: 1,
         title: "New list",
         type: "tasks",
         color: "Red",
@@ -41,6 +39,7 @@ export const listsSchemas = {
   }),
   ListResponse: interfaceToOpenAPI<List>({
     id: 1,
+    userId: 1,
     title: "New list",
     type: "tasks",
     color: "Red",

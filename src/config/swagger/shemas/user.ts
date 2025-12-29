@@ -1,16 +1,15 @@
-import { User } from "@appTypes/auth.types";
 import { PaginatedResponse } from "@appTypes/common.types";
 import { UpdateUserRequest } from "@appTypes/users.types";
 import { RegisterInput } from "@middleware/schemas/user";
+import { User } from "@prisma/client";
 import { interfaceToOpenAPI } from "@utils/interfaceToOpenAPI";
 
 export const usersSchemas = {
-  PaginatedUsersResponse: interfaceToOpenAPI<PaginatedResponse<User>>({
+  PaginatedUsersResponse: interfaceToOpenAPI<PaginatedResponse<Omit<User, "password">>>({
     data: [
       {
         id: 1,
         email: "user@example.com",
-        password: "",
         name: "John Doe",
         createdAt: new Date(),
         updatedAt: new Date(),

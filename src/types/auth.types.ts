@@ -1,16 +1,8 @@
-export interface User {
-  id: number;
-  email: string;
-  password?: string;
-  name?: string;
-  createdAt: Date;
-  updatedAt: Date;
-  avatar?: string;
-}
+import { User } from "@prisma/client";
 
 export interface LoginResponse {
   accessToken: string;
-  user: User;
+  user: Omit<User, "password">;
 }
 
 export interface RefreshResponse {

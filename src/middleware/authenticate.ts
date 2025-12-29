@@ -1,6 +1,6 @@
 import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import keyRotationService from "@services/keyRotationService";
+import keyRotationService from "@utils/keyRotation";
 import { AppError, unauthorizedError } from "@utils/errors";
 import { RequestTU } from "./cookieExtractor";
 

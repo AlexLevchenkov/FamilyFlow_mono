@@ -10,20 +10,21 @@ model List {
   updatedAt   DateTime  @updatedAt
 
   sharedWith SharedLists[]
+  items      Item[]
 
   @@index([userId])
 }
 
 model SharedLists {
-  id              Int      @id @default(autoincrement())
+  id              Int            @id @default(autoincrement())
   ownerId         Int
-  owner           User     @relation("SharedListOwner", fields: [ownerId], references: [id])
+  owner           User           @relation("SharedListOwner", fields: [ownerId], references: [id])
   recipientId     Int
-  recipient       User     @relation("SharedListRecipient", fields: [recipientId], references: [id])
+  recipient       User           @relation("SharedListRecipient", fields: [recipientId], references: [id])
   listId          Int
-  list            List     @relation(fields: [listId], references: [id])
-  accessTypes     AccessTypes
-  createdAt       DateTime @default(now())
+  list            List           @relation(fields: [listId], references: [id])
+  accessTypes     AccessTypes    @default(watch)
+  createdAt       DateTime       @default(now())
 
   @@unique([ownerId, recipientId, listId])
 }

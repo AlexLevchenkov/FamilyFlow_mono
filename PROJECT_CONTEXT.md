@@ -96,7 +96,7 @@ Server/
 - `token` (String, hashed) - Hashed user token
 - `userId` (UUID) - Foreign key to User
 - `deviceId` (String, optional)
-- `ipAddress`` (String, optional) - Device IP address
+- `ipAddress` (String, optional) - Device IP address
 - `expiresAt`, `createdAt`, `updatedAt` - Timestamps
 
 

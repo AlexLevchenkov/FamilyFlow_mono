@@ -17,15 +17,16 @@ const ACCESS_LEVEL: Record<AccessTypes, number> = {
 
 class ListServices {
   async getUserLists({ userId, page }: WithUserId<GetUserListsInput>) {
+    const itemsPerPage = Number(process.env.ITEMS_PER_PAGE);
     const where = {
       OR: [{ userId }, { sharedWith: { some: { recipientId: userId } } }],
     };
 
     const lists = await prisma.list.findMany({
       where,
-      skip: page ? Number(page) * 20 : 0,
-      take: 20,
-      orderBy: { updatedAt: "desc" },
+      skip: page ? Number(page) * itemsPerPage : 0,
+      take: itemsPerPage,
+      orderBy: [{ title: "asc" }],
     });
 
     if (lists.length === 0) {
@@ -40,8 +41,8 @@ class ListServices {
       pagination: {
         total,
         page: page || 1,
-        limit: 20,
-        totalPages: Math.ceil(total / 20),
+        limit: itemsPerPage,
+        totalPages: Math.ceil(total / itemsPerPage),
       },
     };
   }

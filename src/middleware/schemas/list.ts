@@ -50,7 +50,9 @@ export type ShareListInput = z.infer<typeof shareListSchema>;
 export const validateGetUserLists = makeValidator(getUserListsSchema, {
   params: true,
 });
-export const validateGetList = makeValidator(getListSchema, { params: true });
+export const validateGetList = makeValidator(getListSchema, {
+  params: true
+});
 export const validateCreateList = makeValidator(createListSchema, {
   body: true,
 });
@@ -61,4 +63,6 @@ export const validateUpdateList = makeValidator(updateListSchema, {
 export const validateDeleteList = makeValidator(deleteListSchema, {
   params: true,
 });
-export const validateShareList = makeValidator(shareListSchema, { body: true });
+export const validateShareList = makeValidator(shareListSchema, {
+  body: true
+});

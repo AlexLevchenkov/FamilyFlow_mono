@@ -11,6 +11,7 @@ import bcryptjs from "bcryptjs";
 
 class UserService {
   async getUsers({ page, partName, partEmail }: GetUsersInput) {
+    const itemsPerPage = Number(process.env.ITEMS_PER_PAGE);
     const where = {
       AND: [
         partEmail ? { email: { contains: partEmail } } : {},
@@ -20,8 +21,9 @@ class UserService {
 
     const users = await prisma.user.findMany({
       where,
-      skip: page ? Number(page) * 20 : 0,
-      take: 20,
+      skip: page ? Number(page) * itemsPerPage : 0,
+      take: itemsPerPage,
+      orderBy: { updatedAt: "desc" },
     });
 
     const total = await prisma.user.count({ where });
@@ -36,8 +38,8 @@ class UserService {
       pagination: {
         total,
         page: page || 1,
-        limit: 20,
-        totalPages: Math.ceil(total / 20),
+        limit: itemsPerPage,
+        totalPages: Math.ceil(total / itemsPerPage),
       },
     };
   }
