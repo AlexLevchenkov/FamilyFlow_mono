@@ -5,9 +5,9 @@ import { paths } from "./paths";
 export const swaggerOptions: SwaggerOptions = {
   openapi: "3.0.0",
   info: {
-    title: "ToDoProject",
+    title: "FamilyFlow",
     version: "1.0.0",
-    description: "API documentation for ToDoProject application",
+    description: "API documentation for FamilyFlow application",
   },
   servers: [
     {

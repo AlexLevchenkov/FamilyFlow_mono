@@ -1,7 +1,7 @@
 {
-  "name": "to_do_family",
+  "name": "family_flow",
   "version": "1.0.0",
-  "description": "Backend API для застосунку управління домашніми справами.",
+  "description": "Backend API for the home affairs management application",
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev -r tsconfig-paths/register src/index.ts",
