@@ -40,12 +40,19 @@ const shareListSchema = z.object({
   accessTypes: z.enum(accessTypes)
 });
 
+const removeSharingListSchema = z.object({
+  listId: z.string(),
+  ownerId: z.string(),
+  recipientId: z.string(),
+})
+
 export type GetUserListsInput = z.infer<typeof getUserListsSchema>;
 export type GetListInput = z.infer<typeof getListSchema>;
 export type CreateListInput = z.infer<typeof createListSchema>;
 export type UpdateListInput = z.infer<typeof updateListSchema>;
 export type DeleteListInput = z.infer<typeof deleteListSchema>;
 export type ShareListInput = z.infer<typeof shareListSchema>;
+export type removeSharingListInput = z.infer<typeof removeSharingListSchema>;
 
 export const validateGetUserLists = makeValidator(getUserListsSchema, {
   params: true,
@@ -65,4 +72,7 @@ export const validateDeleteList = makeValidator(deleteListSchema, {
 });
 export const validateShareList = makeValidator(shareListSchema, {
   body: true
+});
+export const validateRemoveSharingList = makeValidator(removeSharingListSchema, {
+  query: true
 });

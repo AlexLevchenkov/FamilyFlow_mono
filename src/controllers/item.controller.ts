@@ -15,12 +15,6 @@ class ItemController {
         : 1;
 
       const data = await itemService.getListItems({ listId, page });
-
-      if (!data) {
-        apiResponse(res, null, 401, "Invalid credentials");
-        return;
-      }
-
       apiResponse(res, data, 200);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An error occurred";
@@ -31,14 +25,7 @@ class ItemController {
   async getListItemById(req: RequestTU, res: Response): Promise<void> {
     try {
       const id: number = Number(req.params.id);
-
       const data = await itemService.getListItemById({ id });
-
-      if (!data) {
-        apiResponse(res, null, 401, "Invalid credentials");
-        return;
-      }
-
       apiResponse(res, data, 200);
     }  catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An error occurred";
@@ -58,11 +45,6 @@ class ItemController {
         dueDate,
       }: CreateItemInput = req.body;
 
-      if (!listId || !title) {
-        apiResponse(res, null, 400, "Could not get listId or title");
-        return;
-      }
-
       const data = await itemService.createListItem({
         listId,
         title,
@@ -72,11 +54,6 @@ class ItemController {
         description,
         dueDate,
       });
-
-      if (!data) {
-        apiResponse(res, null, 401, "Invalid credentials");
-        return;
-      }
 
       apiResponse(res, data, 200);
     } catch (error) {
@@ -136,13 +113,7 @@ class ItemController {
         return;
       }
 
-      const data = await itemService.deleteListItem({ id });
-
-      if (!data) {
-        apiResponse(res, null, 401, "Invalid credentials");
-        return;
-      }
-
+      await itemService.deleteListItem({ id });
       apiResponse(res, undefined, 200);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An error occurred";

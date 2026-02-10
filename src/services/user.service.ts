@@ -29,8 +29,7 @@ class UserService {
     const total = await prisma.user.count({ where });
 
     if (users.length === 0) {
-      badRequestError("Can't get any users");
-      return;``
+      throw badRequestError("Can't get any users");``
     }
 
     return {
@@ -52,8 +51,7 @@ class UserService {
     });
 
     if (haveUser) {
-      badRequestError("User already exists");
-      return;
+      throw badRequestError("User already exists");
     }
 
     const user = await prisma.user.create({
@@ -71,8 +69,7 @@ class UserService {
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
-      badRequestError("User not found");
-      return;
+      throw badRequestError("User not found");
     }
 
     return user;
@@ -82,8 +79,7 @@ class UserService {
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
-      badRequestError("User not found");
-      return;
+      throw badRequestError("User not found");
     }
 
     const updatedUser = await prisma.user.update({
@@ -103,19 +99,15 @@ class UserService {
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
-      badRequestError("User not found");
-      return;
+      throw badRequestError("User not found");
     }
 
     const result = await prisma.user.delete({ where: { id: userId } });
     await prisma.refreshToken.deleteMany({ where: { userId } });
 
     if (!result) {
-      badRequestError("Failed to delete user");
-      return;
+      throw badRequestError("Failed to delete user");
     }
-
-    return true;
   }
 }
 

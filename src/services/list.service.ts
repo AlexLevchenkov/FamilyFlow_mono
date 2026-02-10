@@ -30,8 +30,7 @@ class ListServices {
     });
 
     if (lists.length === 0) {
-      badRequestError("Can't get any list");
-      return;
+      throw badRequestError("Can't get any list");
     }
 
     const total = await prisma.list.count({ where });
@@ -51,8 +50,7 @@ class ListServices {
     const list = await prisma.list.findFirst({ where: { id } });
 
     if (!list) {
-      badRequestError("List not found");
-      return;
+      throw badRequestError("List not found");
     }
 
     return list;
@@ -64,7 +62,6 @@ class ListServices {
     });
 
     if (haveList) {
-      badRequestError("List already exists");
       return null;
     }
 
@@ -81,8 +78,7 @@ class ListServices {
     });
 
     if (!haveList) {
-      badRequestError("List not found");
-      return;
+      throw badRequestError("List not found");
     }
 
     const updatedList = await prisma.list.update({
@@ -99,17 +95,14 @@ class ListServices {
     });
 
     if (!haveList) {
-      return true;
+      return;
     }
 
     const result = await prisma.list.delete({ where: { userId, id } });
 
     if (!result) {
-      badRequestError("Failed to delete list");
-      return;
+      throw badRequestError("Failed to delete list");
     }
-
-    return true;
   }
 
   async shareList({ listId, userId, recipientId, accessTypes }: WithUserId<ShareListInput>) {
@@ -118,8 +111,7 @@ class ListServices {
     });
 
     if (!sharedWith) {
-      badRequestError("Failed to create share list");
-      return;
+      throw badRequestError("Failed to create share list");
     }
 
     return sharedWith;
@@ -131,8 +123,7 @@ class ListServices {
     });
 
     if (!sharedWith) {
-      badRequestError("Failed to find share connect");
-      return;
+      throw badRequestError("Failed to find share connect");
     }
 
     const result = await prisma.sharedLists.delete({
@@ -146,11 +137,8 @@ class ListServices {
     });
 
     if (!result) {
-      badRequestError("Failed to delete share connect");
-      return;
+      throw badRequestError("Failed to delete share connect");
     }
-
-    return true;
   }
 
   async _canIDoSomething({ userId, listId, accessTypes }: enoughRightInterface) {
@@ -173,12 +161,8 @@ class ListServices {
 
     if (!shared) return false;
 
-    return this._hasEnoughRight(shared.accessTypes, accessTypes);
+    return ACCESS_LEVEL[accessTypes] >= ACCESS_LEVEL[shared.accessTypes];
   }
-
-  _hasEnoughRight(required: AccessTypes, current: AccessTypes) {
-    return ACCESS_LEVEL[current] >= ACCESS_LEVEL[required];
-  };
 }
 
 export default new ListServices();

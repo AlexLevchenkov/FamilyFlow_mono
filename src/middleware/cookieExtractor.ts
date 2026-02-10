@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from "express";
 export interface RequestTU extends Request {
   user?: {
     id: number;
+    jti?: string;
     role?: string;
   };
   refreshToken?: string;
@@ -13,7 +14,7 @@ export interface RequestTU extends Request {
 // middleware: takes refreshToken from cookie (if present) and attaches to req.refreshToken
 export default function cookieExtractor(req: RequestTU, res: Response, next: NextFunction) {
   // cookie-parser must be used earlier in middleware chain
-  const maybe = req.cookies?.refreshToken || req.cookies?.refresh_token;
+  const maybe = req.cookies?.refreshToken;
 
   if (maybe) {
     req.refreshToken = String(maybe);
@@ -21,8 +22,7 @@ export default function cookieExtractor(req: RequestTU, res: Response, next: Nex
     const data = getDataFromRefreshToken(maybe);
 
     if (data && typeof data != "string") {
-      req.user = { id: -1 };
-      req.user.id = Number(data.userId || 0);
+      req.user = {id: Number(data.userId || 0), jti: data.jti || undefined};
     }
   }
   next();

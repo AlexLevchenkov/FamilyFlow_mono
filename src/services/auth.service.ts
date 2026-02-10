@@ -4,9 +4,10 @@ import { WithUserId } from "@middleware/schemas/list";
 import { badRequestError } from "@utils/errors";
 import { generateAccessToken, generateRefreshToken } from "@utils/tokens";
 import bcryptjs from "bcryptjs";
+import { randomUUID } from "crypto";
 
 class AuthService {
-  async login({ email, password, deviceId, ipAddress }: LoginInput) {
+  login = async ({ email, password }: LoginInput) => {
     const user = await prisma.user.findUnique({
       where: {
         email: email,
@@ -14,27 +15,25 @@ class AuthService {
     });
 
     if (!user || !bcryptjs.compareSync(password, user.password)) {
-      badRequestError("Invalid email or password");
-      return;
+      throw badRequestError("Invalid email or password");
     }
 
+    const jti = randomUUID();
+
     const accessToken = generateAccessToken(user.id);
-    const refreshToken = generateRefreshToken(user.id);
+    const refreshToken = generateRefreshToken(user.id, jti);
 
     if (!accessToken || !refreshToken) {
-      badRequestError("Failed to generate tokens. user.id: " + user.id);
-      return;
+      throw badRequestError("Failed to generate tokens user.id: " + user.id);
     }
 
     await prisma.refreshToken.create({
       data: {
-        token: refreshToken,
+        jti,
         userId: user.id,
-        deviceId,
-        ipAddress,
         expiresAt: new Date(
           Date.now() +
-          parseInt(process.env.REFRESH_EXPIRES_IN || "30") *
+          parseInt(process.env.REFRESH_EXPIRES_IN || "14") *
           24 *
           60 *
           60 *
@@ -50,70 +49,54 @@ class AuthService {
     };
   }
 
-  async logout({ userId, deviceId }: WithUserId<LogoutInput>) {
+  logout = async ({ userId, jti }: WithUserId<LogoutInput>) => {
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
-      badRequestError("User not found");
-      return;
+      throw badRequestError("User not found");
     }
 
-    if (deviceId) {
+    if (jti) {
       await prisma.refreshToken.deleteMany({
-        where: { userId: userId, deviceId: deviceId },
+        where: { userId, jti },
       });
     } else {
       await prisma.refreshToken.deleteMany({ where: { userId: userId } });
     }
-
-    return true;
   }
 
-  async refreshToken({ userId, refreshToken }: WithUserId<RefreshTokenInput>) {
+  refreshToken = async ({ userId, jti }: WithUserId<RefreshTokenInput>) => {
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
-      badRequestError("User not found");
-      return;
+      throw badRequestError("User not found");
     }
 
     const existing = await prisma.refreshToken.findFirst({
-      where: { userId: userId, token: refreshToken },
+      where: { userId, jti },
     });
     if (!existing) {
-      badRequestError("Invalid refresh token");
-      return;
+      throw badRequestError("Invalid refresh token");
     }
+    
+    await prisma.refreshToken.delete({ where: { id: existing.id } });
 
     if (existing.expiresAt && existing.expiresAt < new Date()) {
       // remove expired token
-      await prisma.refreshToken.deleteMany({ where: { id: existing.id } });
-      badRequestError("Refresh token expired");
-      return;
+      throw badRequestError("Refresh token expired");
     }
+
+    const newJti = randomUUID();
 
     const newAccessToken = generateAccessToken(userId);
-    const newRefreshToken = generateRefreshToken(userId);
+    const newRefreshToken = generateRefreshToken(userId, newJti);
 
     if (!newAccessToken || !newRefreshToken) {
-      badRequestError("Failed to generate tokens. UserId: " + userId);
-      return;
-    }
-
-    // Rotate: delete existing token(s) for same user+device, then create new one
-    if (existing.deviceId) {
-      await prisma.refreshToken.deleteMany({
-        where: { userId: userId, deviceId: existing.deviceId },
-      });
-    } else {
-      // fallback: delete the exact token record
-      await prisma.refreshToken.deleteMany({ where: { id: existing.id } });
+      throw badRequestError("Failed to generate tokens. UserId: " + userId);
     }
 
     await prisma.refreshToken.create({
       data: {
         userId: userId,
-        token: newRefreshToken,
-        deviceId: existing.deviceId || undefined,
-        ipAddress: existing.ipAddress || undefined,
+        jti: newJti,
         expiresAt: new Date(
           Date.now() +
           parseInt(process.env.REFRESH_EXPIRES_IN || "30") *
@@ -131,63 +114,46 @@ class AuthService {
     };
   }
 
-  async changePassword({ userId, oldPassword, newPassword }: WithUserId<ChangePasswordInput>) {
+  changePassword = async ({ userId, currentPassword, password }: WithUserId<ChangePasswordInput>) => {
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
-      badRequestError("User not found");
-      console.log("User not found");
-      return;
+      throw badRequestError("User not found");
     }
 
-    if (user.password != bcryptjs.hashSync(oldPassword, 10)) {
-      badRequestError("Incorrect password");
-      console.log("Incorrect password");
-      return;
+    if (!bcryptjs.compareSync(currentPassword, user.password)) {
+      throw badRequestError("Incorrect password");
     }
 
     await prisma.user.update({
       where: { id: user.id },
       data: {
-        password: bcryptjs.hashSync(newPassword, 10),
+        password: bcryptjs.hashSync(password, 10),
       },
     });
-
-    // TODO update return value
-    return true;
   }
 
-  async setPassword({ userId, newPassword, }: { userId: number; newPassword: string; }) {
+  setPassword = async ({ userId, password }: { userId: number; password: string; }) => {
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
-      badRequestError("User not found");
-      console.log("User not found");
-      return;
+      throw badRequestError("User not found");
     }
 
     await prisma.user.update({
       where: { id: user.id },
       data: {
-        password: bcryptjs.hashSync(newPassword, 10),
+        password: bcryptjs.hashSync(password, 10),
       },
     });
-
-    // TODO update return value
-    return true;
   }
 
-  async _removeAllOldTokens() {
-    const currentTime = new Date();
-    const oldTokens = await prisma.refreshToken.findMany({
+  _removeAllOldTokens = async () => {
+    await prisma.refreshToken.deleteMany({
       where: {
         expiresAt: {
-          lte: currentTime,
+          lt: new Date(),
         },
       },
     });
-
-    for (const token of oldTokens) {
-      await prisma.refreshToken.delete({ where: { id: token.id } });
-    }
   }
 }
 

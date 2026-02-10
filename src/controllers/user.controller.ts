@@ -8,13 +8,7 @@ class UserController {
   async getUsers(req: Request, res: Response): Promise<void> {
     try {
       const { page, partName, partEmail }: GetUsersInput = req.query;
-
       const data = await userService.getUsers({ page, partName, partEmail });
-      if (!data) {
-        apiResponse(res, null, 404, "Can't get users");
-        return;
-      }
-
       apiResponse(res, data, 200);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An error occurred";
@@ -26,12 +20,6 @@ class UserController {
     try {
       const { email, password, name } = req.body as RegisterInput;
       const user = await userService.register({ email, password, name });
-
-      if (!user) {
-        apiResponse(res, null, 400, "Registration failed");
-        return;
-      }
-
       apiResponse(res, user, 201);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An error occurred";
@@ -51,11 +39,6 @@ class UserController {
       }
 
       const data = await userService.getUserById({ userId });
-      if (!data) {
-        apiResponse(res, null, 404, "User not found");
-        return;
-      }
-
       apiResponse(res, data, 200);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An error occurred";
@@ -81,12 +64,6 @@ class UserController {
         avatar,
         email,
       });
-
-      if (!data) {
-        apiResponse(res, null, 404, "Failed to update user");
-        return;
-      }
-
       apiResponse(res, data, 200);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An error occurred";
@@ -105,13 +82,7 @@ class UserController {
         return;
       }
 
-      const data = await userService.deleteUser({ userId });
-
-      if (!data) {
-        apiResponse(res, null, 404, "User not found");
-        return;
-      }
-
+      await userService.deleteUser({ userId });
       apiResponse(res, undefined, 200);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An error occurred";

@@ -1,14 +1,10 @@
 model RefreshToken {
   id        Int      @id @default(autoincrement())
-  token     String
+  jti       String   @default("")
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
-  deviceId  String?
-  ipAddress String?
   expiresAt DateTime
   createdAt DateTime @default(now())
 
   @@index([userId])
-  @@index([deviceId])
-  @@unique([userId, deviceId])
 }

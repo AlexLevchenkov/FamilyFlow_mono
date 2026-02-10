@@ -38,8 +38,7 @@ class ItemService {
     });
 
     if (!item) {
-      notFoundError("Can`t find item per ID");
-      return;
+      throw notFoundError("Can`t find item per ID");
     }
 
     return item;
@@ -67,8 +66,7 @@ class ItemService {
     });
 
     if (!createdItem) {
-      badRequestError("Can't create new Item");
-      return;
+      throw badRequestError("Can't create new Item");
     }
 
     return createdItem;
@@ -98,8 +96,7 @@ class ItemService {
     });
 
     if (!updatedItem) {
-      badRequestError("Can't update Item");
-      return;
+      throw badRequestError("Can't update Item");
     }
 
     return updatedItem;
@@ -109,11 +106,8 @@ class ItemService {
     const deletedItem = await prisma.item.delete({ where: { id } });
 
     if (!deletedItem) {
-      badRequestError("Can't delete Item");
-      return;
+      throw badRequestError("Can't delete Item");
     }
-
-    return true;
   }
 }
 

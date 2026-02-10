@@ -11,8 +11,6 @@ export const authSchemas = {
   LoginRequest: interfaceToOpenAPI<LoginInput>({
     email: "super@gmail.com",
     password: "password",
-    deviceId: "123456789",
-    ipAddress: "192.0.0.1",
   }),
   LoginResponse: interfaceToOpenAPI<LoginResponse>({
     accessToken: "jwt-token",

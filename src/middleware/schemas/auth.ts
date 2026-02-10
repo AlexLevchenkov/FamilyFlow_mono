@@ -1,24 +1,46 @@
 import z from "zod";
 import { makeValidator } from "@utils/validation";
 
+const passwordSchema = z
+  .string()
+  .min(8)
+  .max(20)
+  .refine((password) => /[A-Z]/.test(password), {message: "Password must contain uppercase letters"})
+  .refine((password) => /[a-z]/.test(password), {message: "Password must contain lowercase letters"})
+  .refine((password) => /[0-9]/.test(password), {message: "Password must contain numbers"})
+  .refine((password) => /[!@#$%^&*]/.test(password), {message: "Password must contain special characters (!@#$%^&*)"});
+
+const emailSchema = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .refine(
+    (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+    { message: "Invalid email" }
+  );
+
 const changePasswordSchema = z.object({
-  oldPassword: z.string(),
-  newPassword: z.string(),
-});
+  currentPassword: z.string(),
+  password: passwordSchema,
+  confirmPassword: z.string().optional(),
+})
+.refine((data) => data.password === data.confirmPassword);
+
+const setPasswordSchema = z.object({
+  password: passwordSchema,
+})
 
 const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
-  deviceId: z.string().optional(),
-  ipAddress: z.ipv4().optional(),
+  email: emailSchema,
+  password: passwordSchema,
 });
 
 const logoutSchema = z.object({
-  deviceId: z.string().optional(),
+  jti: z.string().optional(),
 });
 
 const refreshTokenSchema = z.object({
-  refreshToken: z.string(),
+  jti: z.string(),
 });
 
 export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
@@ -29,3 +51,4 @@ export type RefreshTokenInput = z.infer<typeof refreshTokenSchema>;
 export const validateLogin = makeValidator(loginSchema);
 export const validateLogout = makeValidator(logoutSchema);
 export const validateChangePassword = makeValidator(changePasswordSchema);
+export const validateSetPassword = makeValidator(setPasswordSchema);

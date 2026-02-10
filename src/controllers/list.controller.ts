@@ -16,12 +16,6 @@ class ListController {
       }
 
       const data = await listService.getUserLists({ userId: user.id, page });
-
-      if (!data) {
-        apiResponse(res, null, 401, "Invalid credentials");
-        return;
-      }
-
       apiResponse(res, data, 200);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An error occurred";
@@ -39,12 +33,6 @@ class ListController {
       }
 
       const data = await listService.getListById({ id });
-
-      if (!data) {
-        apiResponse(res, null, 401, "Invalid credentials");
-        return;
-      }
-
       apiResponse(res, data, 200);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An error occurred";
@@ -75,11 +63,6 @@ class ListController {
         return;
       }
 
-      if (!data) {
-        apiResponse(res, null, 401, "Invalid credentials");
-        return;
-      }
-
       apiResponse(res, data, 200);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An error occurred";
@@ -106,12 +89,6 @@ class ListController {
         color,
         icon,
       });
-
-      if (!data) {
-        apiResponse(res, null, 401, "Invalid credentials");
-        return;
-      }
-
       apiResponse(res, data, 200);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An error occurred";
@@ -129,13 +106,7 @@ class ListController {
         return;
       }
 
-      const data = await listService.deleteList({ userId: user.id, id });
-
-      if (!data) {
-        apiResponse(res, null, 401, "Invalid credentials");
-        return;
-      }
-
+      await listService.deleteList({ userId: user.id, id });
       apiResponse(res, undefined, 200);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An error occurred";
@@ -148,12 +119,12 @@ class ListController {
       const { user } = req;
       const { listId, recipientId, accessTypes }: ShareListInput = req.body;
 
-      if (!user || !user.id || !listId || !recipientId || !accessTypes) {
+      if (!user || !user.id) {
         apiResponse(
           res,
           null,
           400,
-          "Could not get user, listId or recipientId"
+          "Could not get user"
         );
         return;
       }
@@ -164,11 +135,6 @@ class ListController {
         recipientId,
         accessTypes,
       });
-
-      if (!data) {
-        apiResponse(res, null, 401, "Invalid credentials");
-        return;
-      }
 
       apiResponse(res, data, 201);
     } catch (error) {
@@ -184,36 +150,21 @@ class ListController {
       const ownerId = Number(req.query.ownerId);
       const recipientId = Number(req.query.recipientId);
 
-      if (!user || !user.id || !listId || !ownerId || !recipientId) {
-        apiResponse(
-          res,
-          null,
-          400,
-          "Could not get user, listId, ownerId or recipientId"
-        );
+      if (!user || !user.id) {
+        apiResponse(res, null, 400, "Could not get user");
         return;
       }
 
       if (user.id != ownerId && user.id != recipientId) {
-        apiResponse(
-          res,
-          null,
-          400,
-          "You can't remove this sharing"
-        );
-      }
-
-      const data = await listService.removeSharingList({
-        listId: listId,
-        userId: ownerId,
-        recipientId: recipientId,
-      });
-
-      if (!data) {
-        apiResponse(res, null, 401, "Invalid credentials");
+        apiResponse(res, null, 400, "You can't remove this sharing");
         return;
       }
 
+      await listService.removeSharingList({
+        listId,
+        recipientId,
+        userId: ownerId,
+      });
       apiResponse(res, undefined, 201);
     } catch (error) {
       const errorMessage =
