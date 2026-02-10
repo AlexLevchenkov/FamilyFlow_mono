@@ -1,7 +1,7 @@
 import z from "zod";
 import { makeValidator } from "@utils/validation";
 
-const passwordSchema = z
+export const passwordSchema = z
   .string()
   .min(8)
   .max(20)
@@ -32,7 +32,7 @@ const setPasswordSchema = z.object({
 
 const loginSchema = z.object({
   email: emailSchema,
-  password: passwordSchema,
+  password: z.string().min(8).max(20),
 });
 
 const logoutSchema = z.object({

@@ -2,6 +2,7 @@ import { Router } from "express";
 import authController from "@controllers/auth.controller";
 import authenticate from "@middleware/authenticate";
 import cookieExtractor from "@middleware/cookieExtractor";
+import platformIdentifier from "@middleware/platformIdentifier";
 import {
   validateChangePassword,
   validateLogin,
@@ -11,11 +12,11 @@ import {
 
 const authRouter = Router();
 
-authRouter.post("/login", validateLogin, authController.login);
-authRouter.post("/logout", authenticate, validateLogout, authController.logout);
+authRouter.post("/login", platformIdentifier, validateLogin, authController.login);
+authRouter.post("/logout", platformIdentifier, authenticate, validateLogout, authController.logout);
 authRouter.post(
   "/refresh-token",
-  authenticate,
+  platformIdentifier, 
   cookieExtractor,
   authController.refreshToken
 );

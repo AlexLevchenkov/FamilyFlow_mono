@@ -1,4 +1,5 @@
-export const authPaths = {  "/auth/login": {
+export const authPaths = {
+  "/auth/login": {
     post: {
       tags: ["Auth"],
       summary: "User login",
@@ -30,6 +31,11 @@ export const authPaths = {  "/auth/login": {
           description: "Invalid credentials",
         },
       },
+      parameters: [
+        {
+          $ref: "#/components/parameters/XAuthMode",
+        },
+      ],
     },
   },
   "/auth/logout": {
@@ -45,9 +51,14 @@ export const authPaths = {  "/auth/login": {
           description: "Logout failed",
         },
       },
+      parameters: [
+        {
+          $ref: "#/components/parameters/XAuthMode",
+        },
+      ],
     },
   },
-  "/auth/refresh": {
+  "/auth/refresh-token": {
     post: {
       tags: ["Auth"],
       summary: "Token refresh",
@@ -70,6 +81,11 @@ export const authPaths = {  "/auth/login": {
           description: "Unauthorized",
         },
       },
+      parameters: [
+        {
+          $ref: "#/components/parameters/XAuthMode",
+        },
+      ],
     },
   },
   "/auth/change-password": {

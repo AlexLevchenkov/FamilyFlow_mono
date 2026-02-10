@@ -24,6 +24,18 @@ export const swaggerOptions: SwaggerOptions = {
       },
     },
     schemas,
+    parameters: {
+      XAuthMode: {
+        name: 'X-Auth-Mode',
+        in: 'header',
+        required: false,
+        schema: {
+          type: 'string',
+          enum: ['WEB', 'MOBILE'],
+          default: 'WEB',
+        },
+      },
+    },
   },
   paths,
 };

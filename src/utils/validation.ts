@@ -1,7 +1,6 @@
-import { Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from 'express';
 import { AppError, ValidationError } from "@utils/errors";
 import z from "zod";
-import { RequestTU } from "@middleware/cookieExtractor";
 
 type ValidatorSources = {
   body?: boolean;
@@ -12,9 +11,9 @@ type ValidatorSources = {
 export const makeValidator = (
   schema: z.ZodTypeAny,
   sources: ValidatorSources = { body: true },
-  messagePrefix = "Validation error: "
+  messagePrefix ="Validation error:"
 ) => {
-  return (req: RequestTU, res: Response, next: NextFunction): void => {
+  return (req: Request, res: Response, next: NextFunction): void => {
     try {
       const data = {
         ...(sources.body ? req.body : {}),
@@ -27,7 +26,8 @@ export const makeValidator = (
       if (!parseResult.success) {
         next(
           new ValidationError(
-            messagePrefix + JSON.stringify(parseResult.error.format())
+            "Path: " + req.originalUrl + ". \n " + 
+            messagePrefix + parseResult.error.issues.map(e => e.message).join(', ')
           )
         );
         return;

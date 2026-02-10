@@ -1,10 +1,9 @@
-import { Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from 'express';
 import jwt from "jsonwebtoken";
 import keyRotationService from "@utils/keyRotation";
 import { AppError, unauthorizedError } from "@utils/errors";
-import { RequestTU } from "./cookieExtractor";
 
-export default function authenticate(req: RequestTU, res: Response, next: NextFunction): void {
+export default function authenticate(req: Request, res: Response, next: NextFunction): void {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
@@ -13,7 +12,7 @@ export default function authenticate(req: RequestTU, res: Response, next: NextFu
     }
 
     const [bearer, token] = authHeader.split(" ");
-    
+
     if (bearer !== "Bearer" || !token) {
       next(unauthorizedError("Invalid token format"));
       return;
@@ -40,6 +39,7 @@ export default function authenticate(req: RequestTU, res: Response, next: NextFu
     req.user = {
       id: payload.userId,
       role: payload.role,
+      jti: "",
     };
 
     next();

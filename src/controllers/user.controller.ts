@@ -2,12 +2,11 @@ import { Request, Response } from "express";
 import { GetUsersInput, RegisterInput, UpdateUserInput } from "@middleware/schemas/user";
 import userService from "@services/user.service";
 import apiResponse from "@utils/response";
-import { RequestTU } from "@middleware/cookieExtractor";
 
 class UserController {
   async getUsers(req: Request, res: Response): Promise<void> {
     try {
-      const { page, partName, partEmail }: GetUsersInput = req.query;
+      const { page, partName, partEmail }: GetUsersInput = req.validated;
       const data = await userService.getUsers({ page, partName, partEmail });
       apiResponse(res, data, 200);
     } catch (error) {
@@ -15,6 +14,7 @@ class UserController {
       apiResponse(res, null, 500, errorMessage);
     }
   }
+
 
   async register(req: Request, res: Response): Promise<void> {
     try {
@@ -29,16 +29,7 @@ class UserController {
 
   async getUserById(req: Request, res: Response): Promise<void> {
     try {
-      const userIdParam = req.params.id;
-
-      const userId = Number(userIdParam);
-
-      if (!userIdParam || Number.isNaN(userId) || userId <= 0) {
-        apiResponse(res, null, 400, "Invalid or missing userId parameter");
-        return;
-      }
-
-      const data = await userService.getUserById({ userId });
+      const data = await userService.getUserById({ ...req.validated });
       apiResponse(res, data, 200);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An error occurred";
@@ -46,7 +37,7 @@ class UserController {
     }
   }
 
-  async updateUser(req: RequestTU, res: Response): Promise<void> {
+  async updateUser(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
 
@@ -71,7 +62,7 @@ class UserController {
     }
   }
 
-  async deleteUser(req: RequestTU, res: Response): Promise<void> {
+  async deleteUser(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
 

@@ -1,19 +1,22 @@
 import { Request, Response } from "express";
 import authService from "@services/auth.service";
-import { ChangePasswordInput, LoginInput } from "@middleware/schemas/auth";
-import { RequestTU } from "@middleware/cookieExtractor";
 import { logError } from "@utils/logger";
 import apiResponse from "@utils/response";
 
 class AuthController {
   login = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { email, password } = req.body as LoginInput;
-      const data = await authService.login({ email, password });
+      const mode = req.mode;
+      const data = await authService.login({ ...req.validated });
 
-      this.addRefreshTokenToCookie(res, data.refreshToken);
-
-      apiResponse(res, { ...data, user: {...data.user, password: null} }, 200);
+      if (mode === "WEB") {
+        this.addRefreshTokenToCookie(res, data.refreshToken);
+        apiResponse(res, { user: { ...data.user, password: null }, accessToken: data.accessToken }, 200);
+      } else if (mode === "MOBILE") {
+        apiResponse(res, { user: { ...data.user, password: null }, accessToken: data.accessToken, refreshToken: data.refreshToken }, 200);
+      } else {
+        apiResponse(res, null, 500, "Invalid or missed mode");
+      }
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";
@@ -21,29 +24,26 @@ class AuthController {
     }
   };
 
-  logout = async (req: RequestTU, res: Response): Promise<void> => {
+  logout = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { user } = req;
-
-      if (!user) {
-        apiResponse(res, null, 400, "Could not get user");
-        return;
-      }
-
+      const { user, mode } = req;
+      
       await authService.logout({ userId: user.id });
 
-      try {
-        res.clearCookie("refreshToken", {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "lax",
-          path: "/auth/refresh-token",
-        });
-      } catch (err) {
-        logError(
-          "Failed to clear refresh token cookie: " +
+      if (mode === "WEB") {
+        try {
+          res.clearCookie("refreshToken", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            path: "/auth/refresh-token",
+          });
+        } catch (err) {
+          logError(
+            "Failed to clear refresh token cookie: " +
             (err instanceof Error ? err.message : String(err))
-        );
+          );
+        }
       }
 
       apiResponse(res, null, 200, "Logged out successfully");
@@ -54,23 +54,21 @@ class AuthController {
     }
   };
 
-  refreshToken = async (req: RequestTU, res: Response): Promise<void> => {
+  refreshToken = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { user } = req;
-
-      if (!user || !user.id || !user.jti) {
-        apiResponse(res, null, 400, "Could not get user or jti");
-        return;
-      }
+      const { user, mode } = req;
 
       const data = await authService.refreshToken({
         userId: user.id,
         jti: user.jti,
       });
 
-      this.addRefreshTokenToCookie(res, data.refreshToken);
-
-      apiResponse(res, data, 200);
+      if (mode === "WEB") {
+        this.addRefreshTokenToCookie(res, data.refreshToken);
+        apiResponse(res, { accessToken: data.accessToken }, 200);
+      } else if (mode === "MOBILE") {
+        apiResponse(res, { accessToken: data.accessToken, refreshToken: data.refreshToken }, 200);
+      }
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";
@@ -78,20 +76,13 @@ class AuthController {
     }
   };
 
-  changePassword = async (req: RequestTU, res: Response): Promise<void> => {
+  changePassword = async (req: Request, res: Response): Promise<void> => {
     try {
       const { user } = req;
-      const { currentPassword, password } = req.body as ChangePasswordInput;
-
-      if (!user) {
-        apiResponse(res, null, 400, "Could not get user");
-        return;
-      }
 
       await authService.changePassword({
-        userId: user?.id,
-        currentPassword,
-        password,
+        userId: user.id,
+        ...req.validated,
       });
 
       apiResponse(res, null, 200);
@@ -102,19 +93,13 @@ class AuthController {
     }
   };
 
-  setPassword = async (req: RequestTU, res: Response): Promise<void> => {
+  setPassword = async (req: Request, res: Response): Promise<void> => {
     try {
       const { user } = req;
-      const { password } = req.body as ChangePasswordInput;
-
-      if (!user) {
-        apiResponse(res, null, 400, "Could not get user");
-        return;
-      }
 
       await authService.setPassword({
-        userId: user?.id,
-        password,
+        userId: user.id,
+        ...req.validated,
       });
 
       apiResponse(res, null, 200);
@@ -124,7 +109,7 @@ class AuthController {
       apiResponse(res, null, 500, errorMessage);
     }
   };
-  
+
   addRefreshTokenToCookie = (res: Response, token: string): void => {
     try {
       const refreshExpiresDays = parseInt(process.env.REFRESH_EXPIRES_IN || "14");
@@ -140,7 +125,7 @@ class AuthController {
     } catch (err) {
       logError(
         "Failed to set refresh token cookie: " +
-          (err instanceof Error ? err.message : String(err))
+        (err instanceof Error ? err.message : String(err))
       );
     }
   };

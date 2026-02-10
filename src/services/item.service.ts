@@ -9,7 +9,7 @@ import {
 import { badRequestError, notFoundError } from "@utils/errors";
 
 class ItemService {
-  async getListItems({ listId, page }: GetListItemsInput) {
+  async getListItems({ listId, page = 1 }: GetListItemsInput) {
     const itemsPerPage = Number(process.env.ITEMS_PER_PAGE) || 20;
 
     const items = await prisma.item.findMany({
@@ -47,10 +47,10 @@ class ItemService {
   async createListItem({
     listId,
     title,
-    completed,
-    priority,
-    position,
-    description,
+    completed = false,
+    priority = 0,
+    position = 0,
+    description = "",
     dueDate,
   }: CreateItemInput) {
     const createdItem = await prisma.item.create({
@@ -81,7 +81,7 @@ class ItemService {
     position,
     description,
     dueDate,
-  }: UpdateItemInput & { id: number }) {
+  }: UpdateItemInput) {
     const updatedItem = await prisma.item.update({
       where: { id },
       data: {

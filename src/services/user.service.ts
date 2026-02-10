@@ -65,8 +65,8 @@ class UserService {
     return { ...user, password: undefined };
   }
 
-  async getUserById({ userId }: GetUserByIdInput) {
-    const user = await prisma.user.findUnique({ where: { id: userId } });
+  async getUserById({ id }: GetUserByIdInput) {
+    const user = await prisma.user.findUnique({ where: { id } });
 
     if (!user) {
       throw badRequestError("User not found");

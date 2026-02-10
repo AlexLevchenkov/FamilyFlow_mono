@@ -1,20 +1,11 @@
-import { Response } from "express";
-import { RequestTU } from "@middleware/cookieExtractor";
-import { CreateItemInput, GetListItemsInput, UpdateItemInput } from "@middleware/schemas/item";
+import type { Request, Response } from 'express';
 import itemService from "@services/item.service";
 import apiResponse from "@utils/response";
 
 class ItemController {
-  async getListItems(req: RequestTU, res: Response): Promise<void> {
+  async getListItems(req: Request, res: Response): Promise<void> {
     try {
-      const query = req.query;
-
-      const listId: GetListItemsInput["listId"] = Number(query.listId);
-      const page: GetListItemsInput["page"] = query.page
-        ? Number(query.page)
-        : 1;
-
-      const data = await itemService.getListItems({ listId, page });
+      const data = await itemService.getListItems({ ...req.validated });
       apiResponse(res, data, 200);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An error occurred";
@@ -22,10 +13,9 @@ class ItemController {
     }
   }
 
-  async getListItemById(req: RequestTU, res: Response): Promise<void> {
+  async getListItemById(req: Request, res: Response): Promise<void> {
     try {
-      const id: number = Number(req.params.id);
-      const data = await itemService.getListItemById({ id });
+      const data = await itemService.getListItemById({ ...req.validated });
       apiResponse(res, data, 200);
     }  catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An error occurred";
@@ -33,27 +23,9 @@ class ItemController {
     }
   }
 
-  async createListItem(req: RequestTU, res: Response): Promise<void> {
+  async createListItem(req: Request, res: Response): Promise<void> {
     try {
-      const {
-        listId,
-        title,
-        completed = false,
-        priority = 0,
-        position = 0,
-        description = "",
-        dueDate,
-      }: CreateItemInput = req.body;
-
-      const data = await itemService.createListItem({
-        listId,
-        title,
-        completed,
-        priority,
-        position,
-        description,
-        dueDate,
-      });
+      const data = await itemService.createListItem({...req.validated});
 
       apiResponse(res, data, 200);
     } catch (error) {
@@ -63,34 +35,9 @@ class ItemController {
     }
   }
 
-  async updateListItem(req: RequestTU, res: Response): Promise<void> {
+  async updateListItem(req: Request, res: Response): Promise<void> {
     try {
-      const {
-        listId,
-        title,
-        completed,
-        priority,
-        position,
-        description,
-        dueDate,
-      }: UpdateItemInput = req.body;
-      const id = Number(req.params.id);
-
-      if (!listId) {
-        apiResponse(res, null, 400, "Could not get listId");
-        return;
-      }
-
-      const data = await itemService.updateListItem({
-        id,
-        listId,
-        title,
-        completed,
-        priority,
-        position,
-        description,
-        dueDate,
-      });
+      const data = await itemService.updateListItem({...req.validated});
 
       if (!data) {
         apiResponse(res, null, 401, "Invalid credentials");
@@ -104,16 +51,9 @@ class ItemController {
     }
   }
 
-  async deleteListItem(req: RequestTU, res: Response): Promise<void> {
+  async deleteListItem(req: Request, res: Response): Promise<void> {
     try {
-      const id = Number(req.params.id);
-
-      if (!id) {
-        apiResponse(res, null, 400, "Could not get list item Id");
-        return;
-      }
-
-      await itemService.deleteListItem({ id });
+      await itemService.deleteListItem({ ... req.validated });
       apiResponse(res, undefined, 200);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An error occurred";

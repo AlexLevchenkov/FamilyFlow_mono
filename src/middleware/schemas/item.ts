@@ -21,6 +21,7 @@ const createItemSchema = z.object({
 });
 
 const updateItemSchema = z.object({
+	id: z.coerce.number(),
 	listId: z.coerce.number(),
 	title: z.coerce.string().optional(),
 	description: z.coerce.string().optional(),

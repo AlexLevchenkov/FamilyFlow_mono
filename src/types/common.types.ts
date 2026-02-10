@@ -7,3 +7,8 @@ export interface PaginatedResponse<T> {
     totalPages: number;
   };
 }
+
+export interface IMode {
+  mode: TMode
+}
+export type TMode = 'WEB' | 'MOBILE'

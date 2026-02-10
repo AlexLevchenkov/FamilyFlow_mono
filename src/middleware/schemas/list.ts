@@ -8,7 +8,7 @@ const type = ["shopping", "tasks", "events"] as Type[];
 const accessTypes = ["edit", "fullAccess", "watch"] as AccessTypes[];
 
 const getUserListsSchema = z.object({
-  page: z.coerce.string().optional(),
+  page: z.coerce.number().refine((page) => page > 0, "Min page value is 1"),
 });
 
 const getListSchema = z.object({
@@ -18,16 +18,16 @@ const getListSchema = z.object({
 const createListSchema = z.object({
   title: z.string(),
   type: z.enum(type),
-  color: z.string(),
-  icon: z.string(),
+  color: z.string().optional(),
+  icon: z.string().optional(),
 });
 
 const updateListSchema = z.object({
   id: z.coerce.number(),
   title: z.string(),
   type: z.enum(type),
-  color: z.string(),
-  icon: z.string(),
+  color: z.string().optional(),
+  icon: z.string().optional(),
 });
 
 const deleteListSchema = z.object({
@@ -55,7 +55,7 @@ export type ShareListInput = z.infer<typeof shareListSchema>;
 export type removeSharingListInput = z.infer<typeof removeSharingListSchema>;
 
 export const validateGetUserLists = makeValidator(getUserListsSchema, {
-  params: true,
+  query: true,
 });
 export const validateGetList = makeValidator(getListSchema, {
   params: true

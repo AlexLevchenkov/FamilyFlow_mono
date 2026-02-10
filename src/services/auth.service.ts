@@ -76,7 +76,7 @@ class AuthService {
     if (!existing) {
       throw badRequestError("Invalid refresh token");
     }
-    
+
     await prisma.refreshToken.delete({ where: { id: existing.id } });
 
     if (existing.expiresAt && existing.expiresAt < new Date()) {

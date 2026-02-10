@@ -1,14 +1,13 @@
-import { Response } from "express";
-import { RequestTU } from "@middleware/cookieExtractor";
-import { GetUserListsInput, CreateListInput, UpdateListInput, ShareListInput } from "@middleware/schemas/list";
+import type { Request, Response } from 'express';
+import { GetUserListsInput, CreateListInput, UpdateListInput, ShareListInput, GetListInput, DeleteListInput } from "@middleware/schemas/list";
 import apiResponse from "@utils/response";
 import listService from "@services/list.service";
 
 class ListController {
-  async getUserLists(req: RequestTU, res: Response): Promise<void> {
+  async getUserLists(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { page }: GetUserListsInput = req.query;
+      const { page }: GetUserListsInput = req.validated;
 
       if (!user || !user.id) {
         apiResponse(res, null, 400, "Could not get user");
@@ -23,16 +22,12 @@ class ListController {
     }
   }
 
-  async getListById(req: RequestTU, res: Response): Promise<void> {
+  async getListById(req: Request, res: Response): Promise<void> {
     try {
-      const id: number = Number(req.params.id);
+      const { user } = req;
+      const { id }: GetListInput = req.validated;
 
-      if (!id) {
-        apiResponse(res, null, 400, "Could not get list Id");
-        return;
-      }
-
-      const data = await listService.getListById({ id });
+      const data = await listService.getListById({ id, userId: user.id});
       apiResponse(res, data, 200);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An error occurred";
@@ -40,10 +35,10 @@ class ListController {
     }
   }
 
-  async createList(req: RequestTU, res: Response): Promise<void> {
+  async createList(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { title, type, color, icon }: CreateListInput = req.body;
+      const { title, type, color = "", icon = "" }: CreateListInput = req.validated;
 
       if (!user || !user.id || !title || !type) {
         apiResponse(res, null, 400, "Could not get user or title or type");
@@ -70,11 +65,10 @@ class ListController {
     }
   }
 
-  async updateList(req: RequestTU, res: Response): Promise<void> {
+  async updateList(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { title, type, color, icon }: Omit<UpdateListInput, "id"> = req.body;
-      const id = Number(req.params.id);
+      const { id, title, type, color = "", icon = "" }: UpdateListInput = req.validated;
 
       if (!user || !user.id || !id || !title || !type) {
         apiResponse(res, null, 400, "Could not get user or title or type");
@@ -96,13 +90,13 @@ class ListController {
     }
   }
 
-  async deleteList(req: RequestTU, res: Response): Promise<void> {
+  async deleteList(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const id = Number(req.params.id);
+      const { id }: DeleteListInput = req.validated;
 
-      if (!user || !user.id || !id) {
-        apiResponse(res, null, 400, "Could not get user or list Id");
+      if (!user || !user.id) {
+        apiResponse(res, null, 400, "Could not get user");
         return;
       }
 
@@ -114,10 +108,10 @@ class ListController {
     }
   }
 
-  async shareList(req: RequestTU, res: Response): Promise<void> {
+  async shareList(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { listId, recipientId, accessTypes }: ShareListInput = req.body;
+      const { listId, recipientId, accessTypes }: ShareListInput = req.validated;
 
       if (!user || !user.id) {
         apiResponse(
@@ -143,7 +137,7 @@ class ListController {
     }
   }
 
-  async removeSharingList(req: RequestTU, res: Response): Promise<void> {
+  async removeSharingList(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
       const listId = Number(req.query.listId);

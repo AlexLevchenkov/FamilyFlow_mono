@@ -36,6 +36,7 @@ export const itemsListSchemas = {
     position: item.position,
   }),
   UpdateItemsListRequest: interfaceToOpenAPI<UpdateItemInput>({
+    id: item.id,
     listId: item.listId,
     title: item.title,
     description: item.description || "",

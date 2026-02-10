@@ -24,7 +24,7 @@ class ListServices {
 
     const lists = await prisma.list.findMany({
       where,
-      skip: page ? Number(page) * itemsPerPage : 0,
+      skip: page ? Number(page - 1) * itemsPerPage : 0,
       take: itemsPerPage,
       orderBy: [{ title: "asc" }],
     });
@@ -46,8 +46,8 @@ class ListServices {
     };
   }
 
-  async getListById({ id }: GetListInput) {
-    const list = await prisma.list.findFirst({ where: { id } });
+  async getListById({ id, userId }: GetListInput & { userId: number }) {
+    const list = await prisma.list.findFirst({ where: { id, userId } });
 
     if (!list) {
       throw badRequestError("List not found");
@@ -79,6 +79,14 @@ class ListServices {
 
     if (!haveList) {
       throw badRequestError("List not found");
+    };
+
+    const listWithThisTitle = await prisma.list.findFirst({
+      where: { userId, title }
+    })
+
+    if (!!listWithThisTitle) {
+      throw badRequestError("List with this title already exist")
     }
 
     const updatedList = await prisma.list.update({
