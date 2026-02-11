@@ -1,4 +1,4 @@
-import { AuthStorage } from "common/types/auth";
+import { AuthStorage } from '@familyflow/common/types/auth';
 
 export let authStorage: AuthStorage;
 

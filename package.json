@@ -4,14 +4,16 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "dev:common": "cd common && pnpm dev",
     "dev:web": "cd web && pnpm dev",
-    "build:web": "cd web && pnpm build",
     "dev:mobile": "cd mobile && pnpm start",
-    "android": "cd mobile && pnpm android",
-    "ios": "cd mobile && pnpm ios",
+    "build:common": "cd common && pnpm build",
+    "build:web": "cd web && pnpm build",
+    "build:mobile": "cd mobile && pnpm build",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "clean": "rm -rf node_modules pnpm-lock.yaml common/node_modules mobile/node_module web/node_moduless"
+    "reset": "rm -rf pnpm-lock.yaml node_modules common/node_modules mobile/node_modules web/node_modules && pnpm install"
   },
   "devDependencies": {
     "typescript": "^5.4.0",

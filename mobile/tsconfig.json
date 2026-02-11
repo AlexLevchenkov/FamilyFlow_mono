@@ -4,9 +4,6 @@
     "jsx": "react-native",
     "lib": ["ES2020"],
     "types": ["react", "react-native"],
-    "paths": {
-      "@common/*": ["../common/*"]
-    }
   },
   "include": ["app", "index.ts", "index.tsx"]
 }

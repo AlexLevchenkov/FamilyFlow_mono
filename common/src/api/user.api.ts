@@ -1,5 +1,5 @@
-import { apiRequest } from "./client";
-import { API_CONFIG } from "./config";
+import { apiRequest } from "@familyflow/common/api/client";
+import { API_CONFIG } from "@familyflow/common/api/config";
 
 export interface User {
   id: string;

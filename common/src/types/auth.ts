@@ -3,3 +3,5 @@ export interface AuthStorage {
   setAccessToken(token: string): Promise<void> | void;
   clear(): Promise<void> | void;
 }
+
+export type TMode = "WEB" | "MOBILE"

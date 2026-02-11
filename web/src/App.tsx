@@ -1,28 +1,31 @@
-import { useAuth, useLogin } from "@common/hooks/AuthHooks";
-import { useEffect } from "react";
-import { authStorage } from "@common/store/auth"
+import { useAuth, useLogin, useLogout } from "@familyflow/common/hooks/AuthHooks";
+import { authStorage } from "@familyflow/common/store/auth"
 
 export default function App() {
-  const login = useLogin();
+  const login = useLogin("WEB");
+  const logout = useLogout("WEB");
   const isAuth = useAuth();
 
-  const onSubmit = () => {
+  const tryLogin = () => {
     login.mutate({
       email: "super@gmail.com",
       password: "password",
-    });
+    },
+    {onSuccess: (data) => {
+      authStorage.setAccessToken(data.accessToken)
+    }});
   };
 
-  useEffect(() => {
-    if (login.data && login.data.accessToken) {
-      authStorage.setAccessToken(login.data?.accessToken);
-    }
-  }, [login.data])
+  const tryLogout = () => {
+    logout.mutate(undefined, {onSuccess: () => authStorage.setAccessToken("")});
+  };
 
-  if (isAuth) return <p>You are authorized</p>;
+  if (isAuth) return <p>You are authorized <button onClick={tryLogout}>Logout</button></p>;
 
   if (login.isPending) return <p>Loading...</p>;
   if (login.isError) return <p>Error</p>;
 
-  return <button onClick={onSubmit}>Login</button>;
+  return <div>
+    <button onClick={tryLogin}>Login</button>
+  </div>;
 }
