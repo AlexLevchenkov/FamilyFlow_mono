@@ -1,5 +1,5 @@
 import * as SecureStore from "expo-secure-store";
-import { initAuthStorage } from "@common/store/auth"
+import { initAuthStorage } from "@familyflow/common/store/auth"
 
 initAuthStorage({
   async getAccessToken() {
@@ -8,7 +8,7 @@ initAuthStorage({
   async setAccessToken(token: string) {
     await SecureStore.setItemAsync("familyflow_access_token", token);
   },
-  async clear() {
+  async removeAccessToken() {
     await SecureStore.deleteItemAsync("familyflow_access_token");
   },
 });

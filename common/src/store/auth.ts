@@ -1,7 +1,24 @@
 import { AuthStorage } from '@familyflow/common/types/auth';
 
-export let authStorage: AuthStorage;
+let storage: AuthStorage | null = null;
 
-export function initAuthStorage(storage: AuthStorage) {
-  authStorage = storage;
-}
+export const initAuthStorage = (authStorage: AuthStorage) => {
+  storage = authStorage;
+};
+
+export const authStorage = {
+  getAccessToken() {
+    if (!storage) throw new Error("AuthStorage not initialized");
+    return storage.getAccessToken();
+  },
+
+  setAccessToken(token: string) {
+    if (!storage) throw new Error("AuthStorage not initialized");
+    return storage.setAccessToken(token);
+  },
+
+  removeAccessToken() {
+    if (!storage) throw new Error("AuthStorage not initialized");
+    return storage.removeAccessToken();
+  },
+};

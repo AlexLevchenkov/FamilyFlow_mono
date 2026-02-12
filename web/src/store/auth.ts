@@ -7,7 +7,7 @@ initAuthStorage({
   setAccessToken(token: string) {
     localStorage.setItem("access_token", token);
   },
-  clear() {
+  removeAccessToken() {
     localStorage.removeItem("access_token");
   },
 });

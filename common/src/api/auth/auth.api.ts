@@ -1,7 +1,7 @@
 import { apiRequest } from '@familyflow/common/api/client';
 import { API_CONFIG } from '@familyflow/common/api/config';
 import { TMode } from '@familyflow/common/types/auth';
-import { authStorage } from '@familyflow/common/store/auth';
+import { authStorage } from '../../../dist/store/auth';
 
 export interface LoginDto {
   email: string;

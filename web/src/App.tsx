@@ -17,7 +17,7 @@ export default function App() {
   };
 
   const tryLogout = () => {
-    logout.mutate(undefined, {onSuccess: () => authStorage.setAccessToken("")});
+    logout.mutate(undefined, {onSuccess: () => authStorage.removeAccessToken()});
   };
 
   if (isAuth) return <p>You are authorized <button onClick={tryLogout}>Logout</button></p>;
