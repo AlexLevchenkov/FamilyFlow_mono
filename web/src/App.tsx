@@ -2,8 +2,8 @@ import { useAuth, useLogin, useLogout } from "@familyflow/common/hooks/AuthHooks
 import { authStorage } from "@familyflow/common/store/auth"
 
 export default function App() {
-  const login = useLogin("WEB");
-  const logout = useLogout("WEB");
+  const login = useLogin();
+  const logout = useLogout();
   const isAuth = useAuth();
 
   const tryLogin = () => {

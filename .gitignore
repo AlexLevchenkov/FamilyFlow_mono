@@ -36,5 +36,5 @@ Thumbs.db
 coverage/
 .nyc_output/
 
-
-/src/generated/prisma
+#Common
+tsconfig.tsbuildinfo

@@ -1,6 +1,7 @@
 import { initAuthStorage } from "@familyflow/common/store/auth";
 
 initAuthStorage({
+  mode: "WEB",
   getAccessToken() {
     return localStorage.getItem("access_token");
   },

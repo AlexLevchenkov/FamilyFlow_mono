@@ -7,6 +7,10 @@ export const initAuthStorage = (authStorage: AuthStorage) => {
 };
 
 export const authStorage = {
+  getMode() {
+    return storage?.mode
+  },
+
   getAccessToken() {
     if (!storage) throw new Error("AuthStorage not initialized");
     return storage.getAccessToken();
