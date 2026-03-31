@@ -19,8 +19,8 @@
   },
 
   "scripts": {
-    "build": "tsc --build",
-    "dev": "rm -rf dist tsconfig.tsbuildinfo && tsc --build --watch"
+    "build": "tsc --build && cp -R src/assets dist/assets",
+    "dev": "rm -rf dist && mkdir dist && cp -R src/assets dist/assets && tsc --build --watch"
   },
 
   "peerDependencies": {

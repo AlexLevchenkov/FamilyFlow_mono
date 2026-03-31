@@ -1,8 +1,14 @@
 export const colors = {
-  primary: "#4F46E5",
-  secondary: "#22C55E",
-  background: "#FFFFFF",
-  text: "#111827",
-  muted: "#6B7280",
-  danger: "#EF4444"
-} as const;
+  text: "#0F266A",
+  white: "#FFF",
+  asideBack: "#F6F2FB",
+  background: "#E4E4E4",
+  panelsColor: "#FEFDFE",
+  selected: "#8D6ACE",
+  gradien1: "#8D6ACE",
+  gradien2: "#684DC8",
+};
+
+export const gradient = {
+  buttonFill: `linear-gradient(${colors.gradien1}, ${colors.gradien2})`,
+}

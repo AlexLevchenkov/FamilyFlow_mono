@@ -1,31 +1,12 @@
-import { useAuth, useLogin, useLogout } from "@familyflow/common/hooks/AuthHooks";
-import { authStorage } from "@familyflow/common/store/auth"
+import LoginLogout from '@organisms/LoginLogout';
+import '@styles/fonts.css'
+import Logo from '@atoms/Logo';
 
 export default function App() {
-  const login = useLogin();
-  const logout = useLogout();
-  const isAuth = useAuth();
-
-  const tryLogin = () => {
-    login.mutate({
-      email: "super@gmail.com",
-      password: "password",
-    },
-    {onSuccess: (data) => {
-      authStorage.setAccessToken(data.accessToken)
-    }});
-  };
-
-  const tryLogout = () => {
-    logout.mutate(undefined, {onSuccess: () => authStorage.removeAccessToken()});
-  };
-
-  if (isAuth) return <p>You are authorized <button onClick={tryLogout}>Logout</button></p>;
-
-  if (login.isPending) return <p>Loading...</p>;
-  if (login.isError) return <p>Error</p>;
-
-  return <div>
-    <button onClick={tryLogin}>Login</button>
-  </div>;
+  return (
+    <div>
+      <LoginLogout />
+      <Logo />
+    </div>
+  );
 }
