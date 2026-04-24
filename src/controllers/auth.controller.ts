@@ -6,17 +6,9 @@ import apiResponse from "@utils/response";
 class AuthController {
   login = async (req: Request, res: Response): Promise<void> => {
     try {
-      const mode = req.mode;
       const data = await authService.login({ ...req.validated });
-
-      if (mode === "WEB") {
-        this.addRefreshTokenToCookie(res, data.refreshToken);
-        apiResponse(res, { user: { ...data.user, password: null }, accessToken: data.accessToken }, 200);
-      } else if (mode === "MOBILE") {
-        apiResponse(res, { user: { ...data.user, password: null }, accessToken: data.accessToken, refreshToken: data.refreshToken }, 200);
-      } else {
-        apiResponse(res, null, 500, "Invalid or missed mode");
-      }
+      this.addRefreshTokenToCookie(res, data.refreshToken);
+      apiResponse(res, { user: { name: data.user.name, avatar: data.user.avatar }, accessToken: data.accessToken }, 200);
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";
@@ -26,24 +18,22 @@ class AuthController {
 
   logout = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { user, mode } = req;
+      const { user } = req;
       
       await authService.logout({ userId: user.id });
 
-      if (mode === "WEB") {
-        try {
-          res.clearCookie("refreshToken", {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-            path: "/auth/refresh-token",
-          });
-        } catch (err) {
-          logError(
-            "Failed to clear refresh token cookie: " +
-            (err instanceof Error ? err.message : String(err))
-          );
-        }
+      try {
+        res.clearCookie("refreshToken", {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "lax",
+          path: "/auth/refresh-token",
+        });
+      } catch (err) {
+        logError(
+          "Failed to clear refresh token cookie: " +
+          (err instanceof Error ? err.message : String(err))
+        );
       }
 
       apiResponse(res, null, 200, "Logged out successfully");
@@ -56,19 +46,15 @@ class AuthController {
 
   refreshToken = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { user, mode } = req;
+      const { user } = req;
 
       const data = await authService.refreshToken({
         userId: user.id,
         jti: user.jti,
       });
 
-      if (mode === "WEB") {
-        this.addRefreshTokenToCookie(res, data.refreshToken);
-        apiResponse(res, { accessToken: data.accessToken }, 200);
-      } else if (mode === "MOBILE") {
-        apiResponse(res, { accessToken: data.accessToken, refreshToken: data.refreshToken }, 200);
-      }
+      this.addRefreshTokenToCookie(res, data.refreshToken);
+      apiResponse(res, { accessToken: data.accessToken }, 200);
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";

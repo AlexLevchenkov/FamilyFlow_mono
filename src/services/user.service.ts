@@ -29,11 +29,11 @@ class UserService {
     const total = await prisma.user.count({ where });
 
     if (users.length === 0) {
-      throw badRequestError("Can't get any users");``
+      throw badRequestError("Can't get any users");
     }
 
     return {
-      data: users.map((user) => ({ ...user, password: undefined })),
+      data: users.map(({ password: _password, ...user }) => user),
       pagination: {
         total,
         page: page || 1,

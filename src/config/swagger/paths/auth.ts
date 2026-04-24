@@ -31,11 +31,6 @@ export const authPaths = {
           description: "Invalid credentials",
         },
       },
-      parameters: [
-        {
-          $ref: "#/components/parameters/XAuthMode",
-        },
-      ],
     },
   },
   "/auth/logout": {
@@ -51,11 +46,6 @@ export const authPaths = {
           description: "Logout failed",
         },
       },
-      parameters: [
-        {
-          $ref: "#/components/parameters/XAuthMode",
-        },
-      ],
     },
   },
   "/auth/refresh-token": {
@@ -81,11 +71,6 @@ export const authPaths = {
           description: "Unauthorized",
         },
       },
-      parameters: [
-        {
-          $ref: "#/components/parameters/XAuthMode",
-        },
-      ],
     },
   },
   "/auth/change-password": {

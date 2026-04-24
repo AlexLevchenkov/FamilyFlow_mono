@@ -10,7 +10,7 @@ import { interfaceToOpenAPI } from "@utils/interfaceToOpenAPI";
 export const authSchemas = {
   LoginRequest: interfaceToOpenAPI<LoginInput>({
     email: "super@gmail.com",
-    password: "password",
+    password: "Password123!@#",
   }),
   LoginResponse: interfaceToOpenAPI<LoginResponse>({
     accessToken: "jwt-token",
@@ -27,10 +27,10 @@ export const authSchemas = {
     accessToken: "jwt-token",
   }),
   ChangePasswordRequest: interfaceToOpenAPI<ChangePasswordResponse>({
-    oldPassword: "password123",
-    newPassword: "password456",
+    oldPassword: "Password123!@#",
+    newPassword: "Password456!@#",
   }),
   SetPasswordRequest: interfaceToOpenAPI<SetPasswordResponse>({
-    newPassword: "password456",
+    newPassword: "Password456!@#",
   }),
 };

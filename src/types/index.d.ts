@@ -1,5 +1,4 @@
 import 'express-serve-static-core';
-import { TMode } from './common.types';
 
 declare module 'express-serve-static-core' {
   interface Request {
@@ -10,7 +9,6 @@ declare module 'express-serve-static-core' {
     };
     refreshToken?: string;
     validated?: any;
-    mode: TMode;
   }
 }
 

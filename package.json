@@ -11,12 +11,22 @@
     "prisma:build": "node prisma/index.js",
     "prisma:generate": "prisma generate",
     "preprisma:generate": "npm run prisma:build",
+    "postprisma:generate": "node scripts/link-prisma-client.js",
     "prisma:migrate": "prisma migrate dev",
     "preprisma:migrate": "npm run prisma:build",
-    "prisma:migrate:deploy": "prisma migrate deploy"
+    "prisma:migrate:deploy": "prisma migrate deploy",
+    "prisma:migrate:reset": "prisma migrate reset"
+  },
+  "scriptDescriptions": {
+    "prisma:studio": "Open Prisma Studio UI for browsing/editing data.",
+    "prisma:build": "Compile Prisma schema from src/models into prisma/schema.prisma.",
+    "prisma:generate": "Generate Prisma Client (runs prisma:build first).",
+    "prisma:migrate": "Create/apply migrations in dev (runs prisma:build first).",
+    "prisma:migrate:deploy": "Apply existing migrations (CI/production).",
+    "prisma:migrate:reset": "Drop and recreate DB, then apply migrations (dev only)."
   },
   "dependencies": {
-    "@prisma/adapter-mariadb": "^7.1.0",
+    "@prisma/adapter-pg": "^7.5.0",
     "@prisma/client": "^7.2.0",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
@@ -26,8 +36,8 @@
     "express": "^5.2.1",
     "express-validator": "^7.3.1",
     "jsonwebtoken": "^9.0.2",
-    "mysql2": "^3.15.3",
     "node-cron": "^4.2.1",
+    "pg": "^8.20.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "zod": "^4.1.13"
