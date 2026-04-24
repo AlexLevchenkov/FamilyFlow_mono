@@ -4,18 +4,14 @@ import { RegisterInput } from "@middleware/schemas/user";
 import type { User as UserModel } from "@prisma/client";
 import { interfaceToOpenAPI } from "@utils/interfaceToOpenAPI";
 
-type UserPublic = Omit<UserModel, "password">;
+type UserPublic = Pick<UserModel, "name" | "avatar">;
 
 export const usersSchemas = {
   PaginatedUsersResponse: interfaceToOpenAPI<PaginatedResponse<UserPublic>>({
     data: [
       {
-        id: 1,
-        email: "user@example.com",
         name: "John Doe",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        avatar: "https/example.com/jone-doe-avatar",
+        avatar: "https://example.com/jone-doe-avatar",
       },
     ],
     pagination: {
@@ -35,13 +31,8 @@ export const usersSchemas = {
     name: "John Doe",
     avatar: "https/example.com/jone-doe-avatar",
   }),
-  UserResponse: interfaceToOpenAPI<UserModel>({
-    id: 1,
-    email: "user@example.com",
-    password: "",
+  UserResponse: interfaceToOpenAPI<UserPublic>({
     name: "John Doe",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    avatar: "https/example.com/jone-doe-avatar",
+    avatar: "https://example.com/jone-doe-avatar",
   }),
 };

@@ -7,8 +7,15 @@ class AuthController {
   login = async (req: Request, res: Response): Promise<void> => {
     try {
       const data = await authService.login({ ...req.validated });
-      this.addRefreshTokenToCookie(res, data.refreshToken);
-      apiResponse(res, { user: { name: data.user.name, avatar: data.user.avatar }, accessToken: data.accessToken }, 200);
+      this._addRefreshTokenToCookie(res, data.refreshToken);
+      apiResponse(
+        res,
+        {
+          user: { name: data.user.name, avatar: data.user.avatar },
+          accessToken: data.accessToken,
+        },
+        200,
+      );
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";
@@ -19,7 +26,7 @@ class AuthController {
   logout = async (req: Request, res: Response): Promise<void> => {
     try {
       const { user } = req;
-      
+
       await authService.logout({ userId: user.id });
 
       try {
@@ -32,7 +39,7 @@ class AuthController {
       } catch (err) {
         logError(
           "Failed to clear refresh token cookie: " +
-          (err instanceof Error ? err.message : String(err))
+            (err instanceof Error ? err.message : String(err)),
         );
       }
 
@@ -53,7 +60,7 @@ class AuthController {
         jti: user.jti,
       });
 
-      this.addRefreshTokenToCookie(res, data.refreshToken);
+      this._addRefreshTokenToCookie(res, data.refreshToken);
       apiResponse(res, { accessToken: data.accessToken }, 200);
     } catch (error) {
       const errorMessage =
@@ -96,9 +103,47 @@ class AuthController {
     }
   };
 
-  addRefreshTokenToCookie = (res: Response, token: string): void => {
+  requestPasswordReset = async (req: Request, res: Response): Promise<void> => {
     try {
-      const refreshExpiresDays = parseInt(process.env.REFRESH_EXPIRES_IN || "14");
+      const { email } = req.body;
+      await authService.requestPasswordReset({ email });
+      apiResponse(res, null, 200);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, 500, errorMessage);
+    }
+  };
+
+  resetPassword = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { token, newPassword } = req.body;
+      await authService.resetPassword({ token, newPassword });
+      apiResponse(res, null, 200);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, 500, errorMessage);
+    }
+  };
+
+  verifyEmail = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { token } = req.body;
+      await authService.verifyEmail({ token });
+      apiResponse(res, null, 200);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, 500, errorMessage);
+    }
+  };
+
+  _addRefreshTokenToCookie = (res: Response, token: string): void => {
+    try {
+      const refreshExpiresDays = parseInt(
+        process.env.REFRESH_EXPIRES_IN || "14",
+      );
       const maxAge = 1000 * 60 * 60 * 24 * refreshExpiresDays;
 
       res.cookie("refreshToken", token, {
@@ -111,7 +156,7 @@ class AuthController {
     } catch (err) {
       logError(
         "Failed to set refresh token cookie: " +
-        (err instanceof Error ? err.message : String(err))
+          (err instanceof Error ? err.message : String(err)),
       );
     }
   };

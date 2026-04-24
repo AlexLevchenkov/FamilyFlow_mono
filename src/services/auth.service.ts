@@ -2,6 +2,7 @@ import prisma from "@config/prisma";
 import { ChangePasswordInput, LoginInput, RefreshTokenInput, LogoutInput } from "@middleware/schemas/auth";
 import { WithUserId } from "@middleware/schemas/list";
 import { badRequestError } from "@utils/errors";
+import { sendResetEmail } from "@utils/Email";
 import { generateAccessToken, generateRefreshToken } from "@utils/tokens";
 import bcryptjs from "bcryptjs";
 import { randomUUID } from "crypto";
@@ -145,6 +146,54 @@ class AuthService {
       },
     });
   }
+
+  requestPasswordReset = async ({email} : {email: string}) => {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      throw badRequestError("User not found");
+    }
+  
+    const newAccessToken = crypto.randomUUID();
+  
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { resetToken: newAccessToken, resetTokenExp: new Date(Date.now() + 15 * 60 * 1000) },
+    });
+  
+    await sendResetEmail(email, newAccessToken);
+    return true;
+  };
+
+  resetPassword = async ({ token, newPassword } : { token: string, newPassword: string }) => {
+    const user = await prisma.user.findFirst({ where: { resetToken: token } });
+
+    if (!user || user.resetTokenExp == null || user.resetTokenExp < new Date()) {
+      throw badRequestError("Invalid or expired token");
+    }
+
+    const hashed = await bcryptjs.hash(newPassword, 10);
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { password: hashed, resetToken: null, resetTokenExp: null },
+    });
+
+    return true;
+  };
+
+  verifyEmail = async ({ token } : { token: string }) => {
+    const user = await prisma.user.findFirst({ where: { resetToken: token } });
+
+    if (!user) {
+      throw badRequestError("Invalid or expired token");
+    }
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { resetToken: null, emailVerified: true },
+    });
+
+    return true;
+  };
 
   _removeAllOldTokens = async () => {
     await prisma.refreshToken.deleteMany({

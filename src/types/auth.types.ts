@@ -2,7 +2,7 @@ import { User } from "@prisma/client";
 
 export interface LoginResponse {
   accessToken: string;
-  user: Omit<User, "password">;
+  user: Pick<User, "name" | "avatar">;
 }
 
 export interface RefreshResponse {
@@ -16,4 +16,17 @@ export interface ChangePasswordResponse {
 
 export interface SetPasswordResponse {
   newPassword: string;
+}
+
+export interface ForgotPasswordResponse {
+  email: string;
+}
+
+export interface ResetPasswordResponse {
+  token: string;
+  newPassword: string;
+}
+
+export interface EmailVerifyResponse {
+  token: string;
 }

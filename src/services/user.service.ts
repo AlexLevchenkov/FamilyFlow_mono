@@ -6,6 +6,7 @@ import {
   GetUserByIdInput,
   DeleteUserInput,
 } from "@middleware/schemas/user";
+import { sendCheckEmail } from "@utils/Email";
 import { badRequestError } from "@utils/errors";
 import bcryptjs from "bcryptjs";
 
@@ -54,13 +55,19 @@ class UserService {
       throw badRequestError("User already exists");
     }
 
+    const newAccessToken = crypto.randomUUID();
+
     const user = await prisma.user.create({
       data: {
         email: email,
         password: bcryptjs.hashSync(password, 10),
         name: name,
+        resetToken: newAccessToken,
+        emailVerified: false,
       },
     });
+
+    await sendCheckEmail(email, newAccessToken);
 
     return { ...user, password: undefined };
   }

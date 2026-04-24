@@ -129,4 +129,85 @@ export const authPaths = {
       },
     },
   },
+  "/auth/forgot-password": {
+    post: {
+      tags: ["Auth"],
+      summary: "Init reset password",
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              $ref: "#/components/schemas/ForgotPasswordRequest",
+            },
+          },
+        },
+      },
+      responses: {
+        200: {
+          description: "Sended mail with link",
+        },
+        400: {
+          description: "Could not get user",
+        },
+        401: {
+          description: "Unauthorized",
+        },
+      },
+    },
+  },
+  "/auth/reset-password": {
+    post: {
+      tags: ["Auth"],
+      summary: "Reset password",
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              $ref: "#/components/schemas/ResetPasswordRequest",
+            },
+          },
+        },
+      },
+      responses: {
+        200: {
+          description: "Password is changed",
+        },
+        400: {
+          description: "Could not get user",
+        },
+        401: {
+          description: "Unauthorized",
+        },
+      },
+    },
+  },
+  "/auth/verify-email": {
+    post: {
+      tags: ["Auth"],
+      summary: "Verify email",
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              $ref: "#/components/schemas/EmailVerifyRequest",
+            },
+          },
+        },
+      },
+      responses: {
+        200: {
+          description: "Email is verified",
+        },
+        400: {
+          description: "Could not get user",
+        },
+        401: {
+          description: "Unauthorized",
+        },
+      },
+    },
+  },
 };

@@ -92,6 +92,10 @@ model User {
   RefreshToken         RefreshToken[]
   List                 List[]
 
+  resetToken           String?
+  resetTokenExp        DateTime?
+  emailVerified        Boolean       @default(false)
+
   ownedSharedLists     SharedLists[] @relation("SharedListOwner")
   receivedSharedLists  SharedLists[] @relation("SharedListRecipient")
 }

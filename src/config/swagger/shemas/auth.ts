@@ -3,6 +3,9 @@ import {
   LoginResponse,
   RefreshResponse,
   SetPasswordResponse,
+  ForgotPasswordResponse,
+  ResetPasswordResponse,
+  EmailVerifyResponse,
 } from "@appTypes/auth.types";
 import { LoginInput } from "@middleware/schemas/auth";
 import { interfaceToOpenAPI } from "@utils/interfaceToOpenAPI";
@@ -15,12 +18,8 @@ export const authSchemas = {
   LoginResponse: interfaceToOpenAPI<LoginResponse>({
     accessToken: "jwt-token",
     user: {
-      id: 1,
-      email: "user@example.com",
       name: "John Doe",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      avatar: "https/example.com/jone-doe-avatar",
+      avatar: "https://example.com/jone-doe-avatar",
     },
   }),
   RefreshResponse: interfaceToOpenAPI<RefreshResponse>({
@@ -32,5 +31,15 @@ export const authSchemas = {
   }),
   SetPasswordRequest: interfaceToOpenAPI<SetPasswordResponse>({
     newPassword: "Password456!@#",
+  }),
+  ForgotPasswordRequest: interfaceToOpenAPI<ForgotPasswordResponse>({
+    email: "super@gmail.com",
+  }),
+  ResetPasswordRequest: interfaceToOpenAPI<ResetPasswordResponse>({
+    token: "secretToken",
+    newPassword: "Password456!@#",
+  }),
+  EmailVerifyRequest: interfaceToOpenAPI<EmailVerifyResponse>({
+    token: "secretToken",
   }),
 };
