@@ -1,5 +1,5 @@
 {
-  "name": "family_flow",
+  "name": "family_flow_server",
   "version": "1.0.0",
   "description": "Backend API for the home affairs management application",
   "main": "index.js",

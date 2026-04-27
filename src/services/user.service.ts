@@ -7,7 +7,7 @@ import {
   DeleteUserInput,
 } from "@middleware/schemas/user";
 import { sendCheckEmail } from "@utils/Email";
-import { badRequestError } from "@utils/errors";
+import { alreadyExistError, internalServerError, notFoundError } from "@utils/errors";
 import bcryptjs from "bcryptjs";
 
 class UserService {
@@ -30,7 +30,7 @@ class UserService {
     const total = await prisma.user.count({ where });
 
     if (users.length === 0) {
-      throw badRequestError("Can't get any users");
+      throw notFoundError("Can't get any users");
     }
 
     return {
@@ -52,7 +52,7 @@ class UserService {
     });
 
     if (haveUser) {
-      throw badRequestError("User already exists");
+      throw alreadyExistError("User already exists");
     }
 
     const newAccessToken = crypto.randomUUID();
@@ -76,7 +76,7 @@ class UserService {
     const user = await prisma.user.findUnique({ where: { id } });
 
     if (!user) {
-      throw badRequestError("User not found");
+      throw notFoundError("User not found");
     }
 
     return user;
@@ -86,7 +86,7 @@ class UserService {
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
-      throw badRequestError("User not found");
+      throw notFoundError("User not found");
     }
 
     const updatedUser = await prisma.user.update({
@@ -106,14 +106,14 @@ class UserService {
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
-      throw badRequestError("User not found");
+      throw notFoundError("User not found");
     }
 
     const result = await prisma.user.delete({ where: { id: userId } });
     await prisma.refreshToken.deleteMany({ where: { userId } });
 
     if (!result) {
-      throw badRequestError("Failed to delete user");
+      throw internalServerError("Failed to delete user");
     }
   }
 }

@@ -13,9 +13,6 @@ export class AppError extends Error {
   }
 }
 
-export function notFoundError(message: string = "Resource not found") {
-  return new AppError(message, 404);
-}
 
 export function badRequestError(message: string = "Bad request") {
   return new AppError(message, 400);
@@ -23,6 +20,18 @@ export function badRequestError(message: string = "Bad request") {
 
 export function unauthorizedError(message: string = "Unauthorized") {
   return new AppError(message, 401);
+}
+
+export function notFoundError(message: string = "Resource not found") {
+  return new AppError(message, 404);
+}
+
+export function alreadyExistError(message: string = "Resource already exist") {
+  return new AppError(message, 409);
+}
+
+export function internalServerError(message: string = "Internal Server Error") {
+  return new AppError(message, 500);
 }
 
 export class ValidationError extends AppError {

@@ -16,10 +16,10 @@ class AuthController {
         },
         200,
       );
-    } catch (error) {
+    } catch (error: any) {
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   };
 
@@ -44,10 +44,10 @@ class AuthController {
       }
 
       apiResponse(res, null, 200, "Logged out successfully");
-    } catch (error) {
+    } catch (error: any) {
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   };
 
@@ -62,10 +62,10 @@ class AuthController {
 
       this._addRefreshTokenToCookie(res, data.refreshToken);
       apiResponse(res, { accessToken: data.accessToken }, 200);
-    } catch (error) {
+    } catch (error: any) {
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   };
 
@@ -79,10 +79,10 @@ class AuthController {
       });
 
       apiResponse(res, null, 200);
-    } catch (error) {
+    } catch (error: any) {
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   };
 
@@ -96,10 +96,10 @@ class AuthController {
       });
 
       apiResponse(res, null, 200);
-    } catch (error) {
+    } catch (error: any) {
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   };
 
@@ -108,10 +108,10 @@ class AuthController {
       const { email } = req.body;
       await authService.requestPasswordReset({ email });
       apiResponse(res, null, 200);
-    } catch (error) {
+    } catch (error: any) {
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   };
 
@@ -120,10 +120,10 @@ class AuthController {
       const { token, newPassword } = req.body;
       await authService.resetPassword({ token, newPassword });
       apiResponse(res, null, 200);
-    } catch (error) {
+    } catch (error: any) {
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   };
 
@@ -132,10 +132,10 @@ class AuthController {
       const { token } = req.body;
       await authService.verifyEmail({ token });
       apiResponse(res, null, 200);
-    } catch (error) {
+    } catch (error: any) {
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   };
 
@@ -153,11 +153,10 @@ class AuthController {
         maxAge,
         path: "/auth/refresh-token",
       });
-    } catch (err) {
-      logError(
-        "Failed to set refresh token cookie: " +
-          (err instanceof Error ? err.message : String(err)),
-      );
+    } catch (error: any) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   };
 }

@@ -1,12 +1,24 @@
 import prisma from "@config/prisma";
-import { DeleteListInput, GetListInput, GetUserListsInput, CreateListInput, UpdateListInput, WithUserId, ShareListInput } from "@middleware/schemas/list";
+import {
+  DeleteListInput,
+  GetListInput,
+  GetUserListsInput,
+  CreateListInput,
+  UpdateListInput,
+  WithUserId,
+  ShareListInput,
+} from "@middleware/schemas/list";
 import { AccessTypes } from "@prisma/client";
-import { badRequestError } from "@utils/errors";
+import {
+  alreadyExistError,
+  internalServerError,
+  notFoundError,
+} from "@utils/errors";
 
 interface enoughRightInterface {
-  userId: number,
-  listId: number,
-  accessTypes: AccessTypes
+  userId: number;
+  listId: number;
+  accessTypes: AccessTypes;
 }
 
 const ACCESS_LEVEL: Record<AccessTypes, number> = {
@@ -30,7 +42,7 @@ class ListServices {
     });
 
     if (lists.length === 0) {
-      throw badRequestError("Can't get any list");
+      throw notFoundError("Can't get any list");
     }
 
     const total = await prisma.list.count({ where });
@@ -50,19 +62,25 @@ class ListServices {
     const list = await prisma.list.findFirst({ where: { id, userId } });
 
     if (!list) {
-      throw badRequestError("List not found");
+      throw notFoundError("List not found");
     }
 
     return list;
   }
 
-  async createList({ userId, title, type, color, icon }: WithUserId<CreateListInput>) {
+  async createList({
+    userId,
+    title,
+    type,
+    color,
+    icon,
+  }: WithUserId<CreateListInput>) {
     const haveList = await prisma.list.findFirst({
       where: { userId, title, type },
     });
 
     if (haveList) {
-      return null;
+      throw alreadyExistError("List whit this title already exist");
     }
 
     const newList = await prisma.list.create({
@@ -72,21 +90,28 @@ class ListServices {
     return newList;
   }
 
-  async updateList({ userId, id, title, type, color, icon }: WithUserId<UpdateListInput>) {
+  async updateList({
+    userId,
+    id,
+    title,
+    type,
+    color,
+    icon,
+  }: WithUserId<UpdateListInput>) {
     const haveList = await prisma.list.findFirst({
       where: { userId, id },
     });
 
     if (!haveList) {
-      throw badRequestError("List not found");
-    };
+      throw notFoundError("List not found");
+    }
 
     const listWithThisTitle = await prisma.list.findFirst({
-      where: { userId, title }
-    })
+      where: { userId, title },
+    });
 
     if (!!listWithThisTitle) {
-      throw badRequestError("List with this title already exist")
+      throw alreadyExistError("List with this title already exist");
     }
 
     const updatedList = await prisma.list.update({
@@ -103,35 +128,44 @@ class ListServices {
     });
 
     if (!haveList) {
-      return;
+      throw notFoundError("List not found");
     }
 
     const result = await prisma.list.delete({ where: { userId, id } });
 
     if (!result) {
-      throw badRequestError("Failed to delete list");
+      throw internalServerError("Failed to delete list");
     }
   }
 
-  async shareList({ listId, userId, recipientId, accessTypes }: WithUserId<ShareListInput>) {
+  async shareList({
+    listId,
+    userId,
+    recipientId,
+    accessTypes,
+  }: WithUserId<ShareListInput>) {
     const sharedWith = await prisma.sharedLists.create({
       data: { listId, ownerId: userId, recipientId, accessTypes },
     });
 
     if (!sharedWith) {
-      throw badRequestError("Failed to create share list");
+      throw internalServerError("Failed to create share list");
     }
 
     return sharedWith;
   }
 
-  async removeSharingList({ listId, userId, recipientId }: WithUserId<Omit<ShareListInput, "accessTypes">>) {
+  async removeSharingList({
+    listId,
+    userId,
+    recipientId,
+  }: WithUserId<Omit<ShareListInput, "accessTypes">>) {
     const sharedWith = await prisma.sharedLists.findFirst({
       where: { listId, ownerId: userId, recipientId },
     });
 
     if (!sharedWith) {
-      throw badRequestError("Failed to find share connect");
+      throw notFoundError("Failed to find share connect");
     }
 
     const result = await prisma.sharedLists.delete({
@@ -145,11 +179,15 @@ class ListServices {
     });
 
     if (!result) {
-      throw badRequestError("Failed to delete share connect");
+      throw internalServerError("Failed to delete share connect");
     }
   }
 
-  async _canIDoSomething({ userId, listId, accessTypes }: enoughRightInterface) {
+  async _canIDoSomething({
+    userId,
+    listId,
+    accessTypes,
+  }: enoughRightInterface) {
     const list = await prisma.list.findFirst({
       where: { id: listId },
       select: {
@@ -162,7 +200,7 @@ class ListServices {
     });
 
     if (!list) return false;
-    
+
     if (list.userId === userId) return true;
 
     const shared = list.sharedWith[0];

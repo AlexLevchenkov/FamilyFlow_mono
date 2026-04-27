@@ -9,9 +9,10 @@ class UserController {
       const { page, partName, partEmail }: GetUsersInput = req.validated;
       const data = await userService.getUsers({ page, partName, partEmail });
       apiResponse(res, data, 200);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+    } catch (error: any) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
 
@@ -21,9 +22,10 @@ class UserController {
       const { email, password, name } = req.body as RegisterInput;
       const user = await userService.register({ email, password, name });
       apiResponse(res, user, 201);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+    } catch (error: any) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
 
@@ -31,9 +33,10 @@ class UserController {
     try {
       const data = await userService.getUserById({ ...req.validated });
       apiResponse(res, data, 200);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+    } catch (error: any) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
 
@@ -56,9 +59,10 @@ class UserController {
         email,
       });
       apiResponse(res, data, 200);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+    } catch (error: any) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
 
@@ -75,9 +79,10 @@ class UserController {
 
       await userService.deleteUser({ userId });
       apiResponse(res, undefined, 200);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+    } catch (error: any) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
 }

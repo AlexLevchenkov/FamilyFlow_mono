@@ -7,9 +7,10 @@ class ItemController {
     try {
       const data = await itemService.getListItems({ ...req.validated });
       apiResponse(res, data, 200);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+    } catch (error: any) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
 
@@ -17,9 +18,10 @@ class ItemController {
     try {
       const data = await itemService.getListItemById({ ...req.validated });
       apiResponse(res, data, 200);
-    }  catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+    } catch (error: any) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
 
@@ -28,10 +30,10 @@ class ItemController {
       const data = await itemService.createListItem({...req.validated});
 
       apiResponse(res, data, 200);
-    } catch (error) {
+    } catch (error: any) {
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
 
@@ -45,9 +47,10 @@ class ItemController {
       }
 
       apiResponse(res, data, 200);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+    } catch (error: any) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
 
@@ -55,9 +58,10 @@ class ItemController {
     try {
       await itemService.deleteListItem({ ... req.validated });
       apiResponse(res, undefined, 200);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+    } catch (error: any) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
 }

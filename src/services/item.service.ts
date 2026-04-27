@@ -6,7 +6,7 @@ import {
   GetListItemsInput,
   UpdateItemInput,
 } from "@middleware/schemas/item";
-import { badRequestError, notFoundError } from "@utils/errors";
+import { internalServerError, notFoundError } from "@utils/errors";
 
 class ItemService {
   async getListItems({ listId, page = 1 }: GetListItemsInput) {
@@ -66,7 +66,7 @@ class ItemService {
     });
 
     if (!createdItem) {
-      throw badRequestError("Can't create new Item");
+      throw internalServerError("Can't create new Item");
     }
 
     return createdItem;
@@ -96,7 +96,7 @@ class ItemService {
     });
 
     if (!updatedItem) {
-      throw badRequestError("Can't update Item");
+      throw internalServerError("Can't update Item");
     }
 
     return updatedItem;
@@ -106,7 +106,7 @@ class ItemService {
     const deletedItem = await prisma.item.delete({ where: { id } });
 
     if (!deletedItem) {
-      throw badRequestError("Can't delete Item");
+      throw internalServerError("Can't delete Item");
     }
   }
 }

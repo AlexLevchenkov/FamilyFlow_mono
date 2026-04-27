@@ -16,9 +16,10 @@ class ListController {
 
       const data = await listService.getUserLists({ userId: user.id, page });
       apiResponse(res, data, 200);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+    } catch (error: any) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
 
@@ -29,9 +30,10 @@ class ListController {
 
       const data = await listService.getListById({ id, userId: user.id});
       apiResponse(res, data, 200);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+    } catch (error: any) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
 
@@ -59,9 +61,10 @@ class ListController {
       }
 
       apiResponse(res, data, 200);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+    } catch (error: any) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
 
@@ -84,9 +87,10 @@ class ListController {
         icon,
       });
       apiResponse(res, data, 200);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+    } catch (error: any) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
 
@@ -102,9 +106,10 @@ class ListController {
 
       await listService.deleteList({ userId: user.id, id });
       apiResponse(res, undefined, 200);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+    } catch (error: any) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
 
@@ -131,9 +136,10 @@ class ListController {
       });
 
       apiResponse(res, data, 201);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+    } catch (error: any) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
 
@@ -160,10 +166,10 @@ class ListController {
         userId: ownerId,
       });
       apiResponse(res, undefined, 201);
-    } catch (error) {
+    } catch (error: any) {
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, 500, errorMessage);
+      apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
 }
