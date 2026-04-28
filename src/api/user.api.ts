@@ -1,5 +1,4 @@
-import { apiRequest } from "@/api/client";
-import { API_CONFIG } from "@/api/config";
+import { api } from "./client";
 
 export interface User {
   id: string;
@@ -7,12 +6,7 @@ export interface User {
 }
 
 export const userApi = {
-  me(token: string) {
-    return apiRequest<User>(
-      `${API_CONFIG.baseUrl}/users/me`,
-      {
-        token,
-      }
-    );
+  me() {
+    return api.get("/users/me");
   },
 };

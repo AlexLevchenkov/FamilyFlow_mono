@@ -1,12 +1,10 @@
 import React from "react";
 
-type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "primary" | "secondary";
-};
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-export default function Button({ variant = "primary", ...props }: ButtonProps) {
+export const Button = ({ ...props }: ButtonProps) => {
   return (
-    <button className={`button ${variant === "primary" ? "button__primary" : "button__secondary"}`}
+    <button className="text-white p-2 bg-button cursor-pointer"
       {...props}
     >
       {props.children}

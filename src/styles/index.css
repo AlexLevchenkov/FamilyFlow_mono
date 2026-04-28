@@ -1,16 +1,30 @@
 @import "tailwindcss";
 
 body {
-  background-color: #030303;
+  background-color: var(--color-background);
   font-family: var(--font-main);
+  color: var(--color-text);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.bg-button {
+  @apply rounded bg-gradient-to-b from-background1 to-background2;
+}
+
+.container {
+  @apply max-w-7xl mx-auto px-4
 }
 
 @theme {
   /* Colors */
   --color-text: #0F266A;
-  --color-white: #FFF;
+  --color-lightText: #225FBF;
+  --color-white: #FAFAFE;
   --color-asideBack: #F6F2FB;
-  --color-background: #E4E4E4;
+  --color-background: #E0E3F9;
   --color-panelsColor: #FEFDFE;
   --color-selected: #8D6ACE;
   --color-background1: #8D6ACE;
@@ -18,7 +32,7 @@ body {
 
 
   /* fontFamily */
-  --font-main: cursive, Roboto, sans-serif;
+  --font-main: Roboto, sans-serif;
 
   /* fontSize */
   --text-sm: 12px;
@@ -35,5 +49,6 @@ body {
 
   /* borderRadius */
   --radius-main: 10px;
+  --radius-form: 24px;
   --radius-max: 999px;
 }

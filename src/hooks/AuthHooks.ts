@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
-import { authApi, type LoginDto } from '@api/index';
-import { authStorage } from '@store/auth';
+import { authApi, type LoginDto } from '@/api';
+import type { ForgotPasswordData, RegistrationData } from '@/schemas';
+import { useAuthStore } from '@store/auth';
 
 export function useLogin() {
   return useMutation({
@@ -15,5 +16,17 @@ export function useLogout() {
 }
 
 export function useAuth() {
-  return authStorage && !!authStorage.getAccessToken();
+  return useAuthStore(state => state.isAuthenticated);
+}
+
+export function useForgotPassword() {
+  return useMutation({
+    mutationFn: (dto: ForgotPasswordData) => authApi.forgotPassword(dto),
+  });
+}
+
+export function useRegistration() {
+  return useMutation({
+    mutationFn: (dto: RegistrationData) => authApi.registration(dto),
+  })
 }

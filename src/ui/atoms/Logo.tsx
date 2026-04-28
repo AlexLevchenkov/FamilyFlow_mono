@@ -1,10 +1,6 @@
-import logoSVG from '@assets/LogoSVG.svg';
+import logoSVG from '@assets/SVG/Logo.svg';
 
-export default function Logo() {
-  return (
-    <div>
-      <img src={logoSVG} alt="Logo" />
-    </div>
-  );
+export const Logo = () => {
+  return <img className='w-full' src={logoSVG} alt="Logo" />
 };
 

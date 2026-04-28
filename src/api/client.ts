@@ -1,33 +1,36 @@
-export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
+import axios from 'axios';
+import { useAuthStore } from '@/store/auth';
+import { API_CONFIG } from './config';
+import { toast } from '@/ui';
+import { authApi } from '@/api';
 
-interface IRequestOptions {
-  method?: HttpMethod;
-  body?: unknown;
-  token?: string;
-}
+export const api = axios.create({ baseURL: API_CONFIG.baseUrl });
 
-export async function apiRequest<T>(
-  url: string,
-  options: IRequestOptions
-): Promise<T> {
-  const res = await fetch(url, {
-    method: options.method ?? "GET",
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.token && {
-        "Authorization": `Bearer ${options.token}`,
-      }),
-    },
-    body: options.body ? JSON.stringify(options.body) : undefined,
-  });
+api.interceptors.request.use((config) => {
+  const token = useAuthStore.getState().accessToken;
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 
-  if (!res.ok) {
-    const errorBody = await res.json().catch(() => null);
-    throw {
-      status: res.status,
-      message: errorBody?.message ?? "API Error",
-    };
+api.interceptors.response.use(
+  (res) => res,
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry && !!useAuthStore.getState().accessToken) {
+      originalRequest._retry = true;
+      await authApi.refreshToken();
+      const newToken = useAuthStore.getState().accessToken;
+      if (newToken) {
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        return api(originalRequest);
+      }
+    }
+
+    if (error.response?.status === 500) {
+      toast.error("Сталася помилка на сервері. Спробуйте пізніше");
+    }
+
+    return Promise.reject(error);
   }
-
-  return res.json().then((value) => value.data);
-}
+);
