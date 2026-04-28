@@ -1,5 +1,12 @@
-import type { Request, Response } from 'express';
-import { GetUserListsInput, CreateListInput, UpdateListInput, ShareListInput, GetListInput, DeleteListInput } from "@middleware/schemas/list";
+import type { Request, Response } from "express";
+import {
+  GetUserListsInput,
+  CreateListInput,
+  UpdateListInput,
+  ShareListInput,
+  GetListInput,
+  DeleteListInput,
+} from "@/middleware";
 import apiResponse from "@utils/response";
 import listService from "@services/list.service";
 
@@ -8,11 +15,6 @@ class ListController {
     try {
       const { user } = req;
       const { page }: GetUserListsInput = req.validated;
-
-      if (!user || !user.id) {
-        apiResponse(res, null, 400, "Could not get user");
-        return;
-      }
 
       const data = await listService.getUserLists({ userId: user.id, page });
       apiResponse(res, data, 200);
@@ -28,7 +30,7 @@ class ListController {
       const { user } = req;
       const { id }: GetListInput = req.validated;
 
-      const data = await listService.getListById({ id, userId: user.id});
+      const data = await listService.getListById({ id, userId: user.id });
       apiResponse(res, data, 200);
     } catch (error: any) {
       const errorMessage =
@@ -40,12 +42,12 @@ class ListController {
   async createList(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { title, type, color = "", icon = "" }: CreateListInput = req.validated;
-
-      if (!user || !user.id || !title || !type) {
-        apiResponse(res, null, 400, "Could not get user or title or type");
-        return;
-      }
+      const {
+        title,
+        type,
+        color = "",
+        icon = "",
+      }: CreateListInput = req.validated;
 
       const data = await listService.createList({
         userId: user.id,
@@ -55,12 +57,7 @@ class ListController {
         icon,
       });
 
-      if (data === null) {
-        apiResponse(res, null, 402, "List already exists");
-        return;
-      }
-
-      apiResponse(res, data, 200);
+      apiResponse(res, data, 201);
     } catch (error: any) {
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";
@@ -71,12 +68,13 @@ class ListController {
   async updateList(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { id, title, type, color = "", icon = "" }: UpdateListInput = req.validated;
-
-      if (!user || !user.id || !id || !title || !type) {
-        apiResponse(res, null, 400, "Could not get user or title or type");
-        return;
-      }
+      const {
+        id,
+        title,
+        type,
+        color = "",
+        icon = "",
+      }: UpdateListInput = req.validated;
 
       const data = await listService.updateList({
         userId: user.id,
@@ -99,11 +97,6 @@ class ListController {
       const { user } = req;
       const { id }: DeleteListInput = req.validated;
 
-      if (!user || !user.id) {
-        apiResponse(res, null, 400, "Could not get user");
-        return;
-      }
-
       await listService.deleteList({ userId: user.id, id });
       apiResponse(res, undefined, 200);
     } catch (error: any) {
@@ -116,17 +109,8 @@ class ListController {
   async shareList(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { listId, recipientId, accessTypes }: ShareListInput = req.validated;
-
-      if (!user || !user.id) {
-        apiResponse(
-          res,
-          null,
-          400,
-          "Could not get user"
-        );
-        return;
-      }
+      const { listId, recipientId, accessTypes }: ShareListInput =
+        req.validated;
 
       const data = await listService.shareList({
         listId,
@@ -149,11 +133,6 @@ class ListController {
       const listId = Number(req.query.listId);
       const ownerId = Number(req.query.ownerId);
       const recipientId = Number(req.query.recipientId);
-
-      if (!user || !user.id) {
-        apiResponse(res, null, 400, "Could not get user");
-        return;
-      }
 
       if (user.id != ownerId && user.id != recipientId) {
         apiResponse(res, null, 400, "You can't remove this sharing");

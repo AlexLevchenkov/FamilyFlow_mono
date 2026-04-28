@@ -1,12 +1,12 @@
 import { Router } from "express";
+import itemController from "@controllers/item.controller";
 import {
   validateCreateItem,
   validateDeleteItem,
   validateGetListItem,
   validateGetListItems,
   validateUpdateItem,
-} from "@middleware/schemas/item";
-import itemController from "@controllers/item.controller";
+} from "@/middleware";
 
 const itemListRouter = Router();
 

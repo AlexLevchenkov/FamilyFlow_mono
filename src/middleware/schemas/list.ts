@@ -16,7 +16,7 @@ const getListSchema = z.object({
 });
 
 const createListSchema = z.object({
-  title: z.string(),
+  title: z.string().min(1),
   type: z.enum(type),
   color: z.string().optional(),
   icon: z.string().optional(),
@@ -24,7 +24,7 @@ const createListSchema = z.object({
 
 const updateListSchema = z.object({
   id: z.coerce.number(),
-  title: z.string(),
+  title: z.string().min(1),
   type: z.enum(type),
   color: z.string().optional(),
   icon: z.string().optional(),

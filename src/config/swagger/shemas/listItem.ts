@@ -1,7 +1,7 @@
 import { PaginatedResponse } from "@appTypes/common.types";
-import { CreateItemInput, UpdateItemInput } from "@middleware/schemas/item";
 import { Item } from "@prisma/client";
-import { interfaceToOpenAPI } from "@utils/interfaceToOpenAPI";
+import { CreateItemInput, UpdateItemInput } from "@/middleware";
+import { interfaceToOpenAPI } from "@/utils";
 
 const item: Item = {
   id: 1,

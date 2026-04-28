@@ -55,47 +55,10 @@ class AuthController {
     try {
       const { user } = req;
 
-      const data = await authService.refreshToken({
-        userId: user.id,
-        jti: user.jti,
-      });
+      const data = await authService.refreshToken(user);
 
       this._addRefreshTokenToCookie(res, data.refreshToken);
       apiResponse(res, { accessToken: data.accessToken }, 200);
-    } catch (error: any) {
-      const errorMessage =
-        error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, error.statusCode, errorMessage);
-    }
-  };
-
-  changePassword = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { user } = req;
-
-      await authService.changePassword({
-        userId: user.id,
-        ...req.validated,
-      });
-
-      apiResponse(res, null, 200);
-    } catch (error: any) {
-      const errorMessage =
-        error instanceof Error ? error.message : "An error occurred";
-      apiResponse(res, null, error.statusCode, errorMessage);
-    }
-  };
-
-  setPassword = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { user } = req;
-
-      await authService.setPassword({
-        userId: user.id,
-        ...req.validated,
-      });
-
-      apiResponse(res, null, 200);
     } catch (error: any) {
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";

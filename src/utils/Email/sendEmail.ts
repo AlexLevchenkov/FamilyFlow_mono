@@ -1,5 +1,4 @@
 import nodemailer from "nodemailer";
-import dotenv from "dotenv";
 
 export const sendEmail = async (mailOptions: {
   from: string;

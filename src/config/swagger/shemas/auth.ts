@@ -1,14 +1,12 @@
 import {
-  ChangePasswordResponse,
   LoginResponse,
   RefreshResponse,
-  SetPasswordResponse,
   ForgotPasswordResponse,
   ResetPasswordResponse,
   EmailVerifyResponse,
 } from "@appTypes/auth.types";
-import { LoginInput } from "@middleware/schemas/auth";
-import { interfaceToOpenAPI } from "@utils/interfaceToOpenAPI";
+import { LoginInput } from "@/middleware";
+import { interfaceToOpenAPI } from "@/utils";
 
 export const authSchemas = {
   LoginRequest: interfaceToOpenAPI<LoginInput>({
@@ -24,13 +22,6 @@ export const authSchemas = {
   }),
   RefreshResponse: interfaceToOpenAPI<RefreshResponse>({
     accessToken: "jwt-token",
-  }),
-  ChangePasswordRequest: interfaceToOpenAPI<ChangePasswordResponse>({
-    oldPassword: "Password123!@#",
-    newPassword: "Password456!@#",
-  }),
-  SetPasswordRequest: interfaceToOpenAPI<SetPasswordResponse>({
-    newPassword: "Password456!@#",
   }),
   ForgotPasswordRequest: interfaceToOpenAPI<ForgotPasswordResponse>({
     email: "super@gmail.com",

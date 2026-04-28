@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import { sendEmail } from "./sendEmail";
 import { resetPasswordTemplate } from "./templates/resetPassword";
 

@@ -1,4 +1,5 @@
 import prisma from "@config/prisma";
+import { AccessTypes } from "@prisma/client";
 import {
   DeleteListInput,
   GetListInput,
@@ -7,13 +8,12 @@ import {
   UpdateListInput,
   WithUserId,
   ShareListInput,
-} from "@middleware/schemas/list";
-import { AccessTypes } from "@prisma/client";
+} from "@/middleware";
 import {
   alreadyExistError,
   internalServerError,
   notFoundError,
-} from "@utils/errors";
+} from "@/utils";
 
 interface enoughRightInterface {
   userId: number;
@@ -40,10 +40,6 @@ class ListServices {
       take: itemsPerPage,
       orderBy: [{ title: "asc" }],
     });
-
-    if (lists.length === 0) {
-      throw notFoundError("Can't get any list");
-    }
 
     const total = await prisma.list.count({ where });
 
@@ -80,7 +76,7 @@ class ListServices {
     });
 
     if (haveList) {
-      throw alreadyExistError("List whit this title already exist");
+      throw alreadyExistError("List already exists");
     }
 
     const newList = await prisma.list.create({
@@ -183,6 +179,7 @@ class ListServices {
     }
   }
 
+  // TODO Не використовується
   async _canIDoSomething({
     userId,
     listId,

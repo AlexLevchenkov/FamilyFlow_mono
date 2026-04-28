@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import keyRotationService from "@utils/keyRotation";
 import { AppError, unauthorizedError } from "@utils/errors";
 
-export default function authenticate(req: Request, res: Response, next: NextFunction): void {
+export const authenticate = (req: Request, res: Response, next: NextFunction): void => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) {

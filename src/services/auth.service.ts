@@ -1,11 +1,20 @@
-import prisma from "@config/prisma";
-import { ChangePasswordInput, LoginInput, RefreshTokenInput, LogoutInput } from "@middleware/schemas/auth";
-import { WithUserId } from "@middleware/schemas/list";
-import { internalServerError, notFoundError, unauthorizedError } from "@utils/errors";
-import { sendResetEmail } from "@utils/Email";
-import { generateAccessToken, generateRefreshToken } from "@utils/tokens";
+import { Request } from "express";
 import bcryptjs from "bcryptjs";
 import { randomUUID } from "crypto";
+import prisma from "@config/prisma";
+import {
+  LoginInput,
+  LogoutInput,
+  WithUserId,
+} from "@/middleware";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  internalServerError,
+  notFoundError,
+  sendResetEmail,
+  unauthorizedError,
+} from "@/utils";
 
 class AuthService {
   login = async ({ email, password }: LoginInput) => {
@@ -25,7 +34,9 @@ class AuthService {
     const refreshToken = generateRefreshToken(user.id, jti);
 
     if (!accessToken || !refreshToken) {
-      throw internalServerError("Failed to generate tokens user.id: " + user.id);
+      throw internalServerError(
+        "Failed to generate tokens user.id: " + user.id,
+      );
     }
 
     await prisma.refreshToken.create({
@@ -34,11 +45,11 @@ class AuthService {
         userId: user.id,
         expiresAt: new Date(
           Date.now() +
-          parseInt(process.env.REFRESH_EXPIRES_IN || "14") *
-          24 *
-          60 *
-          60 *
-          1000
+            parseInt(process.env.REFRESH_EXPIRES_IN || "14") *
+              24 *
+              60 *
+              60 *
+              1000,
         ),
       },
     });
@@ -48,7 +59,7 @@ class AuthService {
       accessToken,
       refreshToken,
     };
-  }
+  };
 
   logout = async ({ userId, jti }: WithUserId<LogoutInput>) => {
     const user = await prisma.user.findUnique({ where: { id: userId } });
@@ -63,9 +74,16 @@ class AuthService {
     } else {
       await prisma.refreshToken.deleteMany({ where: { userId: userId } });
     }
-  }
+  };
 
-  refreshToken = async ({ userId, jti }: WithUserId<RefreshTokenInput>) => {
+  refreshToken = async (userData: Request['user']) => {
+    if (!userData || !userData.id || !userData.jti) {
+      throw unauthorizedError();
+    }
+
+    const userId = userData.id;
+    const jti = userData.jti;
+
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
       throw notFoundError("User not found");
@@ -81,7 +99,6 @@ class AuthService {
     await prisma.refreshToken.delete({ where: { id: existing.id } });
 
     if (existing.expiresAt && existing.expiresAt < new Date()) {
-      // remove expired token
       throw unauthorizedError("Refresh token expired");
     }
 
@@ -100,11 +117,11 @@ class AuthService {
         jti: newJti,
         expiresAt: new Date(
           Date.now() +
-          parseInt(process.env.REFRESH_EXPIRES_IN || "30") *
-          24 *
-          60 *
-          60 *
-          1000
+            parseInt(process.env.REFRESH_EXPIRES_IN || "30") *
+              24 *
+              60 *
+              60 *
+              1000,
         ),
       },
     });
@@ -113,61 +130,42 @@ class AuthService {
       accessToken: newAccessToken,
       refreshToken: newRefreshToken,
     };
-  }
+  };
 
-  changePassword = async ({ userId, currentPassword, password }: WithUserId<ChangePasswordInput>) => {
-    const user = await prisma.user.findUnique({ where: { id: userId } });
-    if (!user) {
-      throw notFoundError("User not found");
-    }
-
-    if (!bcryptjs.compareSync(currentPassword, user.password)) {
-      throw unauthorizedError("Incorrect password");
-    }
-
-    await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        password: bcryptjs.hashSync(password, 10),
-      },
-    });
-  }
-
-  setPassword = async ({ userId, password }: { userId: number; password: string; }) => {
-    const user = await prisma.user.findUnique({ where: { id: userId } });
-    if (!user) {
-      throw notFoundError("User not found");
-    }
-
-    await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        password: bcryptjs.hashSync(password, 10),
-      },
-    });
-  }
-
-  requestPasswordReset = async ({email} : {email: string}) => {
+  requestPasswordReset = async ({ email }: { email: string }) => {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
       throw notFoundError("User not found");
     }
-  
+
     const newAccessToken = crypto.randomUUID();
-  
+
     await prisma.user.update({
       where: { id: user.id },
-      data: { resetToken: newAccessToken, resetTokenExp: new Date(Date.now() + 15 * 60 * 1000) },
+      data: {
+        resetToken: newAccessToken,
+        resetTokenExp: new Date(Date.now() + 15 * 60 * 1000),
+      },
     });
-  
+
     await sendResetEmail(email, newAccessToken);
     return true;
   };
 
-  resetPassword = async ({ token, newPassword } : { token: string, newPassword: string }) => {
+  resetPassword = async ({
+    token,
+    newPassword,
+  }: {
+    token: string;
+    newPassword: string;
+  }) => {
     const user = await prisma.user.findFirst({ where: { resetToken: token } });
 
-    if (!user || user.resetTokenExp == null || user.resetTokenExp < new Date()) {
+    if (
+      !user ||
+      user.resetTokenExp == null ||
+      user.resetTokenExp < new Date()
+    ) {
       throw unauthorizedError("Invalid or expired token");
     }
 
@@ -180,7 +178,7 @@ class AuthService {
     return true;
   };
 
-  verifyEmail = async ({ token } : { token: string }) => {
+  verifyEmail = async ({ token }: { token: string }) => {
     const user = await prisma.user.findFirst({ where: { resetToken: token } });
 
     if (!user) {
@@ -203,7 +201,7 @@ class AuthService {
         },
       },
     });
-  }
+  };
 }
 
 export default new AuthService();

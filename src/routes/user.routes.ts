@@ -1,12 +1,13 @@
-import { Router } from "express";import {
+import { Router } from "express";
+import {
+  authenticate,
   validateDeleteUser,
   validateGetUser,
   validateGetUsers,
   validateRegister,
   validateUpdateUser,
-} from "@middleware/schemas/user";
+} from "@/middleware";
 import userController from "@controllers/user.controller";
-import authenticate from "@middleware/authenticate";
 
 const userRouter = Router();
 

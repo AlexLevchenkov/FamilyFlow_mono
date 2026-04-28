@@ -24,11 +24,11 @@ export const authPaths = {
             },
           },
         },
-        400: {
-          description: "Invalid data",
-        },
         401: {
-          description: "Invalid credentials",
+          description: "Invalid email or password",
+        },
+        500: {
+          description: "Failed to generate tokens",
         },
       },
     },
@@ -42,8 +42,8 @@ export const authPaths = {
         200: {
           description: "Logged out successfully",
         },
-        400: {
-          description: "Logout failed",
+        404: {
+          description: "User not found",
         },
       },
     },
@@ -64,67 +64,14 @@ export const authPaths = {
             },
           },
         },
-        400: {
-          description: "Unauthorized",
-        },
         401: {
           description: "Unauthorized",
         },
-      },
-    },
-  },
-  "/auth/change-password": {
-    post: {
-      tags: ["Auth"],
-      summary: "Token refresh",
-      security: [{ bearerAuth: [] }],
-      requestBody: {
-        required: true,
-        content: {
-          "application/json": {
-            schema: {
-              $ref: "#/components/schemas/ChangePasswordRequest",
-            },
-          },
+        404: {
+          description: "User not found",
         },
-      },
-      responses: {
-        200: {
-          description: "Change password",
-        },
-        400: {
-          description: "Could not get user",
-        },
-        401: {
-          description: "Unauthorized",
-        },
-      },
-    },
-  },
-  "/auth/set-password": {
-    post: {
-      tags: ["Auth"],
-      summary: "Token refresh",
-      security: [{ bearerAuth: [] }],
-      requestBody: {
-        required: true,
-        content: {
-          "application/json": {
-            schema: {
-              $ref: "#/components/schemas/SetPasswordRequest",
-            },
-          },
-        },
-      },
-      responses: {
-        200: {
-          description: "Set new password",
-        },
-        400: {
-          description: "Could not get user",
-        },
-        401: {
-          description: "Unauthorized",
+        500: {
+          description: "Failed to generate tokens",
         },
       },
     },
@@ -147,11 +94,8 @@ export const authPaths = {
         200: {
           description: "Sended mail with link",
         },
-        400: {
-          description: "Could not get user",
-        },
-        401: {
-          description: "Unauthorized",
+        404: {
+          description: "User not found",
         },
       },
     },
@@ -174,17 +118,14 @@ export const authPaths = {
         200: {
           description: "Password is changed",
         },
-        400: {
-          description: "Could not get user",
-        },
         401: {
-          description: "Unauthorized",
+          description: "Invalid or expired token",
         },
       },
     },
   },
   "/auth/verify-email": {
-    post: {
+    get: {
       tags: ["Auth"],
       summary: "Verify email",
       requestBody: {
@@ -201,11 +142,8 @@ export const authPaths = {
         200: {
           description: "Email is verified",
         },
-        400: {
-          description: "Could not get user",
-        },
         401: {
-          description: "Unauthorized",
+          description: "Invalid or expired token",
         },
       },
     },

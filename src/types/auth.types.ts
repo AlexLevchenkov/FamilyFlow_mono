@@ -9,15 +9,6 @@ export interface RefreshResponse {
   accessToken: string;
 }
 
-export interface ChangePasswordResponse {
-  oldPassword: string;
-  newPassword: string;
-}
-
-export interface SetPasswordResponse {
-  newPassword: string;
-}
-
 export interface ForgotPasswordResponse {
   email: string;
 }

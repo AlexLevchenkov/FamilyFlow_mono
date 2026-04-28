@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { GetUsersInput, RegisterInput, UpdateUserInput } from "@middleware/schemas/user";
+import { GetUsersInput, RegisterInput, UpdateUserInput } from "@/middleware";
 import userService from "@services/user.service";
 import apiResponse from "@utils/response";
 
@@ -15,7 +15,6 @@ class UserController {
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
-
 
   async register(req: Request, res: Response): Promise<void> {
     try {
@@ -47,17 +46,13 @@ class UserController {
       const userId = Number(user?.id);
       const { email, name, avatar } = req.body as UpdateUserInput;
 
-      if (Number.isNaN(userId) || userId <= 0) {
-        apiResponse(res, null, 400, "Invalid or missing userId parameter");
-        return;
-      }
-
       const data = await userService.updateUser({
         userId,
         name,
         avatar,
         email,
       });
+
       apiResponse(res, data, 200);
     } catch (error: any) {
       const errorMessage =
@@ -69,14 +64,7 @@ class UserController {
   async deleteUser(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-
       const userId = Number(user?.id);
-
-      if (Number.isNaN(userId) || userId <= 0) {
-        apiResponse(res, null, 400, "Invalid or missing userId parameter");
-        return;
-      }
-
       await userService.deleteUser({ userId });
       apiResponse(res, undefined, 200);
     } catch (error: any) {

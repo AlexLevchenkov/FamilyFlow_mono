@@ -21,7 +21,7 @@
       "@services/*": ["services/*"],
       "@appTypes/*": ["types/*"],
       "@utils/*": ["utils/*"],
-      "@root/*": ["*"]
+      "@/*": ["*"]
     },
   },
   "include": ["src/**/*"],

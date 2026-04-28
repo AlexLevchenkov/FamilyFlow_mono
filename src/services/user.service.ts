@@ -1,3 +1,4 @@
+import bcryptjs from "bcryptjs";
 import prisma from "@config/prisma";
 import {
   GetUsersInput,
@@ -5,10 +6,13 @@ import {
   UpdateUserInput,
   GetUserByIdInput,
   DeleteUserInput,
-} from "@middleware/schemas/user";
-import { sendCheckEmail } from "@utils/Email";
-import { alreadyExistError, internalServerError, notFoundError } from "@utils/errors";
-import bcryptjs from "bcryptjs";
+} from "@/middleware";
+import {
+  alreadyExistError,
+  internalServerError,
+  notFoundError,
+  sendCheckEmail,
+} from "@/utils";
 
 class UserService {
   async getUsers({ page, partName, partEmail }: GetUsersInput) {
@@ -30,11 +34,14 @@ class UserService {
     const total = await prisma.user.count({ where });
 
     if (users.length === 0) {
-      throw notFoundError("Can't get any users");
+      throw notFoundError("User not found");
     }
 
     return {
-      data: users.map(({ password: _password, ...user }) => user),
+      data: users.map((user) => ({
+        name: user.name,
+        avatar: user.avatar,
+      })),
       pagination: {
         total,
         page: page || 1,
@@ -69,7 +76,7 @@ class UserService {
 
     await sendCheckEmail(email, newAccessToken);
 
-    return { ...user, password: undefined };
+    return { avatar: user.avatar, name: user.name };
   }
 
   async getUserById({ id }: GetUserByIdInput) {

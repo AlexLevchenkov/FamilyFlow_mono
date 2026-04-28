@@ -19,17 +19,6 @@ const emailSchema = z
     { message: "Invalid email" }
   );
 
-const changePasswordSchema = z.object({
-  currentPassword: z.string(),
-  password: passwordSchema,
-  confirmPassword: z.string().optional(),
-})
-.refine((data) => data.password === data.confirmPassword);
-
-const setPasswordSchema = z.object({
-  password: passwordSchema,
-})
-
 const loginSchema = z.object({
   email: emailSchema,
   password: z.string().min(8).max(20),
@@ -37,10 +26,6 @@ const loginSchema = z.object({
 
 const logoutSchema = z.object({
   jti: z.string().optional(),
-});
-
-const refreshTokenSchema = z.object({
-  jti: z.string(),
 });
 
 const requestPasswordResetSchema = z.object({
@@ -56,18 +41,14 @@ const verifyEmailSchema = z.object({
   token: z.string(),
 });
 
-export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type LogoutInput = z.infer<typeof logoutSchema>;
-export type RefreshTokenInput = z.infer<typeof refreshTokenSchema>;
 export type RequestPasswordResetInput = z.infer<typeof requestPasswordResetSchema>;
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
 export type VerifyEmailInput = z.infer<typeof verifyEmailSchema>;
 
 export const validateLogin = makeValidator(loginSchema);
 export const validateLogout = makeValidator(logoutSchema);
-export const validateChangePassword = makeValidator(changePasswordSchema);
-export const validateSetPassword = makeValidator(setPasswordSchema);
 export const validateRequestPasswordReset = makeValidator(requestPasswordResetSchema);
 export const validateResetPassword = makeValidator(resetPasswordSchema);
 export const validateVerifyEmail = makeValidator(verifyEmailSchema);

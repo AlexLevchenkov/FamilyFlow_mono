@@ -1,5 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
 import { sendEmail } from "./sendEmail";
 import { verifyEmailTemplate } from "./templates/verifyEmail";
 
