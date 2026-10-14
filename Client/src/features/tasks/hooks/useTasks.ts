@@ -1,10 +1,23 @@
-import { useContext } from 'react';
-import { TasksContext } from './TasksContext';
+import { useTaskStore } from '../store/task.store';
 
 export function useTasksContext() {
-  const context = useContext(TasksContext);
-  if (!context) {
-    throw new Error('useTasksContext must be used within a TasksProvider');
-  }
-  return context;
+  const state = useTaskStore();
+  const visibleTasks = state.tasks.filter(task => {
+    if (state.filter === 'Виконані') return task.done;
+    if (state.filter === 'Активні') return !task.done;
+    return true;
+  });
+  const completed = state.tasks.filter(task => task.done).length;
+  const progress = state.tasks.length
+    ? Math.round((completed / state.tasks.length) * 100)
+    : 0;
+
+  return {
+    ...state,
+    visibleTasks,
+    completed,
+    progress,
+    addTask: () => void state.addTask(),
+    toggleTask: (id: number) => void state.toggleTask(id),
+  };
 }

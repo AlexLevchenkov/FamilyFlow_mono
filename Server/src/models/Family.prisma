@@ -1,0 +1,36 @@
+model Family {
+  id        Int            @id @default(autoincrement())
+  ownerId   Int            @unique
+  owner     User           @relation("FamilyOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  name      String         @default("Наша родина")
+  members   FamilyMember[]
+  goals     Goal[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+model FamilyMember {
+  id        Int      @id @default(autoincrement())
+  familyId  Int
+  family    Family   @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([familyId])
+}
+
+model Goal {
+  id        Int      @id @default(autoincrement())
+  familyId  Int
+  family    Family   @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  title     String
+  category  String
+  progress  Int      @default(0)
+  detail    String?
+  color     String   @default("#7656d0")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([familyId])
+}

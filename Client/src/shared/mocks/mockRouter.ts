@@ -2,6 +2,8 @@ import { authHandlers } from './handlers/auth.handlers';
 import { userHandlers } from './handlers/user.handlers';
 import { listHandlers } from './handlers/list.handlers';
 import { listItemHandlers } from './handlers/listItem.handlers';
+import { familyHandlers } from './handlers/family.handlers';
+import { goalHandlers } from './handlers/goal.handlers';
 import type { MockRequestContext, MockResponseResult } from './handlers/types';
 
 type RouteHandler = (ctx: MockRequestContext) => MockResponseResult | Promise<MockResponseResult>;
@@ -62,6 +64,14 @@ register('POST', '/listItem', listItemHandlers.createListItem);
 register('GET', '/listItem/:id', listItemHandlers.getListItemById);
 register('PUT', '/listItem/:id', listItemHandlers.updateListItem);
 register('DELETE', '/listItem/:id', listItemHandlers.deleteListItem);
+
+// Family and goals
+register('GET', '/family', familyHandlers.getFamily);
+register('POST', '/family/members', familyHandlers.addMember);
+register('GET', '/goal', goalHandlers.getGoals);
+register('POST', '/goal', goalHandlers.createGoal);
+register('PUT', '/goal/:id', goalHandlers.updateGoal);
+register('DELETE', '/goal/:id', goalHandlers.deleteGoal);
 
 /**
  * Match an incoming request to a mock handler.

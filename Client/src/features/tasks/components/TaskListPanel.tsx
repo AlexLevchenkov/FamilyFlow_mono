@@ -14,6 +14,8 @@ interface TaskListPanelProps {
   setNewTask: (task: string) => void
   addTask: () => void
   toggleTask: (id: number) => void
+  loading?: boolean
+  error?: string | null
   showHeaderAdd?: boolean
   showFooterAdd?: boolean
 }
@@ -32,6 +34,8 @@ export function TaskListPanel({
   setNewTask,
   addTask,
   toggleTask,
+  loading = false,
+  error = null,
   showHeaderAdd = false,
   showFooterAdd = false,
 }: TaskListPanelProps) {
@@ -64,6 +68,18 @@ export function TaskListPanel({
           )}
         </div>
       </div>
+
+      {error && (
+        <p role="alert" className="mb-3 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">
+          {error}
+        </p>
+      )}
+
+      {loading && (
+        <p className="py-5 text-center text-sm text-[#9290a4]" aria-live="polite">
+          Завантаження справ…
+        </p>
+      )}
 
       <div className="space-y-2.5">
         {visibleTasks.map((task) => (

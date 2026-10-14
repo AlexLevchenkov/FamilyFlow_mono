@@ -3,6 +3,11 @@ import type {
   ListModel,
   SharedListModel,
   ListItemModel,
+  FamilyModel,
+  FamilyMemberModel,
+  GoalModel,
+  CreateGoalRequest,
+  UpdateGoalRequest,
   ListType,
   AccessType,
 } from '@api/contracts';
@@ -211,15 +216,53 @@ const INITIAL_SHARED: SharedListModel[] = [
   },
 ];
 
+const INITIAL_GOALS: Omit<GoalModel, 'id' | 'familyId'>[] = [
+  {
+    title: 'Сімейна подорож у Карпати',
+    category: 'Подорожі',
+    progress: 68,
+    detail: 'Зібрано 20 400 із 30 000 ₴',
+    color: '#7656d0',
+    createdAt: '2026-03-01T08:00:00.000Z',
+    updatedAt: '2026-03-01T08:00:00.000Z',
+  },
+  {
+    title: '12 сімейних вечорів',
+    category: 'Час разом',
+    progress: 42,
+    detail: '5 із 12 вечорів проведено',
+    color: '#e87891',
+    createdAt: '2026-03-02T08:00:00.000Z',
+    updatedAt: '2026-03-02T08:00:00.000Z',
+  },
+  {
+    title: 'Облаштувати дитячу',
+    category: 'Дім',
+    progress: 80,
+    detail: '4 із 5 кроків виконано',
+    color: '#39b29d',
+    createdAt: '2026-03-03T08:00:00.000Z',
+    updatedAt: '2026-03-03T08:00:00.000Z',
+  },
+];
+
+type MockFamilyMember = FamilyMemberModel & { familyId: number };
+
 class MockDatabase {
   private users: UserDetail[] = [];
   private lists: ListModel[] = [];
   private items: ListItemModel[] = [];
   private sharedLists: SharedListModel[] = [];
+  private families: Pick<FamilyModel, 'id' | 'ownerId' | 'name' | 'createdAt' | 'updatedAt'>[] = [];
+  private familyMembers: MockFamilyMember[] = [];
+  private goals: GoalModel[] = [];
   private nextUserId = 10;
   private nextListId = 10;
   private nextItemId = 20;
   private nextSharedId = 10;
+  private nextFamilyId = 2;
+  private nextFamilyMemberId = 10;
+  private nextGoalId = 10;
 
   constructor() {
     this.reset();
@@ -230,6 +273,28 @@ class MockDatabase {
     this.lists = JSON.parse(JSON.stringify(INITIAL_LISTS));
     this.items = JSON.parse(JSON.stringify(INITIAL_ITEMS));
     this.sharedLists = JSON.parse(JSON.stringify(INITIAL_SHARED));
+    this.families = [{
+      id: 1,
+      ownerId: 1,
+      name: 'Наша родина',
+      createdAt: '2026-03-01T08:00:00.000Z',
+      updatedAt: '2026-03-01T08:00:00.000Z',
+    }];
+    this.familyMembers = [2, 3, 4].map((userId, index) => ({
+      id: index + 1,
+      familyId: 1,
+      userId,
+      email: INITIAL_USERS[userId - 1].email,
+      name: INITIAL_USERS[userId - 1].name,
+      avatar: INITIAL_USERS[userId - 1].avatar,
+      isOwner: false,
+      joinedAt: `2026-03-0${index + 2}T08:00:00.000Z`,
+    }));
+    this.goals = INITIAL_GOALS.map((goal, index) => ({
+      ...goal,
+      id: index + 1,
+      familyId: 1,
+    }));
   }
 
   // --- Users ---
@@ -254,6 +319,136 @@ class MockDatabase {
 
   public getUserByEmail(email: string) {
     return this.users.find(u => u.email.toLowerCase() === email.toLowerCase());
+  }
+
+  public getFamily(userId: number): FamilyModel {
+    let family = this.families.find(
+      item =>
+        item.ownerId === userId ||
+        this.familyMembers.some(
+          member => member.userId === userId && member.familyId === item.id
+        )
+    );
+    if (!family) {
+      family = {
+        id: this.nextFamilyId++,
+        ownerId: userId,
+        name: 'Наша родина',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      this.families.push(family);
+    }
+
+    const owner = this.getUserById(family.ownerId);
+    const members = this.familyMembers
+      .filter(member => member.familyId === family?.id)
+      .map(member => ({
+        id: member.id,
+        userId: member.userId,
+        email: member.email,
+        name: member.name,
+        avatar: member.avatar,
+        isOwner: member.isOwner,
+        joinedAt: member.joinedAt,
+      }));
+    return {
+      ...family,
+      members: [
+        {
+          id: owner?.id ?? family.ownerId,
+          userId: family.ownerId,
+          email: owner?.email ?? '',
+          name: owner?.name ?? null,
+          avatar: owner?.avatar ?? null,
+          isOwner: true,
+          joinedAt: family.createdAt,
+        },
+        ...members,
+      ],
+    };
+  }
+
+  private getFamilyIdForUser(userId: number) {
+    const family = this.families.find(
+      item =>
+        item.ownerId === userId ||
+        this.familyMembers.some(
+          member => member.userId === userId && member.familyId === item.id
+        )
+    );
+    return family?.id;
+  }
+
+  public addFamilyMember(ownerId: number, email: string) {
+    const family = this.getFamily(ownerId);
+    const user = this.getUserByEmail(email);
+    if (!user) return { error: 'No registered account exists for this email', status: 404 as const };
+    if (user.id === family.ownerId) {
+      return { error: 'You are already the owner of this family', status: 400 as const };
+    }
+    const existingFamilyId = this.getFamilyIdForUser(user.id);
+    if (existingFamilyId !== undefined) {
+      return {
+        error: existingFamilyId === family.id
+          ? 'This user is already a member of this family'
+          : 'This user already belongs to another family',
+        status: 409 as const,
+      };
+    }
+    const member: FamilyMemberModel = {
+      id: this.nextFamilyMemberId++,
+      userId: user.id,
+      email: user.email,
+      name: user.name,
+      avatar: user.avatar,
+      isOwner: false,
+      joinedAt: new Date().toISOString(),
+    };
+    this.familyMembers.push({ ...member, familyId: family.id });
+    family.updatedAt = new Date().toISOString();
+    return { member };
+  }
+
+  public getGoals(userId: number) {
+    const family = this.getFamily(userId);
+    return this.goals.filter(goal => goal.familyId === family.id);
+  }
+
+  public createGoal(userId: number, input: CreateGoalRequest) {
+    const family = this.getFamily(userId);
+    const now = new Date().toISOString();
+    const goal: GoalModel = {
+      id: this.nextGoalId++,
+      familyId: family.id,
+      title: input.title,
+      category: input.category,
+      progress: input.progress ?? 0,
+      detail: input.detail ?? null,
+      color: input.color ?? '#7656d0',
+      createdAt: now,
+      updatedAt: now,
+    };
+    this.goals.push(goal);
+    return goal;
+  }
+
+  public updateGoal(userId: number, id: number, fields: UpdateGoalRequest) {
+    const family = this.getFamily(userId);
+    const goal = this.goals.find(item => item.id === id && item.familyId === family.id);
+    if (!goal) return null;
+    Object.assign(goal, fields, { updatedAt: new Date().toISOString() });
+    return goal;
+  }
+
+  public deleteGoal(userId: number, id: number) {
+    const family = this.getFamily(userId);
+    const index = this.goals.findIndex(
+      item => item.id === id && item.familyId === family.id
+    );
+    if (index < 0) return false;
+    this.goals.splice(index, 1);
+    return true;
   }
 
   public createUser(email: string, name: string) {

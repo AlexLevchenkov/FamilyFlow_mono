@@ -6,3 +6,6 @@ export * from './auth.api';
 export * from './user.api';
 export * from './list.api';
 export * from './listItem.api';
+export * from './family.api';
+export * from './goal.api';
+export * from './error';

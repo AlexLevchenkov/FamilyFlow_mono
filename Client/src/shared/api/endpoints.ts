@@ -26,6 +26,15 @@ export const API_ENDPOINTS = {
     ROOT: '/listItem',
     BY_ID: (id: number | string) => `/listItem/${id}`,
   },
+  FAMILY: {
+    ROOT: '/family',
+    MEMBERS: '/family/members',
+    MEMBER_BY_ID: (userId: number | string) => `/family/members/${userId}`,
+  },
+  GOAL: {
+    ROOT: '/goal',
+    BY_ID: (id: number | string) => `/goal/${id}`,
+  },
 } as const;
 
 export type ApiEndpoints = typeof API_ENDPOINTS;

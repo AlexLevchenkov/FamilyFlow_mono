@@ -16,4 +16,6 @@ model User {
 
   ownedSharedLists     SharedLists[] @relation("SharedListOwner")
   receivedSharedLists  SharedLists[] @relation("SharedListRecipient")
+  ownedFamily          Family?       @relation("FamilyOwner")
+  familyMembership     FamilyMember?
 }

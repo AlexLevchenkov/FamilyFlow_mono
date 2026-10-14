@@ -173,6 +173,57 @@ export interface ListItemModel {
   updatedAt: string;
 }
 
+export interface GoalModel {
+  id: number;
+  familyId: number;
+  title: string;
+  category: string;
+  progress: number;
+  detail: string | null;
+  color: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateGoalRequest {
+  title: string;
+  category: string;
+  progress?: number;
+  detail?: string;
+  color?: string;
+}
+
+export interface UpdateGoalRequest {
+  title?: string;
+  category?: string;
+  progress?: number;
+  detail?: string | null;
+  color?: string;
+}
+
+export interface FamilyMemberModel {
+  id: number;
+  userId: number;
+  email: string;
+  name: string | null;
+  avatar: string | null;
+  isOwner: boolean;
+  joinedAt: string;
+}
+
+export interface FamilyModel {
+  id: number;
+  ownerId: number;
+  name: string;
+  members: FamilyMemberModel[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AddFamilyMemberRequest {
+  email: string;
+}
+
 export interface GetListItemsParams {
   listId: number;
   page?: number;

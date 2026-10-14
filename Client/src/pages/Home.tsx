@@ -1,12 +1,10 @@
+import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { Icon, Panel, PrimaryButton } from "@ui"
-import { FamilyAvatar } from "@features/family"
-import { EventCard } from "@features/calendar"
+import { FamilyAvatar, useFamilyStore } from "@features/family"
+import { EventCard, useCalendarStore } from "@features/calendar"
 import { TaskListPanel, useTasksContext } from "@features/tasks"
 import familyIllustration from "@assets/Images/Сім'я без фону.png"
-import { events, family } from "@mocks/data"
-
-
 export function Home() {
   const {
     tasks,
@@ -21,8 +19,20 @@ export function Home() {
     setNewTask,
     addTask,
     toggleTask,
+    loading,
+    error,
   } = useTasksContext()
+  const familyData = useFamilyStore(state => state.family)
+  const loadFamily = useFamilyStore(state => state.loadFamily)
+  const calendarEvents = useCalendarStore(state => state.events)
+  const loadEvents = useCalendarStore(state => state.loadEvents)
+  useEffect(() => {
+    void loadFamily()
+    void loadEvents()
+  }, [loadFamily, loadEvents])
   const navigate = useNavigate()
+  const family = familyData?.members ?? []
+  const memberColors = ["#5267ca", "#e76f91", "#f2a13b", "#4cb89e"]
   return (
     <>
       <section
@@ -41,7 +51,7 @@ export function Home() {
             Усе важливе для родини — в одному місці
           </h2>
           <p className="mt-3 max-w-115 text-sm leading-6 text-[#656580] sm:text-base">
-            Сьогодні у вас 3 активні справи. Розподіляйте задачі та
+            Сьогодні у вас {tasks.length - completed} активні справи. Розподіляйте задачі та
             знаходьте більше часу одне для одного.
           </p>
           <PrimaryButton
@@ -71,6 +81,8 @@ export function Home() {
           setNewTask={setNewTask}
           addTask={addTask}
           toggleTask={toggleTask}
+          loading={loading}
+          error={error}
           showFooterAdd
         />
 
@@ -93,11 +105,11 @@ export function Home() {
                   onClick={() => navigate("/family")}
                 >
                   <FamilyAvatar
-                    initials={person.initials}
-                    color={person.color}
+                    initials={(person.name ?? person.email).slice(0, 1).toUpperCase()}
+                    color={memberColors[person.userId % memberColors.length]}
                   />
-                  <strong className="mt-2 w-full overflow-hidden text-ellipsis whitespace-nowrap text-[11px]">{person.name}</strong>
-                  <small className="mt-0.5 text-[9px] font-bold text-page-faint">{person.tasks} справи</small>
+                  <strong className="mt-2 w-full overflow-hidden text-ellipsis whitespace-nowrap text-[11px]">{person.name ?? person.email}</strong>
+                  <small className="mt-0.5 text-[9px] font-bold text-page-faint">{person.isOwner ? "Адміністратор" : "Учасник"}</small>
                 </button>
               ))}
             </div>
@@ -152,9 +164,9 @@ export function Home() {
             </button>
           </div>
           <div className="grid gap-3 sm:grid-cols-3">
-            {events.map((event) => (
+            {calendarEvents.slice(0, 3).map((event) => (
               <EventCard
-                key={event.title}
+                key={event.id}
                 day={String(event.day).padStart(2, "0")}
                 month={event.month}
                 title={event.title}
@@ -162,6 +174,9 @@ export function Home() {
                 color={event.color}
               />
             ))}
+            {!calendarEvents.length && (
+              <p className="text-sm text-page-muted">Подій поки немає.</p>
+            )}
           </div>
         </Panel>
 
@@ -174,7 +189,7 @@ export function Home() {
               Спільний час має значення
             </p>
             <p className="mt-1 text-sm leading-5 text-white/65">
-              Ви запланували 2 сімейні події цього тижня.
+              Ви запланували {calendarEvents.length} сімейних подій.
             </p>
           </div>
           <Icon name="chevron" size={20} />
