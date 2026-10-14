@@ -80,7 +80,7 @@ class AuthController {
 
   resetPassword = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { token, newPassword } = req.body;
+      const { token, newPassword } = req.validated;
       await authService.resetPassword({ token, newPassword });
       apiResponse(res, null, 200);
     } catch (error: any) {
@@ -92,7 +92,7 @@ class AuthController {
 
   verifyEmail = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { token } = req.body;
+      const { token } = req.validated;
       await authService.verifyEmail({ token });
       apiResponse(res, null, 200);
     } catch (error: any) {

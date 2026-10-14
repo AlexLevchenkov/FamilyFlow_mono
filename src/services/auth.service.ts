@@ -187,7 +187,7 @@ class AuthService {
 
     await prisma.user.update({
       where: { id: user.id },
-      data: { resetToken: null, emailVerified: true },
+      data: { resetToken: null, resetTokenExp: null, emailVerified: true },
     });
 
     return true;

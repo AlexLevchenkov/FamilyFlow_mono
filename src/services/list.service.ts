@@ -140,6 +140,16 @@ class ListServices {
     recipientId,
     accessTypes,
   }: WithUserId<ShareListInput>) {
+    const list = await prisma.list.findFirst({ where: { id: listId } });
+
+    if (!list) {
+      throw notFoundError("List not found");
+    }
+
+    if (list.userId !== userId) {
+      throw notFoundError("List not found");
+    }
+
     const sharedWith = await prisma.sharedLists.create({
       data: { listId, ownerId: userId, recipientId, accessTypes },
     });
@@ -204,7 +214,7 @@ class ListServices {
 
     if (!shared) return false;
 
-    return ACCESS_LEVEL[accessTypes] >= ACCESS_LEVEL[shared.accessTypes];
+    return ACCESS_LEVEL[shared.accessTypes] >= ACCESS_LEVEL[accessTypes];
   }
 }
 

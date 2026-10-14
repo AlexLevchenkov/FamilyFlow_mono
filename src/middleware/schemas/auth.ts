@@ -51,4 +51,4 @@ export const validateLogin = makeValidator(loginSchema);
 export const validateLogout = makeValidator(logoutSchema);
 export const validateRequestPasswordReset = makeValidator(requestPasswordResetSchema);
 export const validateResetPassword = makeValidator(resetPasswordSchema);
-export const validateVerifyEmail = makeValidator(verifyEmailSchema);
+export const validateVerifyEmail = makeValidator(verifyEmailSchema, { body: false, query: true });

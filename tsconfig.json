@@ -22,7 +22,7 @@
       "@appTypes/*": ["types/*"],
       "@utils/*": ["utils/*"],
       "@/*": ["*"]
-    },
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
