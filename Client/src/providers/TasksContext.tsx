@@ -1,0 +1,90 @@
+import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
+import { initialTasks } from '@/mocks/data';
+import type { Task } from '@/types';
+
+export interface TasksContextValue {
+  tasks: Task[];
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  visibleTasks: Task[];
+  completed: number;
+  progress: number;
+  filter: string;
+  setFilter: (filter: string) => void;
+  showComposer: boolean;
+  setShowComposer: (show: boolean) => void;
+  newTask: string;
+  setNewTask: (task: string) => void;
+  addTask: () => void;
+  toggleTask: (id: number) => void;
+}
+
+const TasksContext = createContext<TasksContextValue | null>(null);
+
+export function TasksProvider({ children }: { children: ReactNode }) {
+  const [tasks, setTasks] = useState<Task[]>(initialTasks);
+  const [filter, setFilter] = useState('Усі');
+  const [showComposer, setShowComposer] = useState(false);
+  const [newTask, setNewTask] = useState('');
+
+  const visibleTasks = useMemo(() => {
+    if (filter === 'Виконані') return tasks.filter(task => task.done);
+    if (filter === 'Активні') return tasks.filter(task => !task.done);
+    return tasks;
+  }, [filter, tasks]);
+
+  const completed = tasks.filter(task => task.done).length;
+  const progress = tasks.length > 0 ? Math.round((completed / tasks.length) * 100) : 0;
+
+  function toggleTask(id: number) {
+    setTasks(current =>
+      current.map(task => (task.id === id ? { ...task, done: !task.done } : task))
+    );
+  }
+
+  function addTask() {
+    if (!newTask.trim()) return;
+    setTasks(current => [
+      ...current,
+      {
+        id: Date.now(),
+        title: newTask.trim(),
+        meta: 'Особиста справа',
+        time: 'Сьогодні',
+        category: 'Нове',
+        color: '#8b63de',
+        done: false,
+      },
+    ]);
+    setNewTask('');
+    setShowComposer(false);
+  }
+
+  const value = useMemo(
+    () => ({
+      tasks,
+      setTasks,
+      visibleTasks,
+      completed,
+      progress,
+      filter,
+      setFilter,
+      showComposer,
+      setShowComposer,
+      newTask,
+      setNewTask,
+      addTask,
+      toggleTask,
+    }),
+    [tasks, visibleTasks, completed, progress, filter, showComposer, newTask]
+  );
+
+  return <TasksContext.Provider value={value}>{children}</TasksContext.Provider>;
+}
+
+export function useTasksContext(): TasksContextValue {
+  const context = useContext(TasksContext);
+  if (!context) {
+    throw new Error('useTasksContext must be used within a TasksProvider');
+  }
+  return context;
+}
