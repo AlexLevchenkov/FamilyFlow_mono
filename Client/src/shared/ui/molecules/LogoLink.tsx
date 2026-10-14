@@ -1,4 +1,4 @@
-import { Logo } from '@ui/atoms';
+import { Logo } from '@ui';
 
 interface ILogoLink {
   isTextBelow?: boolean;

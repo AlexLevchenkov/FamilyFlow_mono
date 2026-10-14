@@ -1,5 +1,5 @@
 import { useLogout } from '@hooks/AuthHooks';
-import { Icon } from '@ui/atoms';
+import { Icon } from '@ui';
 import { useNavigate } from 'react-router-dom';
 
 interface LogoutButtonProps {

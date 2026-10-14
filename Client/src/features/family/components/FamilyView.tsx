@@ -1,6 +1,5 @@
-import { Icon, Panel, PrimaryButton } from "@ui/atoms"
+import { Icon, PageHero, Panel, PrimaryButton } from "@ui"
 import { FamilyAvatar } from "./FamilyAvatar"
-import { PageHero } from "@ui/molecules"
 import { family } from "@mocks/data"
 
 export function FamilyView() {

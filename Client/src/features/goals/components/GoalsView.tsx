@@ -1,5 +1,4 @@
-import { Icon, Panel, PrimaryButton } from "@ui/atoms"
-import { PageHero } from "@ui/molecules"
+import { Icon, PageHero, Panel, PrimaryButton } from "@ui"
 import { goals } from "@mocks/data"
 
 export function GoalsView() {

@@ -1,11 +1,11 @@
 import { createPortal } from 'react-dom';
 import { useEffect, useSyncExternalStore } from 'react';
-import { toastStore } from './toastStore';
-import type { ToastItem } from './toastStore';
+import { toastStore } from './ToastStore';
+import type { ToastItem } from './ToastStore';
 
 // eslint-disable-next-line react-refresh/only-export-components
-export { toast, toastStore } from './toastStore';
-export type { ToastItem, ToastType } from './toastStore';
+export { toast, toastStore } from './ToastStore';
+export type { ToastItem, ToastType } from './ToastStore';
 
 interface ToastCardProps {
   item: ToastItem;

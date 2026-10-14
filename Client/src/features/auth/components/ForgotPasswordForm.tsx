@@ -8,7 +8,7 @@ import {
 } from '@schemas/loginSchema';
 import { Button, Input } from '@ui';
 import { ForgotPasswordModal } from './ForgotPasswordModal';
-import { Icon } from '@ui/atoms';
+import { Icon } from '@ui';
 
 export const ForgotPasswordForm = () => {
   const [showSuccess, setShowSuccess] = useState(false);

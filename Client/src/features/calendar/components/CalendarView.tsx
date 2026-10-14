@@ -1,4 +1,4 @@
-import { Icon, IconButton, Panel } from "@ui/atoms"
+import { Icon, IconButton, Panel } from "@ui"
 import { EventCard } from "./EventCard"
 import { events } from "@mocks/data"
 

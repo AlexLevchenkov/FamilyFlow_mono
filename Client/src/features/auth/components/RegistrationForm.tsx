@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { isAxiosError } from 'axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegistrationSchema, type RegistrationData } from '@schemas';
 import { useRegistration } from '@hooks/AuthHooks';
-import { Button, Input, Popup } from '@ui';
-import { Icon } from '@ui/atoms';
-import { useNavigate } from 'react-router-dom';
+import { Button, Icon, Input, Popup } from '@ui';
 
 export const RegistrationForm = () => {
   const [showSuccessfulPopup, setShowSuccessfulPopup] = useState(false);

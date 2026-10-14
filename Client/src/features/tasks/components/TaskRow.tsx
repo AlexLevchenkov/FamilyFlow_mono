@@ -1,4 +1,4 @@
-import { Icon } from "@ui/atoms"
+import { Icon } from "@ui"
 import type { Task } from "../types"
 
 interface TaskRowProps {

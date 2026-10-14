@@ -1,4 +1,4 @@
-import { Modal } from '@ui/atoms';
+import { Modal } from '@ui';
 import { useNavigate } from 'react-router-dom';
 
 interface IForgotPasswordModal {

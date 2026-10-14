@@ -7,7 +7,7 @@ import {
 } from "@schemas/loginSchema"
 import { useResetPassword } from "@hooks/AuthHooks"
 import { useNavigate } from "react-router-dom"
-import { Icon } from "@ui/atoms"
+import { Icon } from "@ui"
 
 interface ResetPasswordFormProps {
   token: string

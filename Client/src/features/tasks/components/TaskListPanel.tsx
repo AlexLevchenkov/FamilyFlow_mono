@@ -1,4 +1,4 @@
-import { Icon, Panel, PrimaryButton } from "@ui/atoms"
+import { Icon, Panel, PrimaryButton } from "@ui"
 import { TaskRow } from "./TaskRow"
 import type { Task } from "../types"
 

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { IUser } from "@features/auth/types/user";
+import type { IUser } from "@features/auth";
 
 interface AuthState {
   accessToken: string | null;
