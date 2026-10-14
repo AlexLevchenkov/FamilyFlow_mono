@@ -16,7 +16,7 @@ function emitChange() {
   }
 }
 
-export const toastStore = {
+export const ToastStore = {
   addToast(msg: string, type: ToastType, duration = 4500): string {
     const id = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
     const newToast: ToastItem = { id, msg, type, duration };
@@ -48,9 +48,9 @@ export const toastStore = {
 };
 
 export const toast = {
-  success: (msg: string, duration?: number) => toastStore.addToast(msg, 'success', duration),
-  error: (msg: string, duration?: number) => toastStore.addToast(msg, 'error', duration),
-  info: (msg: string, duration?: number) => toastStore.addToast(msg, 'info', duration),
-  dismiss: (id: string) => toastStore.removeToast(id),
-  clear: () => toastStore.clear(),
+  success: (msg: string, duration?: number) => ToastStore.addToast(msg, 'success', duration),
+  error: (msg: string, duration?: number) => ToastStore.addToast(msg, 'error', duration),
+  info: (msg: string, duration?: number) => ToastStore.addToast(msg, 'info', duration),
+  dismiss: (id: string) => ToastStore.removeToast(id),
+  clear: () => ToastStore.clear(),
 };

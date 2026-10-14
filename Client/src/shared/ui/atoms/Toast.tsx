@@ -1,11 +1,6 @@
 import { createPortal } from 'react-dom';
 import { useEffect, useSyncExternalStore } from 'react';
-import { toastStore } from './ToastStore';
-import type { ToastItem } from './ToastStore';
-
-// eslint-disable-next-line react-refresh/only-export-components
-export { toast, toastStore } from './ToastStore';
-export type { ToastItem, ToastType } from './ToastStore';
+import { type ToastItem, ToastStore } from './ToastStore';
 
 interface ToastCardProps {
   item: ToastItem;
@@ -127,8 +122,8 @@ const ToastCard = ({ item, onClose }: ToastCardProps) => {
 
 export const ToastContainer = () => {
   const activeToasts = useSyncExternalStore(
-    toastStore.subscribe,
-    toastStore.getSnapshot,
+    ToastStore.subscribe,
+    ToastStore.getSnapshot,
     () => []
   );
 
@@ -140,7 +135,7 @@ export const ToastContainer = () => {
       className="pointer-events-none fixed bottom-5 right-5 z-9999 flex flex-col gap-2.5 max-sm:left-4 max-sm:right-4 max-sm:bottom-4"
     >
       {activeToasts.map(item => (
-        <ToastCard key={item.id} item={item} onClose={toastStore.removeToast} />
+        <ToastCard key={item.id} item={item} onClose={ToastStore.removeToast} />
       ))}
     </div>,
     document.body
