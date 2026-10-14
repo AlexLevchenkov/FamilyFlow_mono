@@ -1,23 +1,7 @@
-import { User } from "@prisma/client";
-
-export interface LoginResponse {
-  accessToken: string;
-  user: Pick<User, "name" | "avatar">;
-}
-
-export interface RefreshResponse {
-  accessToken: string;
-}
-
-export interface ForgotPasswordResponse {
-  email: string;
-}
-
-export interface ResetPasswordResponse {
-  token: string;
-  newPassword: string;
-}
-
-export interface EmailVerifyResponse {
-  token: string;
-}
+export type {
+  LoginResponse,
+  RefreshResponse,
+  ForgotPasswordResponse,
+  ResetPasswordResponse,
+  EmailVerifyResponse,
+} from "@familyflow/contracts";

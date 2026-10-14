@@ -1,5 +1,9 @@
 import { PaginatedResponse } from "@appTypes/common.types";
-import { CreateListInput, ShareListInput, UpdateListInput } from "@/middleware";
+import type {
+  CreateListRequest,
+  ShareListRequest,
+  UpdateListRequest,
+} from "@familyflow/contracts";
 import { List, SharedLists } from "@prisma/client";
 import { interfaceToOpenAPI } from "@/utils";
 
@@ -24,13 +28,13 @@ export const listsSchemas = {
       totalPages: 1,
     },
   }),
-  CreateListRequest: interfaceToOpenAPI<CreateListInput>({
+  CreateListRequest: interfaceToOpenAPI<CreateListRequest>({
     title: "New list",
     type: "tasks",
     color: "Red",
     icon: "Box",
   }),
-  UpdateListRequest: interfaceToOpenAPI<Omit<UpdateListInput, "id">>({
+  UpdateListRequest: interfaceToOpenAPI<UpdateListRequest>({
     title: "New list",
     type: "tasks",
     color: "Red",
@@ -46,7 +50,7 @@ export const listsSchemas = {
     createdAt: new Date(),
     updatedAt: new Date(),
   }),
-  shareListRequest: interfaceToOpenAPI<ShareListInput>({
+  shareListRequest: interfaceToOpenAPI<ShareListRequest>({
     listId: 1,
     recipientId: 2,
     accessTypes: "fullAccess",

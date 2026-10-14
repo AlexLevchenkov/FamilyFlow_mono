@@ -1,6 +1,9 @@
 import { PaginatedResponse } from "@appTypes/common.types";
 import { Item } from "@prisma/client";
-import { CreateItemInput, UpdateItemInput } from "@/middleware";
+import type {
+  CreateListItemRequest,
+  UpdateListItemRequest,
+} from "@familyflow/contracts";
 import { interfaceToOpenAPI } from "@/utils";
 
 const item: Item = {
@@ -26,7 +29,7 @@ export const itemsListSchemas = {
       totalPages: 1,
     },
   }),
-  CreateItemsListRequest: interfaceToOpenAPI<CreateItemInput>({
+  CreateItemsListRequest: interfaceToOpenAPI<CreateListItemRequest>({
     listId: item.listId,
     title: item.title,
     description: item.description || "",
@@ -35,8 +38,7 @@ export const itemsListSchemas = {
     dueDate: item.dueDate || new Date(),
     position: item.position,
   }),
-  UpdateItemsListRequest: interfaceToOpenAPI<UpdateItemInput>({
-    id: item.id,
+  UpdateItemsListRequest: interfaceToOpenAPI<UpdateListItemRequest>({
     listId: item.listId,
     title: item.title,
     description: item.description || "",

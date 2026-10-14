@@ -1,9 +1,11 @@
 import { PaginatedResponse } from "@appTypes/common.types";
 import type { User } from "@prisma/client";
-import { RegisterInput, UpdateUserInput } from "@/middleware";
+import type {
+  RegisterUserRequest,
+  UpdateUserRequest,
+  UserPublic,
+} from "@familyflow/contracts";
 import { interfaceToOpenAPI } from "@/utils";
-
-type UserPublic = Pick<User, "name" | "avatar">;
 
 export const usersSchemas = {
   PaginatedUsersResponse: interfaceToOpenAPI<PaginatedResponse<UserPublic>>({
@@ -28,12 +30,12 @@ export const usersSchemas = {
       totalPages: 1,
     },
   }),
-  CreateUserRequest: interfaceToOpenAPI<RegisterInput>({
+  CreateUserRequest: interfaceToOpenAPI<RegisterUserRequest>({
     email: "user@example.com",
     password: "Password123!@#",
     name: "John Doe",
   }),
-  UpdateUserRequest: interfaceToOpenAPI<UpdateUserInput>({
+  UpdateUserRequest: interfaceToOpenAPI<UpdateUserRequest>({
     email: "user@example.com",
     name: "John Doe",
     avatar: "https/example.com/jone-doe-avatar",

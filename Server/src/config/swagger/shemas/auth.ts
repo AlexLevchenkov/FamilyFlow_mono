@@ -1,15 +1,15 @@
-import {
+import type {
+  ForgotPasswordRequest,
   LoginResponse,
   RefreshResponse,
-  ForgotPasswordResponse,
-  ResetPasswordResponse,
-  EmailVerifyResponse,
-} from "@appTypes/auth.types";
-import { LoginInput } from "@/middleware";
+  ResetPasswordRequest,
+  VerifyEmailQuery,
+  LoginRequest,
+} from "@familyflow/contracts";
 import { interfaceToOpenAPI } from "@/utils";
 
 export const authSchemas = {
-  LoginRequest: interfaceToOpenAPI<LoginInput>({
+  LoginRequest: interfaceToOpenAPI<LoginRequest>({
     email: "super@gmail.com",
     password: "Password123!@#",
   }),
@@ -23,14 +23,14 @@ export const authSchemas = {
   RefreshResponse: interfaceToOpenAPI<RefreshResponse>({
     accessToken: "jwt-token",
   }),
-  ForgotPasswordRequest: interfaceToOpenAPI<ForgotPasswordResponse>({
+  ForgotPasswordRequest: interfaceToOpenAPI<ForgotPasswordRequest>({
     email: "super@gmail.com",
   }),
-  ResetPasswordRequest: interfaceToOpenAPI<ResetPasswordResponse>({
+  ResetPasswordRequest: interfaceToOpenAPI<ResetPasswordRequest>({
     token: "secretToken",
     newPassword: "Password456!@#",
   }),
-  EmailVerifyRequest: interfaceToOpenAPI<EmailVerifyResponse>({
+  EmailVerifyRequest: interfaceToOpenAPI<VerifyEmailQuery>({
     token: "secretToken",
   }),
 };
