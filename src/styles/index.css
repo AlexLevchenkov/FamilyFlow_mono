@@ -1,54 +1,92 @@
 @import "tailwindcss";
 
 body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
   background-color: var(--color-background);
   font-family: var(--font-main);
   color: var(--color-text);
+  font-synthesis: none;
 }
 
 #root {
   min-height: 100vh;
 }
 
-.bg-button {
-  @apply rounded bg-gradient-to-b from-background1 to-background2;
-}
-
-.container {
-  @apply max-w-7xl mx-auto px-4
-}
-
 @theme {
   /* Colors */
-  --color-text: #0F266A;
-  --color-lightText: #225FBF;
-  --color-white: #FAFAFE;
-  --color-asideBack: #F6F2FB;
-  --color-background: #E0E3F9;
-  --color-panelsColor: #FEFDFE;
-  --color-selected: #8D6ACE;
-  --color-background1: #8D6ACE;
-  --color-background2: #684DC8;
+  --color-text: #0f266a;
+  --color-lightText: #225fbf;
+  --color-white: #fafafe;
+  --color-asideBack: #f6f2fb;
+  --color-background: #e0e3f9;
+  --color-panelsColor: #fefdfe;
+  --color-selected: #8d6ace;
+  --color-background1: #8d6ace;
+  --color-background2: #684dc8;
 
+  /* Shared semantic palette */
+  --color-page-heading: #29274c;
+  --color-page-visual-heading: #2e2c62;
+  --color-page-copy: #747186;
+  --color-page-muted: #8e8b9d;
+  --color-page-faint: #aaa7b6;
+  --color-page-label: #46445f;
+  --color-page-control: #514f66;
+  --color-page-placeholder: #b5b2bf;
+  --color-page-border: #ebe9f2;
+  --color-page-border-hover: #ded8ee;
+  --color-page-border-accent: #cfc7e7;
+  --color-page-control-border: #c9c6d5;
+  --color-page-focus: #9a7cde;
+  --color-page-focus-soft: rgba(126, 87, 215, 0.08);
+  --color-page-success: #36a98d;
+  --color-page-success-soft: #e5f8f1;
+  --color-page-surface: #faf9fd;
+  --color-page-lavender: #f7f4ff;
+  --color-page-lavender-active: #f0eaff;
+  --color-page-gradient-lavender: #eee8ff;
+  --color-page-gradient-blue: #e9edff;
+  --color-page-gradient-mint: #e5f4ef;
+  --color-page-accent-bright: #7d56da;
+  --color-page-overlay-white: rgba(255, 255, 255, 0.85);
+  --color-page-overlay-white-medium: rgba(255, 255, 255, 0.7);
+  --color-page-overlay-white-soft: rgba(255, 255, 255, 0.55);
+  --color-page-shadow-soft: rgba(61, 55, 96, 0.09);
+  --color-page-shadow-panel: rgba(61, 55, 96, 0.055);
+  --color-page-shadow-welcome: rgba(64, 54, 112, 0.08);
+  --color-page-shadow-accent: rgba(107, 72, 204, 0.2);
 
   /* fontFamily */
-  --font-main: Roboto, sans-serif;
+  --font-main: "Nunito Sans", ui-rounded, system-ui, sans-serif;
 
   /* fontSize */
   --text-sm: 12px;
   --text-base: 14px;
   --text-lg: 18px;
   --text-xl: 22px;
-  
-  /* spacing */
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 12px;
-  --spacing-lg: 16px;
-  --spacing-xl: 24px;
 
   /* borderRadius */
   --radius-main: 10px;
   --radius-form: 24px;
   --radius-max: 999px;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

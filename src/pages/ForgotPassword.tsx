@@ -1,9 +1,6 @@
-import { useToggle } from '@hooks/useToggle';
-import { ForgotPasswordForm, ForgotPasswordModal, LoginForm } from '@/ui';
+import { ForgotPasswordForm, LoginForm } from '@/ui';
 
 export const ForgotPasswordPage = () => {
-  const [isOpen, toggleOpen] = useToggle();
-
   return (
     <>
       <main className="h-screen flex flex-col justify-center">
@@ -18,10 +15,9 @@ export const ForgotPasswordPage = () => {
               Будь ласка введіть свою адресу електронної пошту, і ми надішлемо
               вам посилання для оновлення пароля
             </p>
-            <ForgotPasswordForm toggleModal={toggleOpen} />
+            <ForgotPasswordForm />
           </div>
         </div>
-        <ForgotPasswordModal isOpen={isOpen} toggleOpen={toggleOpen} />
       </main>
     </>
   );

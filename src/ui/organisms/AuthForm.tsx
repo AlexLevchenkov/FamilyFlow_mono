@@ -1,16 +1,15 @@
 import { isAxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, InputCheckbox, Input } from '@/ui';
-import { loginSchema, type LoginFormData } from '@schemas/loginSchema';
+import { navigate } from '@lib/navigation';
 import { useLogin } from '@hooks/AuthHooks';
+import { loginSchema, type LoginFormData } from '@schemas/loginSchema';
 import { useStore } from '@/store';
+import { Button, InputCheckbox, Input, Icon } from '@/ui';
 
 export const LoginForm = () => {
   const login = useLogin();
   const { auth } = useStore();
-  const navigate = useNavigate();
 
   const {
     register,
@@ -43,30 +42,46 @@ export const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="mt-7 grid gap-4">
       <Input
         id="email"
-        label="Пошта"
+        label="Електронна пошта"
+        icon="mail"
         type="email"
-        placeholder="Введи пошту"
+        autoComplete="email"
+        placeholder="name@example.com"
+        required
         register={register('email')}
         error={errors.email}
       />
       <Input
         id="password"
         label="Пароль"
+        icon="lock"
         type="password"
-        placeholder="Введи пароль"
+        autoComplete="current-password"
+        minLength={8}
+        placeholder="Щонайменше 8 символів"
+        required
         register={register('password')}
         error={errors.password}
       />
-      <InputCheckbox
-        id="rememberMe"
-        label="Залишатися авторизованим"
-        register={register('rememberMe')}
-      />
-      <Button type="submit" disabled={isSubmitting}>
-        Увійти
+      <div className="-mt-1 flex items-center justify-between">
+        <InputCheckbox
+          id="rememberMe"
+          label="Запам'ятати мене"
+          register={register('rememberMe')}
+        />
+        <button
+          className="text-xs font-black text-background2"
+          onClick={() => navigate("/reset-password")}
+          type="button"
+        >
+          Забули пароль?
+        </button>
+      </div>
+      <Button type="submit" disabled={isSubmitting || login.isPending}>
+        Увійти <Icon name="chevron" size={17} />
       </Button>
     </form>
   );

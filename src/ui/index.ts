@@ -1,3 +1,3 @@
-export * from "@ui/atoms/index";
-export * from "@ui/molecules/index";
-export * from "@ui/organisms/index";
+export * from '@ui/atoms';
+export * from '@ui/molecules';
+export * from '@ui/organisms';

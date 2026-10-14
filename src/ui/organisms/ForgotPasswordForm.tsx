@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForgotPassword } from '@hooks/AuthHooks';
@@ -5,13 +6,11 @@ import {
   forgotPasswordSchema,
   type ForgotPasswordData,
 } from '@schemas/loginSchema';
-import { Button, Input } from '@/ui';
+import { Button, Input, ForgotPasswordModal } from '@/ui';
+import { Icon } from '../atoms/Icon';
 
-interface IProps {
-  toggleModal: () => void;
-}
-
-export const ForgotPasswordForm = ({ toggleModal }: IProps) => {
+export const ForgotPasswordForm = () => {
+  const [showSuccess, setShowSuccess] = useState(false);
   const forgotPassword = useForgotPassword();
 
   const {
@@ -26,25 +25,34 @@ export const ForgotPasswordForm = ({ toggleModal }: IProps) => {
     forgotPassword.mutate(data, {
       onSuccess: res => {
         if (res.status === 200) {
-          toggleModal();
+          setShowSuccess(true);
         }
       },
     });
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <Input
-        id="email"
-        label="Пошта"
-        type="email"
-        placeholder="Введіть пошту"
-        register={register('email')}
-        error={errors.email}
+    <>
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-7 grid gap-4">
+        <Input
+          id="email"
+          label="Електронна пошта"
+          icon="mail"
+          type="email"
+          autoComplete="email"
+          placeholder="name@example.com"
+          required
+          register={register('email')}
+          error={errors.email}
+        />
+        <Button type="submit" disabled={isSubmitting || forgotPassword.isPending}>
+          Надіслати лист <Icon name="chevron" size={17} />
+        </Button>
+      </form>
+      <ForgotPasswordModal
+        isOpen={showSuccess}
+        toggleOpen={() => setShowSuccess(false)}
       />
-      <Button type="submit" disabled={isSubmitting}>
-        Надіслати лист
-      </Button>
-    </form>
+    </>
   );
 };

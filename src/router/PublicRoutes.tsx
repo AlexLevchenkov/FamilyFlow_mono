@@ -1,13 +1,10 @@
 import {
-  LoginPage,
-  ForgotPasswordPage,
-  VerifyEmailPage,
-  RegistrationPage,
-} from "@/pages";
+  AuthPage
+} from '@/pages';
 
 export const publicRoutes = [
-  { path: "/login", element: <LoginPage /> },
-  { path: "/forgot-password", element: <ForgotPasswordPage /> },
-  { path: "/verify-email", element: <VerifyEmailPage /> },
-  { path: "/registration", element: <RegistrationPage /> },
+  { path: '/login', element: <AuthPage view="login" /> },
+  { path: '/registration', element: <AuthPage view="register" /> },
+  { path: '/forgot-password', element: <AuthPage view="reset" /> },
+  // { path: '/verify-email/:token', element: <AuthPage view="verify" /> },
 ];

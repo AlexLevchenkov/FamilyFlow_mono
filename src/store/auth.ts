@@ -10,6 +10,13 @@ interface AuthState {
   refreshTokens: (tokens: { access: string }) => void;
 }
 
+function clearPersistedAuth() {
+  for (const key of ['accessToken', 'name', 'avatar']) {
+    localStorage.removeItem(key);
+    sessionStorage.removeItem(key);
+  }
+}
+
 export const useAuthStore = create<AuthState>((set) => ({
   accessToken: localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken'),
   isAuthenticated: !!(localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken')),
@@ -18,6 +25,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     avatar: localStorage.getItem('avatar') || sessionStorage.getItem('avatar'),
   },
   login: ({ accessToken, rememberMe, me }) => {
+    clearPersistedAuth();
+
     if (rememberMe) {
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('name', me.name || "");
@@ -30,8 +39,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ accessToken, isAuthenticated: true, user: me });
   },
   logout: () => {
-    localStorage.clear();
-    sessionStorage.clear();
+    clearPersistedAuth();
     set({ accessToken: null, isAuthenticated: false, user: null });
   },
   refreshTokens: ({ access }) => {

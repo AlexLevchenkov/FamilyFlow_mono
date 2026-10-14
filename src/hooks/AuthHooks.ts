@@ -1,5 +1,6 @@
+import { isAxiosError } from 'axios';
 import { useMutation } from '@tanstack/react-query';
-import { authApi, type LoginDto } from '@/api';
+import { authApi, type LoginDto, type ResetPasswordDto } from '@/api';
 import type { ForgotPasswordData, RegistrationData } from '@/schemas';
 import { useAuthStore } from '@store/auth';
 
@@ -10,8 +11,20 @@ export function useLogin() {
 }
 
 export function useLogout() {
+  const clearSession = useAuthStore(state => state.logout);
+
   return useMutation({
-    mutationFn: () => authApi.logout(),
+    mutationFn: async () => {
+      try {
+        return await authApi.logout();
+      } catch (error) {
+        if (isAxiosError(error) && error.response?.status === 401) {
+          return undefined;
+        }
+        throw error;
+      }
+    },
+    onSuccess: clearSession,
   });
 }
 
@@ -28,5 +41,17 @@ export function useForgotPassword() {
 export function useRegistration() {
   return useMutation({
     mutationFn: (dto: RegistrationData) => authApi.registration(dto),
-  })
+  });
+}
+
+export function useVerifyEmail() {
+  return useMutation({
+    mutationFn: (token: string) => authApi.verifyEmail(token),
+  });
+}
+
+export function useResetPassword() {
+  return useMutation({
+    mutationFn: (dto: ResetPasswordDto) => authApi.resetPassword(dto),
+  });
 }

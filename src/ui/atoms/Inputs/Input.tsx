@@ -1,13 +1,17 @@
+import type { FieldError, UseFormRegisterReturn } from 'react-hook-form';
 import { useToggle } from '@/hooks/useToggle';
-import { type FieldError, type UseFormRegisterReturn } from 'react-hook-form';
-import Eye from '@assets/SVG/Eye.svg';
-import Eye_closed from '@assets/SVG/Eye-closed.svg';
+import { Icon } from '../Icon';
+import type { IconName } from '../../../types/index';
 
 interface IInput {
   id: string;
   label?: string;
   type?: string;
   placeholder?: string;
+  autoComplete?: string;
+  icon?: IconName;
+  minLength?: number;
+  required?: boolean;
   register: UseFormRegisterReturn;
   error?: FieldError;
 }
@@ -17,6 +21,10 @@ export const Input = ({
   label,
   type = 'text',
   placeholder,
+  autoComplete,
+  icon,
+  minLength,
+  required,
   register,
   error,
 }: IInput) => {
@@ -32,35 +40,37 @@ export const Input = ({
     type != 'password' ? type : showPassword ? 'text' : 'password';
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="grid gap-2">
       {label && (
-        <label htmlFor={id} className="text-sm font-medium">
+        <label htmlFor={id} className="block text-sm font-black text-page-label">
           {label}
         </label>
       )}
-      <div className="relative">
+      <div className={`relative flex h-[52px] items-center pl-3 rounded-[14px] border bg-panelsColor text-page-faint transition duration-150 focus-within:border-page-focus focus-within:bg-white focus-within:shadow-[0_0_0_4px_var(--color-page-focus-soft)] focus-within:text-selected ${error ? 'border-red-500 focus-within:border-red-500' : 'border-page-border'}`}>
+        {icon && <Icon name={icon} size={19} />}
         <input
           {...register}
           id={id}
           type={currentType}
           placeholder={placeholder}
-          className={`w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-lightText ${
-            error ? 'border-red-500' : 'border-gray-300'
-          }`}
+          autoComplete={autoComplete}
+          minLength={minLength}
+          required={required}
+          aria-invalid={Boolean(error)}
+          className="h-full min-w-0 flex-1 border-0 bg-transparent px-3.5 text-base font-bold text-page-heading outline-none placeholder:font-semibold placeholder:text-page-placeholder"
         />
         {type === 'password' && (
           <button
-            className="p-1.5 absolute w-8 right-2.5 top-1/2 -translate-y-1/2"
+            aria-label={showPassword ? 'Приховати пароль' : 'Показати пароль'}
+            className="py-2.5 pr-4 pl-1 text-page-faint"
             onClick={togglePassword}
+            type="button"
           >
-            <img
-              src={showPassword ? Eye : Eye_closed}
-              alt={showPassword ? 'hide password' : 'show password'}
-            />
+            <Icon name="eye" size={19} />
           </button>
         )}
       </div>
-      {error && <p className="text-red-500 text-sm">{error.message}</p>}
+      {error && <p className="text-sm text-red-600" role="alert">{error.message}</p>}
     </div>
   );
 };

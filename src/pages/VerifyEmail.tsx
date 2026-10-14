@@ -1,61 +1,59 @@
-import { NavLink } from "react-router-dom";
+import { useEffect, useRef, useState } from 'react';
+import { useVerifyEmail } from '@hooks/AuthHooks';
+import { Icon } from '../ui/atoms/Icon';
+import { navigate } from '../lib/navigation';
 
-export const VerifyEmailPage = () => {
+export const VerifyEmailPage = ({ token }: { token: string }) => {
+  const verifyEmailMutation = useVerifyEmail();
+  const submittedToken = useRef<string | null>(null);
+  const [status, setStatus] = useState<'loading' | 'success' | 'error'>(
+    'loading'
+  );
+
+  useEffect(() => {
+    if (!token || submittedToken.current === token) return;
+    submittedToken.current = token;
+    verifyEmailMutation.mutate(token, {
+      onSuccess: () => setStatus('success'),
+      onError: () => setStatus('error'),
+    });
+  }, [token, verifyEmailMutation]);
+
+  const isSuccess = status === 'success';
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-blue-50 to-white px-6">
-      {/* Логотип */}
-      <div className="flex items-center gap-2 mb-6">
-        <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-6 h-6 text-white"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
+    <main className="grid min-h-screen place-items-center bg-white px-5">
+      <section className="w-full max-w-md text-center">
+        <div className={`mx-auto mb-6 grid size-16 place-items-center rounded-3xl ${isSuccess ? 'bg-page-success-soft text-page-success' : status === 'error' ? 'bg-red-50 text-red-600' : 'bg-page-lavender text-background2'}`}>
+          <Icon name={isSuccess ? 'check' : 'mail'} size={28} />
         </div>
-        <h1 className="text-2xl font-bold text-blue-700">Підтвердження електронної пошти</h1>
-      </div>
-
-      {/* Ілюстрація */}
-      <div className="w-64 mb-8">
-        <img
-          src="/assets/email_verified.svg"
-          alt="Email verified"
-          className="w-full h-auto"
-        />
-      </div>
-
-      {/* Повідомлення */}
-      <div className="text-center">
-        <h2 className="text-xl font-semibold text-gray-800 mb-2">
-          Вашу електронну пошту було успішно підтверджено!
-        </h2>
-        <p className="text-gray-600 mb-6">
-          Дякуємо, тепер ви можете користуватися всіма функціями нашого сервісу.
+        <p className="mb-2 text-xs font-black uppercase tracking-widest text-page-accent-bright">
+          {status === 'loading' ? 'Перевірка' : isSuccess ? 'Готово' : 'Безпека акаунта'}
         </p>
-
-        <NavLink
-          to="/"
-          className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
-        >
-          Перейти на головну
-        </NavLink>
-      </div>
-
-      {/* Футер */}
-      <footer className="mt-12 text-sm text-gray-500">
-        <div className="flex gap-3 justify-center mb-2">
-          <a href="/support" className="hover:text-blue-600">Підтримка</a>
-          <span>|</span>
-          <a href="/privacy" className="hover:text-blue-600">Політика конфіденційності</a>
-          <span>|</span>
-          <a href="/terms" className="hover:text-blue-600">Умови використання</a>
-        </div>
-        <p>© 2026 FamilyFlow. Усі права захищено.</p>
-      </footer>
-    </div>
+        <h1 className="text-3xl font-black tracking-tight text-page-heading">
+          {status === 'loading'
+            ? 'Підтверджуємо електронну пошту'
+            : isSuccess
+              ? 'Пошту підтверджено'
+              : 'Не вдалося підтвердити пошту'}
+        </h1>
+        <p className="mt-3 text-base leading-relaxed text-page-copy">
+          {status === 'loading'
+            ? 'Це займе лише мить.'
+            : isSuccess
+              ? 'Тепер ви можете увійти до FamilyFlow.'
+              : 'Посилання недійсне або строк його дії минув. Запросіть новий лист і спробуйте ще раз.'}
+        </p>
+        {status !== 'loading' && (
+          <button
+            className="mt-6 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[linear-gradient(135deg,var(--color-background1),var(--color-background2))] px-4 py-3 text-sm font-black text-white shadow-lg transition duration-150 hover:-translate-y-px hover:shadow-xl"
+            onClick={() => navigate('/login')}
+            type="button"
+          >
+            Перейти до входу <Icon name="chevron" size={17} />
+          </button>
+        )}
+      </section>
+    </main>
   );
 };

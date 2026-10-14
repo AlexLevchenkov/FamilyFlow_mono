@@ -1,7 +1,7 @@
-import { Routes, Navigate, Route } from 'react-router-dom';
-import { publicRoutes } from './PublicRoutes';
-import { privateRoutes } from './PrivateRoutes';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { universalRoutes } from './UniversalRoutes';
+import { privateRoutes } from './PrivateRoutes';
+import { publicRoutes } from './PublicRoutes';
 
 const AppRoutes = ({ isAuth }: { isAuth: boolean }) => (
   <Routes>

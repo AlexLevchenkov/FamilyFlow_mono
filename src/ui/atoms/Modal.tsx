@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from "react";
+import { useEffect, type ReactNode } from 'react';
 
 interface IModal {
   isOpen: boolean;
@@ -9,22 +9,36 @@ interface IModal {
 export const Modal = ({ isOpen, children, onClose }: IModal) => {
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = 'auto';
     }
 
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = 'auto';
     };
   }, [isOpen]);
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-      <div className="relative w-3xl bg-white p-6 rounded shadow-lg">
-        <button className="absolute top-0 right-0 p-3 text-red-800 cursor-pointer float-right" onClick={onClose}>X</button>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-page-heading/40 p-4"
+      onMouseDown={(event) => event.target === event.currentTarget && onClose()}
+    >
+      <div
+        aria-modal="true"
+        className="relative w-full max-w-lg rounded-2xl border border-page-border bg-white p-6 shadow-2xl"
+        role="dialog"
+      >
+        <button
+          aria-label="Закрити"
+          className="absolute top-3 right-3 rounded-lg px-3 py-2 text-sm font-bold text-page-muted hover:bg-page-surface"
+          onClick={onClose}
+          type="button"
+        >
+          Закрити
+        </button>
         {children}
       </div>
     </div>

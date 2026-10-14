@@ -1,4 +1,4 @@
-import { type FieldError, type UseFormRegisterReturn } from 'react-hook-form';
+import type { FieldError, UseFormRegisterReturn } from 'react-hook-form';
 
 interface IInputCheckbox {
   id: string;
@@ -13,22 +13,26 @@ export const InputCheckbox = ({
   label,
   placeholder,
   register,
-  error
+  error,
 }: IInputCheckbox) => {
-
   return (
-    <div className="flex flex-row gap-1">
-      <input
-        id={id}
-        {...register}
-        type="checkbox"
-        placeholder={placeholder}
-        className={`border p-2 rounded focus:outline-none focus:ring-2 focus:ring-lightText ${
-          error ? 'border-red-500' : 'border-gray-300'
-        }`}
-      />
-      {label && <label htmlFor={id} className="text-sm leading-[1.5] font-medium">{label}</label>}
-      {error && <p className="text-red-500 text-sm">{error.message}</p>}
+    <div className="grid gap-1">
+      <div className="flex items-start gap-2 text-sm font-bold leading-normal text-page-copy">
+        <input
+          id={id}
+          {...register}
+          type="checkbox"
+          placeholder={placeholder}
+          aria-invalid={Boolean(error)}
+          className={`mt-0.5 size-4 shrink-0 accent-selected ${error ? 'outline outline-1 outline-red-500' : ''}`}
+        />
+        {label && (
+          <label htmlFor={id}>
+            {label}
+          </label>
+        )}
+      </div>
+      {error && <p className="text-sm text-red-600" role="alert">{error.message}</p>}
     </div>
   );
-}
+};

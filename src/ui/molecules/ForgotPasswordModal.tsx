@@ -1,5 +1,5 @@
 import { Modal } from '@ui/atoms';
-import { NavLink } from 'react-router-dom';
+import { navigate } from '../../lib/navigation';
 
 interface IForgotPasswordModal {
   isOpen: boolean;
@@ -12,12 +12,20 @@ export const ForgotPasswordModal = ({
 }: IForgotPasswordModal) => {
   return (
     <Modal isOpen={isOpen} onClose={toggleOpen}>
-      <p>
-        Ми надіслали на вказану вами пошту лист, будь ласка перейдіть по
-        посиланню у цьому листі для зміни пароля до вашого аккаунта
+      <p className="text-base leading-relaxed text-page-copy">
+        Ми надіслали лист із посиланням для відновлення пароля. Перейдіть за
+        посиланням у листі, щоб продовжити.
       </p>
-
-      <NavLink className="underline" to={'/login'}>Певернутися до авторизації</NavLink>
+      <button
+        className="mt-5 text-sm font-black text-background2"
+        onClick={() => {
+          toggleOpen();
+          navigate('/login');
+        }}
+        type="button"
+      >
+        Повернутися до входу
+      </button>
     </Modal>
   );
 };

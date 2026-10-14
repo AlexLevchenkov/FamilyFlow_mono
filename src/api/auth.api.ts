@@ -1,41 +1,55 @@
-import { api } from '@/api/client';
+import { api } from './client';
+import { API_ENDPOINTS } from './endpoints';
+import type {
+  ApiResponse,
+  LoginRequest,
+  LoginResponse,
+  RefreshTokenResponse,
+  ForgotPasswordRequest,
+  ResetPasswordRequest,
+  LogoutQuery,
+} from './contracts';
 import type {
   ForgotPasswordData,
   RegistrationData,
-} from '@/schemas/loginSchema';
+} from '@schemas/loginSchema';
 
-export interface LoginDto {
-  email: string;
-  password: string;
-}
-
-export interface AuthResponse {
-  accessToken: string;
-  user: {
-    id: string;
-    email: string;
-  };
-}
-
-export interface RegistrationDto {
-  email: string;
-  password: string;
-}
+// Re-exports for backward compatibility
+export type { LoginDto, ResetPasswordDto, AuthResponse } from './contracts';
 
 export const authApi = {
-  async login(dto: LoginDto) {
-    return api.post('/auth/login', dto);
+  async login(dto: LoginRequest) {
+    return api.post<ApiResponse<LoginResponse>>(API_ENDPOINTS.AUTH.LOGIN, dto);
   },
-  async logout() {
-    return api.get('/auth/logout');
+
+  async logout(params?: LogoutQuery) {
+    return api.get<ApiResponse<null>>(API_ENDPOINTS.AUTH.LOGOUT, { params });
   },
+
   async refreshToken() {
-    return api.post('/auth/refresh-token');
+    return api.post<ApiResponse<RefreshTokenResponse>>(
+      API_ENDPOINTS.AUTH.REFRESH_TOKEN
+    );
   },
-  async forgotPassword(dto: ForgotPasswordData) {
-    return api.post('/auth/forgot-password', dto);
+
+  async forgotPassword(dto: ForgotPasswordRequest | ForgotPasswordData) {
+    return api.post<ApiResponse<null>>(API_ENDPOINTS.AUTH.FORGOT_PASSWORD, dto);
   },
+
+  async resetPassword(dto: ResetPasswordRequest) {
+    return api.post<ApiResponse<null>>(API_ENDPOINTS.AUTH.RESET_PASSWORD, dto);
+  },
+
   async registration(dto: RegistrationData) {
-    return api.post('/user', dto);
+    return api.post<ApiResponse<LoginResponse['user']>>(
+      API_ENDPOINTS.USER.ROOT,
+      dto
+    );
+  },
+
+  async verifyEmail(token: string) {
+    return api.get<ApiResponse<null>>(API_ENDPOINTS.AUTH.VERIFY_EMAIL, {
+      params: { token },
+    });
   },
 };

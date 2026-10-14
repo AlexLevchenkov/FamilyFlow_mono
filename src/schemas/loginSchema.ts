@@ -29,9 +29,21 @@ export const setPasswordSchema = z.object({
   password: passwordSchema,
 })
 
+export const resetPasswordSchema = z
+  .object({
+    newPassword: passwordSchema,
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Паролі не збігаються",
+  })
+
+const loginPasswordSchema = z.string().min(8).max(20);
+
 export const loginSchema = z.object({
   email: emailSchema,
-  password: passwordSchema,
+  password: loginPasswordSchema,
   rememberMe: z.boolean(),
 });
 
@@ -51,4 +63,5 @@ export const RegistrationSchema = z.object({
 export type ChangePasswordData = z.infer<typeof changePasswordSchema>;
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type ForgotPasswordData = z.infer<typeof forgotPasswordSchema>;
+export type ResetPasswordData = z.infer<typeof resetPasswordSchema>;
 export type RegistrationData = z.infer<typeof RegistrationSchema>;
