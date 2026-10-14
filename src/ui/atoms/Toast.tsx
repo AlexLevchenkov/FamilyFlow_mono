@@ -137,7 +137,7 @@ export const ToastContainer = () => {
   return createPortal(
     <div
       aria-live="polite"
-      className="pointer-events-none fixed bottom-5 right-5 z-[9999] flex flex-col gap-2.5 max-sm:left-4 max-sm:right-4 max-sm:bottom-4"
+      className="pointer-events-none fixed bottom-5 right-5 z-9999 flex flex-col gap-2.5 max-sm:left-4 max-sm:right-4 max-sm:bottom-4"
     >
       {activeToasts.map(item => (
         <ToastCard key={item.id} item={item} onClose={toastStore.removeToast} />

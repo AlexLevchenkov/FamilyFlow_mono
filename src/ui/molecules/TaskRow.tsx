@@ -10,7 +10,7 @@ export function TaskRow({ task, toggleTask }: TaskRowProps) {
   return (
     <article
       className={`flex min-h-12 items-center gap-2 rounded-xl border border-[#efedf4] px-2 py-3
-        transition-all hover:translate-x-0.5 hover:border-[#ded8ee] hover:shadow-[0_4px_15px_rgba(56,50,90,0.055)]
+        transition-all hover:translate-x-0.5 hover:border-page-border-hover hover:shadow-[0_4px_15px_rgba(56,50,90,0.055)]
         ${task.done ? "bg-[#fbfbfd]" : "bg-white"}
       `}
     >
@@ -18,7 +18,7 @@ export function TaskRow({ task, toggleTask }: TaskRowProps) {
         aria-label={task.done ? "Позначити активною" : "Позначити виконаною"}
         className={`grid h-11 w-11 flex-none place-items-center rounded-[7px] border-[1.5px] transition-all ${task.done
           ? "border-[#48b99d] bg-[#48b99d] text-white"
-          : "border-[#c9c6d5] text-transparent hover:border-[#8260d9]"
+          : "border-page-control-border text-transparent hover:border-[#8260d9]"
           }`}
         onClick={() => toggleTask(task.id)}
       >

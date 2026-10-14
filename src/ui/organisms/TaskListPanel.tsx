@@ -20,7 +20,7 @@ interface TaskListPanelProps {
   showFooterAdd?: boolean
 }
 
-const filters = ["Усі", "Активні", "Виконані"]
+const filters = ["Всі", "Активні", "Виконані"]
 
 export function TaskListPanel({
   title,
@@ -48,9 +48,9 @@ export function TaskListPanel({
           <div className="flex rounded-xl bg-[#f2f1f8] p-1">
             {filters.map((item) => (
               <button
-                className={`rounded-[9px] px-[11px] py-[6px] text-[11px] font-extrabold transition-all ${filter === item
-                    ? "bg-white text-[#6445c2] shadow-[0_2px_8px_rgba(54,48,88,0.09)]"
-                    : "text-[#8f8da0]"
+                className={`rounded-[9px] px-3 py-1.5 text-xs font-extrabold transition-all ${filter === item
+                  ? "bg-white text-[#6445c2] shadow-[0_2px_8px_rgba(54,48,88,0.09)]"
+                  : "text-[#8f8da0]"
                   }`}
                 key={item}
                 onClick={() => setFilter(item)}
@@ -97,7 +97,8 @@ export function TaskListPanel({
 
       {showFooterAdd && !showComposer && (
         <button
-          className="mt-[12px] flex w-full items-center justify-center gap-[7px] rounded-[14px] border border-dashed border-[#cfc7e7] p-[10px] text-[13px] font-black text-[#7758c8] transition-all hover:border-[#9476dc] hover:bg-[#faf8ff]"
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-[14px] border border-dashed border-page-border-accent p-3 text-xs font-black
+          text-page-accent-bright transition-all hover:border-page-border-accent hover:bg-page-lavender-active"
           onClick={() => setShowComposer(true)}
         >
           <Icon name="plus" size={18} /> Додати нову справу
