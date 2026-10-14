@@ -1,0 +1,10 @@
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  jti       String   @default("")
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}

@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+  engineType = "library"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+model Item {
+  id             Int       @id @default(autoincrement())
+  listId         Int
+  list           List      @relation(fields: [listId], references: [id])
+  title          String
+  description    String?
+  completed      Boolean
+  priority       Int       @default(0)
+  dueDate        DateTime?
+  position       Int       @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([listId])
+}
+
+model List {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+  title       String
+  type        Type
+  color       String?
+  icon        String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  sharedWith SharedLists[]
+  items      Item[]
+
+  @@index([userId])
+}
+
+model SharedLists {
+  id              Int            @id @default(autoincrement())
+  ownerId         Int
+  owner           User           @relation("SharedListOwner", fields: [ownerId], references: [id])
+  recipientId     Int
+  recipient       User           @relation("SharedListRecipient", fields: [recipientId], references: [id])
+  listId          Int
+  list            List           @relation(fields: [listId], references: [id])
+  accessTypes     AccessTypes    @default(watch)
+  createdAt       DateTime       @default(now())
+
+  @@unique([ownerId, recipientId, listId])
+}
+
+enum Type {
+  shopping
+  tasks
+  events
+}
+
+enum AccessTypes {
+  watch
+  edit
+  fullAccess
+}
+
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  jti       String   @default("")
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+
+model User {
+  id                   Int            @id @default(autoincrement())
+  email                String         @unique
+  password             String
+  name                 String?
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+  avatar               String?
+  
+  RefreshToken         RefreshToken[]
+  List                 List[]
+
+  resetToken           String?
+  resetTokenExp        DateTime?
+  emailVerified        Boolean       @default(false)
+
+  ownedSharedLists     SharedLists[] @relation("SharedListOwner")
+  receivedSharedLists  SharedLists[] @relation("SharedListRecipient")
+}
