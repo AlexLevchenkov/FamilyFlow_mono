@@ -1,0 +1,16 @@
+{
+  "name": "family-flow",
+  "private": true,
+  "workspaces": [
+    "Client",
+    "Server",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm --prefix Server run dev\" \"npm --prefix Client run dev\"",
+    "dev:mock": "npm --prefix Client run dev:mock"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
