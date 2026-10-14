@@ -48,11 +48,10 @@ export function TaskListPanel({
           <div className="flex rounded-xl bg-[#f2f1f8] p-1">
             {filters.map((item) => (
               <button
-                className={`rounded-[9px] px-[11px] py-[6px] text-[11px] font-extrabold transition-all ${
-                  filter === item
+                className={`rounded-[9px] px-[11px] py-[6px] text-[11px] font-extrabold transition-all ${filter === item
                     ? "bg-white text-[#6445c2] shadow-[0_2px_8px_rgba(54,48,88,0.09)]"
                     : "text-[#8f8da0]"
-                }`}
+                  }`}
                 key={item}
                 onClick={() => setFilter(item)}
               >

@@ -8,5 +8,7 @@ export * from './Toast';
 export * from './toastStore';
 export * from './User';
 export * from './Icon';
+export * from './Panel';
+export * from './PrimaryButton';
 
 export * from './Inputs';
