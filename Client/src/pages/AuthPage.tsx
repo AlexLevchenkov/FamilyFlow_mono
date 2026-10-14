@@ -1,11 +1,7 @@
-import type { AuthView } from "../types/index"
-import { Icon } from "../ui/atoms/Icon"
-import { LoginForm } from "../ui/organisms/AuthForm"
-import { RegistrationForm } from "../ui/organisms/RegistrationForm"
-import { ForgotPasswordForm } from "../ui/organisms/ForgotPasswordForm"
-import { ResetPasswordForm } from "../ui/organisms/ResetPasswordForm"
+import { useNavigate } from "react-router-dom"
 import familyIllustration from "@assets/Images/Сім'я без фону.png"
-import { navigate } from "../lib/navigation"
+import { type AuthView, LoginForm, RegistrationForm, ForgotPasswordForm, ResetPasswordForm } from "@features/auth"
+import { Icon } from "@ui"
 
 const authEyebrowClasses =
   "mb-2 text-xs font-black uppercase tracking-widest text-page-accent-bright"
@@ -27,6 +23,7 @@ export function AuthPage({
   view: AuthView
   token?: string
 }) {
+  const navigate = useNavigate()
   const content = {
     login: {
       eyebrow: "Раді бачити вас знову",

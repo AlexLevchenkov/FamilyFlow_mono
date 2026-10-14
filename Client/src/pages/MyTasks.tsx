@@ -1,34 +1,20 @@
-import type { Task } from "../types/index"
-import { Panel } from "../ui/atoms/Panel"
-import { TaskListPanel } from "../ui/organisms/TaskListPanel"
+import { Panel } from "@ui"
+import { TaskListPanel, useTasksContext } from "@features/tasks"
 
-interface MyTasksProps {
-  tasks: Task[];
-  visibleTasks: Task[];
-  completed: number;
-  filter: string;
-  setFilter: (filter: string) => void;
-  showComposer: boolean;
-  setShowComposer: (show: boolean) => void;
-  newTask: string;
-  setNewTask: (task: string) => void;
-  addTask: () => void;
-  toggleTask: (id: number) => void;
-}
-
-export function MyTasks({
-  tasks,
-  visibleTasks,
-  completed,
-  filter,
-  setFilter,
-  showComposer,
-  setShowComposer,
-  newTask,
-  setNewTask,
-  addTask,
-  toggleTask,
-}: MyTasksProps) {
+export function MyTasks() {
+  const {
+    tasks,
+    visibleTasks,
+    completed,
+    filter,
+    setFilter,
+    showComposer,
+    setShowComposer,
+    newTask,
+    setNewTask,
+    addTask,
+    toggleTask,
+  } = useTasksContext()
   return (
     <div className="space-y-6">
       <section className="grid gap-4 sm:grid-cols-3">

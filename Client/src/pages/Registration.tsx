@@ -1,4 +1,5 @@
-import { LogoLink, RegistrationForm } from "@/ui";
+import { LogoLink } from "@ui";
+import { RegistrationForm } from "@features/auth";
 
 export const RegistrationPage = () => {
   return (

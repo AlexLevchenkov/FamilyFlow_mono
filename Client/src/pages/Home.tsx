@@ -1,39 +1,28 @@
-import { Icon, FamilyAvatar, Panel, PrimaryButton, EventCard, TaskListPanel } from "@/ui"
+import { useNavigate } from "react-router-dom"
+import { Icon, Panel, PrimaryButton } from "@ui"
+import { FamilyAvatar } from "@features/family"
+import { EventCard } from "@features/calendar"
+import { TaskListPanel, useTasksContext } from "@features/tasks"
 import familyIllustration from "@assets/Images/Сім'я без фону.png"
-import { events, family } from "@/mocks/data"
-import type { Task } from "@/types"
+import { events, family } from "@mocks/data"
 
-interface HomeProps {
-  tasks: Task[];
-  visibleTasks: Task[];
-  completed: number;
-  progress: number;
-  filter: string;
-  setFilter: (filter: string) => void;
-  showComposer: boolean;
-  setShowComposer: (show: boolean) => void;
-  newTask: string;
-  setNewTask: (task: string) => void;
-  addTask: () => void;
-  toggleTask: (id: number) => void;
-  setActiveNav: (nav: string) => void;
-}
 
-export function Home({
-  tasks,
-  visibleTasks,
-  completed,
-  progress,
-  filter,
-  setFilter,
-  showComposer,
-  setShowComposer,
-  newTask,
-  setNewTask,
-  addTask,
-  toggleTask,
-  setActiveNav,
-}: HomeProps) {
+export function Home() {
+  const {
+    tasks,
+    visibleTasks,
+    completed,
+    progress,
+    filter,
+    setFilter,
+    showComposer,
+    setShowComposer,
+    newTask,
+    setNewTask,
+    addTask,
+    toggleTask,
+  } = useTasksContext()
+  const navigate = useNavigate()
   return (
     <>
       <section
@@ -91,7 +80,7 @@ export function Home({
               <h3 className="text-[19px] font-black tracking-[-0.25px]">Наша родина</h3>
               <button
                 className="text-xs font-extrabold text-[#7656d0]"
-                onClick={() => setActiveNav("Родина")}
+                onClick={() => navigate("/family")}
               >
                 Керувати
               </button>
@@ -101,7 +90,7 @@ export function Home({
                 <button
                   className="flex min-w-0 flex-col items-center rounded-[15px] p-[7px_2px] transition-all hover:-translate-y-0.5 hover:bg-page-surface"
                   key={person.name}
-                  onClick={() => setActiveNav("Родина")}
+                  onClick={() => navigate("/family")}
                 >
                   <FamilyAvatar
                     initials={person.initials}
@@ -157,7 +146,7 @@ export function Home({
             </div>
             <button
               className="text-xs font-extrabold text-page-accent-bright"
-              onClick={() => setActiveNav("Календар")}
+              onClick={() => navigate("/calendar")}
             >
               Весь календар
             </button>
