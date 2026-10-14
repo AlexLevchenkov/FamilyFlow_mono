@@ -1,4 +1,4 @@
-import { ForgotPasswordForm, LoginForm } from '@/ui';
+import { ForgotPasswordForm, LoginForm } from '@features/auth';
 
 export const ForgotPasswordPage = () => {
   return (

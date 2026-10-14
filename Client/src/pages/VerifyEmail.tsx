@@ -1,10 +1,11 @@
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { useVerifyEmail } from '@hooks/AuthHooks';
-import { Icon } from '../ui/atoms/Icon';
-import { navigate } from '../lib/navigation';
+import { Icon } from '@ui';
 
 export const VerifyEmailPage = ({ token }: { token: string }) => {
   const verifyEmailMutation = useVerifyEmail();
+  const navigate = useNavigate();
   const submittedToken = useRef<string | null>(null);
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>(
     'loading'

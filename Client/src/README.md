@@ -1,16 +1,21 @@
-# Common UI Structure
+# Client source architecture
 
-Shared code for both Web and Mobile lives here.
+The client follows a feature-driven structure:
 
-- `ui/` reusable presentational blocks (atoms/molecules/organisms/templates)
-- `features/` feature-level shared UI logic and slices
-- `providers/` shared app providers
-- `navigation/` shared navigation contracts/types
-- `tokens/` design tokens (colors, spacing, typography aliases)
-- `icons/` reusable icon components
-- `assets/` shared static assets
-- `utils/` UI utility helpers
-- `constants/` shared UI constants
-- `schemas/` validation schemas for UI forms
-- `mocks/` fixtures/story/test data
-- `tests/` shared UI testing helpers
+- `app/` initializes the application, global providers, and declarative router.
+- `pages/` composes feature views for individual routes.
+- `features/` contains business-specific UI, hooks, types, schemas, and state. A feature may depend on `shared/`, but not on another feature's internals.
+- `shared/` contains business-independent API infrastructure, UI primitives, layouts, utilities, and mock infrastructure.
+
+Feature code is organized by responsibility, for example:
+
+```text
+features/
+  auth/{components,hooks,schemas,store,types}
+  tasks/{components,hooks,types}
+  calendar/components
+  family/components
+  goals/components
+```
+
+Keep route definitions in `app/router.tsx`, keep page components focused on composing features, and expose only reusable, domain-independent primitives from `shared/ui`.
