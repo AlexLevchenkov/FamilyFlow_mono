@@ -42,11 +42,16 @@ export const Input = ({
   return (
     <div className="grid gap-2">
       {label && (
-        <label htmlFor={id} className="block text-sm font-black text-page-label">
+        <label
+          htmlFor={id}
+          className="block text-sm font-black text-page-label"
+        >
           {label}
         </label>
       )}
-      <div className={`relative flex h-[52px] items-center pl-3 rounded-[14px] border bg-panelsColor text-page-faint transition duration-150 focus-within:border-page-focus focus-within:bg-white focus-within:shadow-[0_0_0_4px_var(--color-page-focus-soft)] focus-within:text-selected ${error ? 'border-red-500 focus-within:border-red-500' : 'border-page-border'}`}>
+      <div
+        className={`relative flex h-[52px] items-center pl-3 rounded-[14px] border bg-panelsColor text-page-faint transition duration-150 focus-within:border-page-focus focus-within:bg-white focus-within:shadow-[0_0_0_4px_var(--color-page-focus-soft)] focus-within:text-selected ${error ? 'border-red-500 focus-within:border-red-500' : 'border-page-border'}`}
+      >
         {icon && <Icon name={icon} size={19} />}
         <input
           {...register}
@@ -70,7 +75,11 @@ export const Input = ({
           </button>
         )}
       </div>
-      {error && <p className="text-sm text-red-600" role="alert">{error.message}</p>}
+      {error && (
+        <p className="text-sm text-red-600" role="alert">
+          {error.message}
+        </p>
+      )}
     </div>
   );
 };

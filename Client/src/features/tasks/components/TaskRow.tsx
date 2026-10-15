@@ -1,9 +1,9 @@
-import { Icon } from "@ui"
-import type { Task } from "../types"
+import { Icon } from '@ui';
+import type { Task } from '../types';
 
 interface TaskRowProps {
-  task: Task
-  toggleTask: (id: number) => void
+  task: Task;
+  toggleTask: (id: number) => void;
 }
 
 export function TaskRow({ task, toggleTask }: TaskRowProps) {
@@ -11,15 +11,16 @@ export function TaskRow({ task, toggleTask }: TaskRowProps) {
     <article
       className={`flex min-h-12 items-center gap-2 rounded-xl border border-[#efedf4] px-2 py-3
         transition-all hover:translate-x-0.5 hover:border-page-border-hover hover:shadow-[0_4px_15px_rgba(56,50,90,0.055)]
-        ${task.done ? "bg-[#fbfbfd]" : "bg-white"}
+        ${task.done ? 'bg-[#fbfbfd]' : 'bg-white'}
       `}
     >
       <button
-        aria-label={task.done ? "Позначити активною" : "Позначити виконаною"}
-        className={`grid h-11 w-11 flex-none place-items-center rounded-[7px] border-[1.5px] transition-all ${task.done
-          ? "border-[#48b99d] bg-[#48b99d] text-white"
-          : "border-page-control-border text-transparent hover:border-[#8260d9]"
-          }`}
+        aria-label={task.done ? 'Позначити активною' : 'Позначити виконаною'}
+        className={`grid h-11 w-11 flex-none place-items-center rounded-[7px] border-[1.5px] transition-all ${
+          task.done
+            ? 'border-[#48b99d] bg-[#48b99d] text-white'
+            : 'border-page-control-border text-transparent hover:border-[#8260d9]'
+        }`}
         onClick={() => toggleTask(task.id)}
       >
         {task.done && <Icon name="check" size={15} />}
@@ -27,7 +28,7 @@ export function TaskRow({ task, toggleTask }: TaskRowProps) {
       <div className="min-w-0 flex-1">
         <p
           className={`truncate text-[15px] font-extrabold sm:text-base 
-            ${task.done ? "text-[#aaa8b8] line-through" : ""}
+            ${task.done ? 'text-[#aaa8b8] line-through' : ''}
           `}
         >
           {task.title}
@@ -50,5 +51,5 @@ export function TaskRow({ task, toggleTask }: TaskRowProps) {
         <Icon name="more" size={19} />
       </button>
     </article>
-  )
+  );
 }

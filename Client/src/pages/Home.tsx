@@ -1,10 +1,10 @@
-import { useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import { Icon, Panel, PrimaryButton } from "@ui"
-import { FamilyAvatar, useFamilyStore } from "@features/family"
-import { EventCard, useCalendarStore } from "@features/calendar"
-import { TaskListPanel, useTasksContext } from "@features/tasks"
-import familyIllustration from "@assets/Images/Сім'я без фону.png"
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Icon, Panel, PrimaryButton } from '@ui';
+import { FamilyAvatar, useFamilyStore } from '@features/family';
+import { EventCard, useCalendarStore } from '@features/calendar';
+import { TaskListPanel, useTasksContext } from '@features/tasks';
+import familyIllustration from "@assets/Images/Сім'я без фону.png";
 export function Home() {
   const {
     tasks,
@@ -21,18 +21,18 @@ export function Home() {
     toggleTask,
     loading,
     error,
-  } = useTasksContext()
-  const familyData = useFamilyStore(state => state.family)
-  const loadFamily = useFamilyStore(state => state.loadFamily)
-  const calendarEvents = useCalendarStore(state => state.events)
-  const loadEvents = useCalendarStore(state => state.loadEvents)
+  } = useTasksContext();
+  const familyData = useFamilyStore(state => state.family);
+  const loadFamily = useFamilyStore(state => state.loadFamily);
+  const calendarEvents = useCalendarStore(state => state.events);
+  const loadEvents = useCalendarStore(state => state.loadEvents);
   useEffect(() => {
-    void loadFamily()
-    void loadEvents()
-  }, [loadFamily, loadEvents])
-  const navigate = useNavigate()
-  const family = familyData?.members ?? []
-  const memberColors = ["#5267ca", "#e76f91", "#f2a13b", "#4cb89e"]
+    void loadFamily();
+    void loadEvents();
+  }, [loadFamily, loadEvents]);
+  const navigate = useNavigate();
+  const family = familyData?.members ?? [];
+  const memberColors = ['#5267ca', '#e76f91', '#f2a13b', '#4cb89e'];
   return (
     <>
       <section
@@ -51,13 +51,10 @@ export function Home() {
             Усе важливе для родини — в одному місці
           </h2>
           <p className="mt-3 max-w-115 text-sm leading-6 text-[#656580] sm:text-base">
-            Сьогодні у вас {tasks.length - completed} активні справи. Розподіляйте задачі та
-            знаходьте більше часу одне для одного.
+            Сьогодні у вас {tasks.length - completed} активні справи.
+            Розподіляйте задачі та знаходьте більше часу одне для одного.
           </p>
-          <PrimaryButton
-            className="mt-6"
-            onClick={() => setShowComposer(true)}
-          >
+          <PrimaryButton className="mt-6" onClick={() => setShowComposer(true)}>
             <Icon name="plus" size={18} /> Додати справу
           </PrimaryButton>
         </div>
@@ -89,27 +86,35 @@ export function Home() {
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-1">
           <Panel>
             <div className="mb-5 flex items-center justify-between">
-              <h3 className="text-[19px] font-black tracking-[-0.25px]">Наша родина</h3>
+              <h3 className="text-[19px] font-black tracking-[-0.25px]">
+                Наша родина
+              </h3>
               <button
                 className="text-xs font-extrabold text-[#7656d0]"
-                onClick={() => navigate("/family")}
+                onClick={() => navigate('/family')}
               >
                 Керувати
               </button>
             </div>
             <div className="grid grid-cols-4 gap-2">
-              {family.map((person) => (
+              {family.map(person => (
                 <button
                   className="flex min-w-0 flex-col items-center rounded-[15px] p-[7px_2px] transition-all hover:-translate-y-0.5 hover:bg-page-surface"
                   key={person.name}
-                  onClick={() => navigate("/family")}
+                  onClick={() => navigate('/family')}
                 >
                   <FamilyAvatar
-                    initials={(person.name ?? person.email).slice(0, 1).toUpperCase()}
+                    initials={(person.name ?? person.email)
+                      .slice(0, 1)
+                      .toUpperCase()}
                     color={memberColors[person.userId % memberColors.length]}
                   />
-                  <strong className="mt-2 w-full overflow-hidden text-ellipsis whitespace-nowrap text-[11px]">{person.name ?? person.email}</strong>
-                  <small className="mt-0.5 text-[9px] font-bold text-page-faint">{person.isOwner ? "Адміністратор" : "Учасник"}</small>
+                  <strong className="mt-2 w-full overflow-hidden text-ellipsis whitespace-nowrap text-[11px]">
+                    {person.name ?? person.email}
+                  </strong>
+                  <small className="mt-0.5 text-[9px] font-bold text-page-faint">
+                    {person.isOwner ? 'Адміністратор' : 'Учасник'}
+                  </small>
                 </button>
               ))}
             </div>
@@ -151,23 +156,25 @@ export function Home() {
         <Panel>
           <div className="mb-5 flex items-center justify-between">
             <div>
-              <h3 className="text-[19px] font-black tracking-[-0.25px]">Найближчі події</h3>
+              <h3 className="text-[19px] font-black tracking-[-0.25px]">
+                Найближчі події
+              </h3>
               <p className="mt-1 text-sm text-page-muted">
                 Не пропустіть важливе
               </p>
             </div>
             <button
               className="text-xs font-extrabold text-page-accent-bright"
-              onClick={() => navigate("/calendar")}
+              onClick={() => navigate('/calendar')}
             >
               Весь календар
             </button>
           </div>
           <div className="grid gap-3 sm:grid-cols-3">
-            {calendarEvents.slice(0, 3).map((event) => (
+            {calendarEvents.slice(0, 3).map(event => (
               <EventCard
                 key={event.id}
-                day={String(event.day).padStart(2, "0")}
+                day={String(event.day).padStart(2, '0')}
                 month={event.month}
                 title={event.title}
                 time={event.time}
@@ -185,9 +192,7 @@ export function Home() {
             <Icon name="users" size={27} />
           </div>
           <div>
-            <p className="text-lg font-extrabold">
-              Спільний час має значення
-            </p>
+            <p className="text-lg font-extrabold">Спільний час має значення</p>
             <p className="mt-1 text-sm leading-5 text-white/65">
               Ви запланували {calendarEvents.length} сімейних подій.
             </p>
@@ -196,5 +201,5 @@ export function Home() {
         </Panel>
       </section>
     </>
-  )
+  );
 }

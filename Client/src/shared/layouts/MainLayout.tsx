@@ -1,14 +1,14 @@
-import type { ReactNode } from "react"
-import { Icon, IconButton, NavItem } from "@ui"
-import { navItems, pageCopy } from "@mocks/data"
+import type { ReactNode } from 'react';
+import { Icon, IconButton, NavItem } from '@ui';
+import { navItems, pageCopy } from '@mocks/data';
 
 interface MainLayoutProps {
-  children: ReactNode
-  activeNav: string
-  setActiveNav: (nav: string) => void
-  activeTasksCount: number
-  logoutSlot: ReactNode
-  profileSlot: ReactNode
+  children: ReactNode;
+  activeNav: string;
+  setActiveNav: (nav: string) => void;
+  activeTasksCount: number;
+  logoutSlot: ReactNode;
+  profileSlot: ReactNode;
 }
 
 export function MainLayout({
@@ -24,13 +24,19 @@ export function MainLayout({
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-[252px] flex-col border-r border-[#ecebf5] bg-white px-5 py-7 lg:flex">
         <div className="mb-10 flex items-center gap-3 px-2">
           <div className="relative w-9 h-7">
-            <span className="w-7 h-7 absolute top-2 left-2 rounded-md rotate-45" style={{
-              background: "linear-gradient(135deg, #b157e9, #7653da)",
-            }} />
-            <span className="w-7 h-7 absolute top-2 right-2 rounded-md rotate-45" style={{
-              background: "linear-gradient(135deg, #6d8bf0, #38b6e7)",
-              mixBlendMode: "multiply",
-            }} />
+            <span
+              className="w-7 h-7 absolute top-2 left-2 rounded-md rotate-45"
+              style={{
+                background: 'linear-gradient(135deg, #b157e9, #7653da)',
+              }}
+            />
+            <span
+              className="w-7 h-7 absolute top-2 right-2 rounded-md rotate-45"
+              style={{
+                background: 'linear-gradient(135deg, #6d8bf0, #38b6e7)',
+                mixBlendMode: 'multiply',
+              }}
+            />
           </div>
           <span className="text-[22px] font-extrabold tracking-[-0.5px]">
             FamilyFlow
@@ -38,14 +44,14 @@ export function MainLayout({
         </div>
 
         <nav className="space-y-1.5">
-          {navItems.map((item) => (
+          {navItems.map(item => (
             <NavItem
               key={item.label}
               icon={item.icon}
               label={item.label}
               active={activeNav === item.label}
               onSelect={setActiveNav}
-              badge={item.label === "Мої справи" ? activeTasksCount : undefined}
+              badge={item.label === 'Мої справи' ? activeTasksCount : undefined}
             />
           ))}
         </nav>
@@ -63,7 +69,7 @@ export function MainLayout({
           <NavItem
             icon="settings"
             label="Налаштування"
-            active={activeNav === "Налаштування"}
+            active={activeNav === 'Налаштування'}
             onSelect={setActiveNav}
           />
           {logoutSlot}
@@ -119,12 +125,12 @@ export function MainLayout({
       </main>
 
       <nav className="fixed inset-x-3 bottom-3 z-40 flex items-center justify-around rounded-[22px] border border-white/70 bg-white/90 p-2 shadow-[0_12px_40px_rgba(50,45,90,.16)] backdrop-blur-xl lg:hidden">
-        {navItems.slice(0, 4).map((item) => (
+        {navItems.slice(0, 4).map(item => (
           <NavItem
             key={item.label}
             icon={item.icon}
             label={item.label}
-            mobileLabel={item.label === "Мої справи" ? "Справи" : undefined}
+            mobileLabel={item.label === 'Мої справи' ? 'Справи' : undefined}
             active={activeNav === item.label}
             onSelect={setActiveNav}
             mobile
@@ -133,11 +139,11 @@ export function MainLayout({
         <NavItem
           icon="users"
           label="Родина"
-          active={activeNav === "Родина"}
+          active={activeNav === 'Родина'}
           onSelect={setActiveNav}
           mobile
         />
       </nav>
     </div>
-  )
+  );
 }

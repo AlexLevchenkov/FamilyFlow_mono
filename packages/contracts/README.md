@@ -5,7 +5,7 @@ workspaces. Import API request/response types from `@familyflow/contracts`
 instead of defining another copy in an application.
 
 ```ts
-import type { CreateListRequest, ListModel } from "@familyflow/contracts";
+import type { CreateListRequest, ListModel } from '@familyflow/contracts';
 ```
 
 These are wire/API contracts. Prisma remains the source of truth for database

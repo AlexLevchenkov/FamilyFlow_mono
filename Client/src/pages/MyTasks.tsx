@@ -1,5 +1,5 @@
-import { Panel } from "@ui"
-import { TaskListPanel, useTasksContext } from "@features/tasks"
+import { Panel } from '@ui';
+import { TaskListPanel, useTasksContext } from '@features/tasks';
 
 export function MyTasks() {
   const {
@@ -16,24 +16,24 @@ export function MyTasks() {
     toggleTask,
     loading,
     error,
-  } = useTasksContext()
+  } = useTasksContext();
   const dueToday = tasks.filter(
     task =>
       task.dueDate &&
       new Date(task.dueDate).toDateString() === new Date().toDateString()
-  ).length
+  ).length;
   return (
     <div className="space-y-6">
       <section className="grid gap-4 sm:grid-cols-3">
         {[
+          ['Активні', tasks.length - completed, 'Потребують уваги', '#7656d0'],
+          ['Виконані', completed, 'Гарний темп', '#39b29d'],
           [
-            "Активні",
-            tasks.length - completed,
-            "Потребують уваги",
-            "#7656d0",
+            'На сьогодні',
+            dueToday,
+            dueToday ? 'Заплановано на сьогодні' : 'Немає справ на сьогодні',
+            '#e87891',
           ],
-          ["Виконані", completed, "Гарний темп", "#39b29d"],
-          ["На сьогодні", dueToday, dueToday ? "Заплановано на сьогодні" : "Немає справ на сьогодні", "#e87891"],
         ].map(([label, value, detail, color]) => (
           <Panel key={label as string}>
             <div
@@ -42,9 +42,7 @@ export function MyTasks() {
             />
             <p className="text-sm font-bold text-[#8f8da0]">{label}</p>
             <p className="mt-2 text-3xl font-extrabold">{value}</p>
-            <p className="mt-1 text-xs font-bold text-[#aaa8b8]">
-              {detail}
-            </p>
+            <p className="mt-1 text-xs font-bold text-[#aaa8b8]">{detail}</p>
           </Panel>
         ))}
       </section>
@@ -66,5 +64,5 @@ export function MyTasks() {
         showHeaderAdd
       />
     </div>
-  )
+  );
 }

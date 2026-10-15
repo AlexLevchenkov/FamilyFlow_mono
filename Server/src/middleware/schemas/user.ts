@@ -1,6 +1,6 @@
-import z from "zod";
-import { makeValidator } from "@utils/validation";
-import { passwordSchema } from "./auth";
+import z from 'zod';
+import { makeValidator } from '@utils/validation';
+import { passwordSchema } from './auth';
 
 const getUsersSchema = z.object({
   page: z.string().optional(),

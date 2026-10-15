@@ -41,14 +41,20 @@ export function FamilyView() {
             Додавайте до родини людей із зареєстрованими акаунтами FamilyFlow.
           </p>
         </div>
-        <PrimaryButton className="shrink-0" onClick={() => setShowInvite(value => !value)}>
+        <PrimaryButton
+          className="shrink-0"
+          onClick={() => setShowInvite(value => !value)}
+        >
           <Icon name="plus" size={18} /> Запросити
         </PrimaryButton>
       </PageHero>
 
       {showInvite && (
         <Panel as="section">
-          <label className="block text-sm font-extrabold" htmlFor="family-member-email">
+          <label
+            className="block text-sm font-extrabold"
+            htmlFor="family-member-email"
+          >
             Email зареєстрованого користувача
           </label>
           <div className="mt-3 flex flex-col gap-2 sm:flex-row">
@@ -61,17 +67,24 @@ export function FamilyView() {
               onKeyDown={event => event.key === 'Enter' && void inviteMember()}
               placeholder="name@example.com"
             />
-            <PrimaryButton onClick={() => void inviteMember()}>Додати</PrimaryButton>
+            <PrimaryButton onClick={() => void inviteMember()}>
+              Додати
+            </PrimaryButton>
           </div>
         </Panel>
       )}
 
       {error && (
-        <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+        <p
+          role="alert"
+          className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700"
+        >
           {error}
         </p>
       )}
-      {loading && <p className="text-sm text-[#9290a4]">Завантаження родини…</p>}
+      {loading && (
+        <p className="text-sm text-[#9290a4]">Завантаження родини…</p>
+      )}
 
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {(family?.members ?? []).map((person, index) => {
@@ -87,7 +100,9 @@ export function FamilyView() {
               <p className="mt-1 text-xs font-bold text-[#aaa8b8]">
                 {person.isOwner ? 'Адміністратор' : 'Учасник'}
               </p>
-              <p className="mt-4 truncate text-xs text-[#9290a4]">{person.email}</p>
+              <p className="mt-4 truncate text-xs text-[#9290a4]">
+                {person.email}
+              </p>
             </Panel>
           );
         })}

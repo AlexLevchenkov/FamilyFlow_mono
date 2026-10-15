@@ -1,8 +1,12 @@
 import type { Request, Response, NextFunction } from 'express';
-import { getDataFromRefreshToken } from "@utils/tokens";
+import { getDataFromRefreshToken } from '@utils/tokens';
 
 // middleware: takes refreshToken from cookie (if present) and attaches to req.refreshToken
-export const cookieExtractor = (req: Request, res: Response, next: NextFunction) => {
+export const cookieExtractor = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   // cookie-parser must be used earlier in middleware chain
   const maybe = req.cookies?.refreshToken;
 
@@ -11,9 +15,9 @@ export const cookieExtractor = (req: Request, res: Response, next: NextFunction)
 
     const data = getDataFromRefreshToken(maybe);
 
-    if (data && typeof data != "string") {
-      req.user = {id: Number(data.userId || 0), jti: data.jti || ""};
+    if (data && typeof data != 'string') {
+      req.user = { id: Number(data.userId || 0), jti: data.jti || '' };
     }
   }
   next();
-}
+};

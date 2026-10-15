@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 body {
   margin: 0;
@@ -59,7 +59,7 @@ body {
   --color-page-shadow-accent: rgba(107, 72, 204, 0.2);
 
   /* fontFamily */
-  --font-main: "Nunito Sans", ui-rounded, system-ui, sans-serif;
+  --font-main: 'Nunito Sans', ui-rounded, system-ui, sans-serif;
 
   /* fontSize */
   --text-sm: 12px;

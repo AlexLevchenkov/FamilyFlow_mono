@@ -24,7 +24,7 @@ export const Modal = ({ isOpen, children, onClose }: IModal) => {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-page-heading/40 p-4"
-      onMouseDown={(event) => event.target === event.currentTarget && onClose()}
+      onMouseDown={event => event.target === event.currentTarget && onClose()}
     >
       <div
         aria-modal="true"
@@ -43,4 +43,4 @@ export const Modal = ({ isOpen, children, onClose }: IModal) => {
       </div>
     </div>
   );
-}
+};

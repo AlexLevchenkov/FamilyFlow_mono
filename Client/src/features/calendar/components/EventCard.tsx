@@ -1,9 +1,9 @@
 interface EventCardProps {
-  day: number | string
-  month: string
-  title: string
-  time: string
-  color: string
+  day: number | string;
+  month: string;
+  title: string;
+  time: string;
+  color: string;
 }
 
 export function EventCard({ day, month, title, time, color }: EventCardProps) {
@@ -23,5 +23,5 @@ export function EventCard({ day, month, title, time, color }: EventCardProps) {
         </div>
       </div>
     </article>
-  )
+  );
 }

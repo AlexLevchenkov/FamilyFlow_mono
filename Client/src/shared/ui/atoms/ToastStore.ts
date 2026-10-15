@@ -48,9 +48,12 @@ export const ToastStore = {
 };
 
 export const toast = {
-  success: (msg: string, duration?: number) => ToastStore.addToast(msg, 'success', duration),
-  error: (msg: string, duration?: number) => ToastStore.addToast(msg, 'error', duration),
-  info: (msg: string, duration?: number) => ToastStore.addToast(msg, 'info', duration),
+  success: (msg: string, duration?: number) =>
+    ToastStore.addToast(msg, 'success', duration),
+  error: (msg: string, duration?: number) =>
+    ToastStore.addToast(msg, 'error', duration),
+  info: (msg: string, duration?: number) =>
+    ToastStore.addToast(msg, 'info', duration),
   dismiss: (id: string) => ToastStore.removeToast(id),
   clear: () => ToastStore.clear(),
 };

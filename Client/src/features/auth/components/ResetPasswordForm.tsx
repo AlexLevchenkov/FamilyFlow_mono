@@ -1,35 +1,35 @@
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Button, Input } from "@ui"
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button, Input } from '@ui';
 import {
   resetPasswordSchema,
   type ResetPasswordData,
-} from "@schemas/loginSchema"
-import { useResetPassword } from "@hooks/AuthHooks"
-import { useNavigate } from "react-router-dom"
-import { Icon } from "@ui"
+} from '@schemas/loginSchema';
+import { useResetPassword } from '@hooks/AuthHooks';
+import { useNavigate } from 'react-router-dom';
+import { Icon } from '@ui';
 
 interface ResetPasswordFormProps {
-  token: string
+  token: string;
 }
 
 export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
-  const resetPassword = useResetPassword()
-  const navigate = useNavigate()
+  const resetPassword = useResetPassword();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<ResetPasswordData>({
     resolver: zodResolver(resetPasswordSchema),
-  })
+  });
 
   const onSubmit = (data: ResetPasswordData) => {
     resetPassword.mutate(
       { token, newPassword: data.newPassword },
-      { onSuccess: () => navigate("/login") },
-    )
-  }
+      { onSuccess: () => navigate('/login') }
+    );
+  };
 
   return (
     <form className="mt-7 grid gap-4" onSubmit={handleSubmit(onSubmit)}>
@@ -42,7 +42,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
         minLength={8}
         placeholder="Щонайменше 8 символів"
         required
-        register={register("newPassword")}
+        register={register('newPassword')}
         error={errors.newPassword}
       />
       <Input
@@ -54,7 +54,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
         minLength={8}
         placeholder="Введіть пароль ще раз"
         required
-        register={register("confirmPassword")}
+        register={register('confirmPassword')}
         error={errors.confirmPassword}
       />
       {resetPassword.isError && (
@@ -67,5 +67,5 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
         Оновити пароль <Icon name="chevron" size={17} />
       </Button>
     </form>
-  )
+  );
 }

@@ -3,17 +3,17 @@ import { Icon } from '@ui';
 import { useNavigate } from 'react-router-dom';
 
 interface LogoutButtonProps {
-  className?: string
+  className?: string;
 }
 
-export const LogoutButton = ({ className = "" }: LogoutButtonProps) => {
+export const LogoutButton = ({ className = '' }: LogoutButtonProps) => {
   const logout = useLogout();
   const navigate = useNavigate();
 
   const tryLogout = () => {
     logout.mutate(undefined, {
       onSuccess: () => {
-        navigate("/login");
+        navigate('/login');
       },
     });
   };

@@ -1,41 +1,41 @@
 export const familyPaths = {
-  "/family": {
+  '/family': {
     get: {
-      tags: ["Family"],
+      tags: ['Family'],
       summary: "Get or create the authenticated user's family",
       security: [{ bearerAuth: [] }],
       responses: {
-        "200": {
-          description: "Family and registered members",
+        '200': {
+          description: 'Family and registered members',
           content: {
-            "application/json": {
-              schema: { $ref: "#/components/schemas/FamilyResponse" },
+            'application/json': {
+              schema: { $ref: '#/components/schemas/FamilyResponse' },
             },
           },
         },
-        "401": { description: "Unauthorized" },
+        '401': { description: 'Unauthorized' },
       },
     },
   },
-  "/family/members": {
+  '/family/members': {
     post: {
-      tags: ["Family"],
-      summary: "Add a registered user to the family by email",
+      tags: ['Family'],
+      summary: 'Add a registered user to the family by email',
       security: [{ bearerAuth: [] }],
       requestBody: {
         required: true,
         content: {
-          "application/json": {
-            schema: { $ref: "#/components/schemas/AddFamilyMemberRequest" },
+          'application/json': {
+            schema: { $ref: '#/components/schemas/AddFamilyMemberRequest' },
           },
         },
       },
       responses: {
-        "201": { description: "Family member added" },
-        "400": { description: "Invalid request or self-invitation" },
-        "404": { description: "No registered account exists for this email" },
-        "409": { description: "User already belongs to a family" },
-        "401": { description: "Unauthorized" },
+        '201': { description: 'Family member added' },
+        '400': { description: 'Invalid request or self-invitation' },
+        '404': { description: 'No registered account exists for this email' },
+        '409': { description: 'User already belongs to a family' },
+        '401': { description: 'Unauthorized' },
       },
     },
   },

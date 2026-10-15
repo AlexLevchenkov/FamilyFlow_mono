@@ -1,19 +1,19 @@
-import type { Request, Response } from "express";
+import type { Request, Response } from 'express';
 import type {
   CreateGoalInput,
   GoalIdInput,
   UpdateGoalInput,
-} from "@/middleware";
-import apiResponse from "@utils/response";
-import goalService from "@services/goal.service";
+} from '@/middleware';
+import apiResponse from '@utils/response';
+import goalService from '@services/goal.service';
 
 function reportError(res: Response, error: unknown) {
-  const message = error instanceof Error ? error.message : "An error occurred";
+  const message = error instanceof Error ? error.message : 'An error occurred';
   const statusCode =
-    typeof error === "object" &&
+    typeof error === 'object' &&
     error !== null &&
-    "statusCode" in error &&
-    typeof error.statusCode === "number"
+    'statusCode' in error &&
+    typeof error.statusCode === 'number'
       ? error.statusCode
       : 500;
   apiResponse(res, null, statusCode, message);
@@ -32,7 +32,10 @@ class GoalController {
     try {
       apiResponse(
         res,
-        await goalService.createGoal(req.user.id, req.validated as CreateGoalInput),
+        await goalService.createGoal(
+          req.user.id,
+          req.validated as CreateGoalInput
+        ),
         201
       );
     } catch (error) {
@@ -44,7 +47,10 @@ class GoalController {
     try {
       apiResponse(
         res,
-        await goalService.updateGoal(req.user.id, req.validated as UpdateGoalInput),
+        await goalService.updateGoal(
+          req.user.id,
+          req.validated as UpdateGoalInput
+        ),
         200
       );
     } catch (error) {

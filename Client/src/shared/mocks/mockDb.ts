@@ -253,7 +253,10 @@ class MockDatabase {
   private lists: ListModel[] = [];
   private items: ListItemModel[] = [];
   private sharedLists: SharedListModel[] = [];
-  private families: Pick<FamilyModel, 'id' | 'ownerId' | 'name' | 'createdAt' | 'updatedAt'>[] = [];
+  private families: Pick<
+    FamilyModel,
+    'id' | 'ownerId' | 'name' | 'createdAt' | 'updatedAt'
+  >[] = [];
   private familyMembers: MockFamilyMember[] = [];
   private goals: GoalModel[] = [];
   private nextUserId = 10;
@@ -273,13 +276,15 @@ class MockDatabase {
     this.lists = JSON.parse(JSON.stringify(INITIAL_LISTS));
     this.items = JSON.parse(JSON.stringify(INITIAL_ITEMS));
     this.sharedLists = JSON.parse(JSON.stringify(INITIAL_SHARED));
-    this.families = [{
-      id: 1,
-      ownerId: 1,
-      name: 'Наша родина',
-      createdAt: '2026-03-01T08:00:00.000Z',
-      updatedAt: '2026-03-01T08:00:00.000Z',
-    }];
+    this.families = [
+      {
+        id: 1,
+        ownerId: 1,
+        name: 'Наша родина',
+        createdAt: '2026-03-01T08:00:00.000Z',
+        updatedAt: '2026-03-01T08:00:00.000Z',
+      },
+    ];
     this.familyMembers = [2, 3, 4].map((userId, index) => ({
       id: index + 1,
       familyId: 1,
@@ -383,16 +388,24 @@ class MockDatabase {
   public addFamilyMember(ownerId: number, email: string) {
     const family = this.getFamily(ownerId);
     const user = this.getUserByEmail(email);
-    if (!user) return { error: 'No registered account exists for this email', status: 404 as const };
+    if (!user)
+      return {
+        error: 'No registered account exists for this email',
+        status: 404 as const,
+      };
     if (user.id === family.ownerId) {
-      return { error: 'You are already the owner of this family', status: 400 as const };
+      return {
+        error: 'You are already the owner of this family',
+        status: 400 as const,
+      };
     }
     const existingFamilyId = this.getFamilyIdForUser(user.id);
     if (existingFamilyId !== undefined) {
       return {
-        error: existingFamilyId === family.id
-          ? 'This user is already a member of this family'
-          : 'This user already belongs to another family',
+        error:
+          existingFamilyId === family.id
+            ? 'This user is already a member of this family'
+            : 'This user already belongs to another family',
         status: 409 as const,
       };
     }
@@ -435,7 +448,9 @@ class MockDatabase {
 
   public updateGoal(userId: number, id: number, fields: UpdateGoalRequest) {
     const family = this.getFamily(userId);
-    const goal = this.goals.find(item => item.id === id && item.familyId === family.id);
+    const goal = this.goals.find(
+      item => item.id === id && item.familyId === family.id
+    );
     if (!goal) return null;
     Object.assign(goal, fields, { updatedAt: new Date().toISOString() });
     return goal;

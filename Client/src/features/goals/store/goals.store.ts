@@ -10,7 +10,7 @@ interface GoalsState {
   createGoal: (goal: CreateGoalRequest) => Promise<void>;
 }
 
-export const useGoalsStore = create<GoalsState>((set) => ({
+export const useGoalsStore = create<GoalsState>(set => ({
   goals: [],
   loading: false,
   error: null,
@@ -21,7 +21,10 @@ export const useGoalsStore = create<GoalsState>((set) => ({
       const response = await goalApi.getGoals();
       set({ goals: response.data.data, loading: false });
     } catch (error) {
-      set({ error: getApiErrorMessage(error, 'Не вдалося завантажити цілі'), loading: false });
+      set({
+        error: getApiErrorMessage(error, 'Не вдалося завантажити цілі'),
+        loading: false,
+      });
     }
   },
 

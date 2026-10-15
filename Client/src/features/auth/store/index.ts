@@ -1,7 +1,5 @@
-import { useAuthStore } from "./auth"
+import { useAuthStore } from './auth';
 
 export const useStore = () => ({
   auth: useAuthStore(),
-})
-
-
+});

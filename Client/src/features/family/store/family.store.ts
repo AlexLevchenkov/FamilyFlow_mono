@@ -21,7 +21,10 @@ export const useFamilyStore = create<FamilyState>((set, get) => ({
       const response = await familyApi.getFamily();
       set({ family: response.data.data, loading: false });
     } catch (error) {
-      set({ error: getApiErrorMessage(error, 'Не вдалося завантажити родину'), loading: false });
+      set({
+        error: getApiErrorMessage(error, 'Не вдалося завантажити родину'),
+        loading: false,
+      });
     }
   },
 

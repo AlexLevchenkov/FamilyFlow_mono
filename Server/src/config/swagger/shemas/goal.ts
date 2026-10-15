@@ -2,18 +2,18 @@ import type {
   CreateGoalRequest,
   GoalModel,
   UpdateGoalRequest,
-} from "@familyflow/contracts";
-import { interfaceToOpenAPI } from "@/utils";
+} from '@familyflow/contracts';
+import { interfaceToOpenAPI } from '@/utils';
 
 const date = new Date().toISOString();
 const goal: GoalModel = {
   id: 1,
   familyId: 1,
-  title: "Family trip",
-  category: "Travel",
+  title: 'Family trip',
+  category: 'Travel',
   progress: 25,
-  detail: "Save together",
-  color: "#7656d0",
+  detail: 'Save together',
+  color: '#7656d0',
   createdAt: date,
   updatedAt: date,
 };

@@ -9,9 +9,8 @@ interface CalendarProps {
 }
 
 const calendarDays = [
-  23, 24, 25, 26, 27, 28, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
-  14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-  1, 2, 3, 4, 5,
+  23, 24, 25, 26, 27, 28, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+  17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 1, 2, 3, 4, 5,
 ];
 
 export function CalendarView({ selectedDay, setSelectedDay }: CalendarProps) {
@@ -47,11 +46,15 @@ export function CalendarView({ selectedDay, setSelectedDay }: CalendarProps) {
         <div className="mb-6 flex items-center justify-between">
           <div>
             <h2 className="text-lg font-black tracking-tight">Березень 2026</h2>
-            <p className="mt-1 text-sm text-[#9290a4]">Усі плани родини на місяць</p>
+            <p className="mt-1 text-sm text-[#9290a4]">
+              Усі плани родини на місяць
+            </p>
           </div>
           <div className="flex gap-2">
             <IconButton aria-label="Попередній місяць">
-              <span className="rotate-180"><Icon name="chevron" size={17} /></span>
+              <span className="rotate-180">
+                <Icon name="chevron" size={17} />
+              </span>
             </IconButton>
             <IconButton aria-label="Наступний місяць">
               <Icon name="chevron" size={17} />
@@ -59,12 +62,18 @@ export function CalendarView({ selectedDay, setSelectedDay }: CalendarProps) {
           </div>
         </div>
         <div className="mb-2 grid grid-cols-7 gap-2 text-center text-xs font-extrabold uppercase tracking-widest text-page-faint max-sm:gap-1">
-          {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'].map(day => <span key={day}>{day}</span>)}
+          {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'].map(day => (
+            <span key={day}>{day}</span>
+          ))}
         </div>
         <div className="grid grid-cols-7 gap-2 max-sm:gap-1">
           {calendarDays.map((day, index) => {
             const muted = index < 6 || index > 36;
-            const hasEvent = !muted && events.some(event => event.day === day && event.month.startsWith('БЕР'));
+            const hasEvent =
+              !muted &&
+              events.some(
+                event => event.day === day && event.month.startsWith('БЕР')
+              );
             return (
               <button
                 className={`relative flex min-h-18 items-start justify-end rounded-xl border p-2.5 text-xs font-black transition-all duration-150 ease-in-out max-sm:min-h-12 max-sm:rounded-lg max-sm:p-2 ${
@@ -79,7 +88,9 @@ export function CalendarView({ selectedDay, setSelectedDay }: CalendarProps) {
               >
                 <span>{day}</span>
                 {hasEvent && (
-                  <i className={`absolute bottom-2.5 left-2.5 size-1.5 rounded-full max-sm:bottom-1.5 max-sm:left-1.5 max-sm:size-1 ${selectedDay === day ? 'bg-white' : 'bg-selected'}`} />
+                  <i
+                    className={`absolute bottom-2.5 left-2.5 size-1.5 rounded-full max-sm:bottom-1.5 max-sm:left-1.5 max-sm:size-1 ${selectedDay === day ? 'bg-white' : 'bg-selected'}`}
+                  />
                 )}
               </button>
             );
@@ -88,8 +99,13 @@ export function CalendarView({ selectedDay, setSelectedDay }: CalendarProps) {
       </Panel>
 
       <div className="space-y-6">
-        <Panel as="section" className="bg-gradient-to-br from-[#302b66] to-[#6051a6] text-white">
-          <p className="text-xs font-bold uppercase tracking-[0.12em] text-white/55">Обраний день</p>
+        <Panel
+          as="section"
+          className="bg-gradient-to-br from-[#302b66] to-[#6051a6] text-white"
+        >
+          <p className="text-xs font-bold uppercase tracking-[0.12em] text-white/55">
+            Обраний день
+          </p>
           <p className="mt-2 text-3xl font-extrabold">{selectedDay} березня</p>
           <p className="mt-2 text-sm text-white/65">
             {selectedEvents.length} заплановані події
@@ -127,15 +143,26 @@ export function CalendarView({ selectedDay, setSelectedDay }: CalendarProps) {
           </Panel>
         )}
 
-        {error && <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
-        {loading && <p className="text-sm text-[#9290a4]">Завантаження подій…</p>}
+        {error && (
+          <p
+            role="alert"
+            className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700"
+          >
+            {error}
+          </p>
+        )}
+        {loading && (
+          <p className="text-sm text-[#9290a4]">Завантаження подій…</p>
+        )}
         <Panel as="section">
           <h2 className="text-lg font-black tracking-tight">Найближчі події</h2>
           <div className="mt-5 space-y-3">
             {events.slice(0, 5).map(event => (
               <EventCard key={event.id} {...event} />
             ))}
-            {!events.length && !loading && <p className="text-sm text-[#9290a4]">Подій поки немає.</p>}
+            {!events.length && !loading && (
+              <p className="text-sm text-[#9290a4]">Подій поки немає.</p>
+            )}
           </div>
         </Panel>
       </div>

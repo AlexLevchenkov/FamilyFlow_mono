@@ -1,1 +1,1 @@
-export type { PaginatedResponse } from "@familyflow/contracts";
+export type { PaginatedResponse } from '@familyflow/contracts';

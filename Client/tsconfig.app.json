@@ -49,8 +49,8 @@
       "@atoms/*": ["src/shared/ui/atoms/*"],
       "@molecules/*": ["src/shared/ui/molecules/*"],
       "@organisms/*": ["src/shared/ui/organisms/*"],
-      "@templates/*": ["src/shared/ui/templates/*"],
-    },
+      "@templates/*": ["src/shared/ui/templates/*"]
+    }
   },
   "include": ["src", "vitest.setup.ts"]
 }

@@ -4,7 +4,10 @@ import { familyHandlers } from './family.handlers';
 import { goalHandlers } from './goal.handlers';
 import type { MockRequestContext } from './types';
 
-function context(body?: Record<string, unknown>, id?: string): MockRequestContext {
+function context(
+  body?: Record<string, unknown>,
+  id?: string
+): MockRequestContext {
   return {
     url: '',
     method: '',
@@ -18,7 +21,9 @@ describe('family and goal mock handlers', () => {
   beforeEach(() => mockDb.reset());
 
   it('does not create a family member for an unregistered email', () => {
-    const result = familyHandlers.addMember(context({ email: 'unknown@example.com' }));
+    const result = familyHandlers.addMember(
+      context({ email: 'unknown@example.com' })
+    );
 
     expect(result.status).toBe(404);
     expect(mockDb.getFamily(1).members).toHaveLength(4);
@@ -26,7 +31,9 @@ describe('family and goal mock handlers', () => {
 
   it('adds only an existing account to the family', () => {
     mockDb.createUser('new-member@example.com', 'New Member');
-    const result = familyHandlers.addMember(context({ email: 'new-member@example.com' }));
+    const result = familyHandlers.addMember(
+      context({ email: 'new-member@example.com' })
+    );
 
     expect(result.status).toBe(201);
     expect(mockDb.getFamily(1).members).toHaveLength(5);
@@ -39,9 +46,15 @@ describe('family and goal mock handlers', () => {
     const goal = created.data.data as { id: number; progress: number };
 
     expect(created.status).toBe(201);
-    expect(goalHandlers.updateGoal(context({ progress: 50 }, String(goal.id))).status).toBe(200);
-    expect(mockDb.getGoals(1).find(item => item.id === goal.id)?.progress).toBe(50);
-    expect(goalHandlers.deleteGoal(context(undefined, String(goal.id))).status).toBe(200);
+    expect(
+      goalHandlers.updateGoal(context({ progress: 50 }, String(goal.id))).status
+    ).toBe(200);
+    expect(mockDb.getGoals(1).find(item => item.id === goal.id)?.progress).toBe(
+      50
+    );
+    expect(
+      goalHandlers.deleteGoal(context(undefined, String(goal.id))).status
+    ).toBe(200);
     expect(mockDb.getGoals(1)).toHaveLength(3);
   });
 });

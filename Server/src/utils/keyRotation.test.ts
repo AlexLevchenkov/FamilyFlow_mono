@@ -81,7 +81,9 @@ describe('KeyRotation Service', () => {
   it('should rotate keys if ROTATION_INTERVAL has passed', async () => {
     const longAgo = new Date(Date.now() - 31 * 24 * 60 * 60 * 1000);
     (keyRotationService as any).lastRotation = longAgo;
-    const rotateSpy = jest.spyOn(keyRotationService, 'rotateKeys').mockImplementation(async () => {});
+    const rotateSpy = jest
+      .spyOn(keyRotationService, 'rotateKeys')
+      .mockImplementation(async () => {});
 
     await keyRotationService.checkAndRotate();
 

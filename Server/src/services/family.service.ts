@@ -1,7 +1,7 @@
-import prisma from "@config/prisma";
-import type { Family, FamilyMember, User } from "@prisma/client";
-import type { AddFamilyMemberInput } from "@/middleware";
-import { alreadyExistError, badRequestError, notFoundError } from "@/utils";
+import prisma from '@config/prisma';
+import type { Family, FamilyMember, User } from '@prisma/client';
+import type { AddFamilyMemberInput } from '@/middleware';
+import { alreadyExistError, badRequestError, notFoundError } from '@/utils';
 
 type FamilyWithUsers = Family & {
   owner: User;
@@ -48,7 +48,7 @@ class FamilyService {
         owner: true,
         members: {
           include: { user: true },
-          orderBy: { createdAt: "asc" },
+          orderBy: { createdAt: 'asc' },
         },
       },
     });
@@ -64,7 +64,7 @@ class FamilyService {
       update: {},
       include: {
         owner: true,
-        members: { include: { user: true }, orderBy: { createdAt: "asc" } },
+        members: { include: { user: true }, orderBy: { createdAt: 'asc' } },
       },
     });
   }
@@ -76,13 +76,13 @@ class FamilyService {
   async addMember(userId: number, { email }: AddFamilyMemberInput) {
     const family = await this.getOrCreateForUser(userId);
     const user = await prisma.user.findFirst({
-      where: { email: { equals: email.trim(), mode: "insensitive" } },
+      where: { email: { equals: email.trim(), mode: 'insensitive' } },
     });
     if (!user) {
-      throw notFoundError("No registered account exists for this email");
+      throw notFoundError('No registered account exists for this email');
     }
     if (user.id === family.ownerId) {
-      throw badRequestError("You are already the owner of this family");
+      throw badRequestError('You are already the owner of this family');
     }
 
     const existingFamily = await prisma.family.findFirst({
@@ -94,8 +94,8 @@ class FamilyService {
     if (existingFamily) {
       throw alreadyExistError(
         existingFamily.id === family.id
-          ? "This user is already a member of this family"
-          : "This user already belongs to another family"
+          ? 'This user is already a member of this family'
+          : 'This user already belongs to another family'
       );
     }
 

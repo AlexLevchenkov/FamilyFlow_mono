@@ -1,6 +1,10 @@
-import type { ButtonHTMLAttributes } from "react"
+import type { ButtonHTMLAttributes } from 'react';
 
-export function PrimaryButton({ className = "", children, ...props }: ButtonHTMLAttributes<HTMLButtonElement>) {
+export function PrimaryButton({
+  className = '',
+  children,
+  ...props
+}: ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
       className={`inline-flex min-h-10 items-center gap-2 rounded-[13px] bg-linear-to-br from-background1 to-background2 px-4 py-3 text-md font-black text-white shadow-[0_8px_20px_rgba(107,72,204,0.2)] transition-all
@@ -9,5 +13,5 @@ export function PrimaryButton({ className = "", children, ...props }: ButtonHTML
     >
       {children}
     </button>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import type { IconName } from "../../types/index"
+import type { IconName } from '../../types/index';
 
 const paths: Record<IconName, React.ReactNode> = {
   home: (
@@ -92,7 +92,7 @@ const paths: Record<IconName, React.ReactNode> = {
     </>
   ),
   arrow: <path d="m5 12 6-6M5 12l6 6M5 12h14" />,
-}
+};
 
 export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
   return (
@@ -109,5 +109,5 @@ export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
     >
       {paths[name]}
     </svg>
-  )
+  );
 }

@@ -40,7 +40,10 @@ export function GoalsView() {
             Зберігайте сімейні бажання та відстежуйте прогрес разом.
           </p>
         </div>
-        <PrimaryButton className="shrink-0" onClick={() => setShowComposer(value => !value)}>
+        <PrimaryButton
+          className="shrink-0"
+          onClick={() => setShowComposer(value => !value)}
+        >
           <Icon name="plus" size={18} /> Нова ціль
         </PrimaryButton>
       </PageHero>
@@ -70,7 +73,10 @@ export function GoalsView() {
       )}
 
       {error && (
-        <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+        <p
+          role="alert"
+          className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700"
+        >
           {error}
         </p>
       )}
@@ -86,7 +92,10 @@ export function GoalsView() {
             <div className="flex items-start justify-between gap-3">
               <div
                 className="grid h-12 w-12 place-items-center rounded-2xl"
-                style={{ backgroundColor: `${goal.color}18`, color: goal.color }}
+                style={{
+                  backgroundColor: `${goal.color}18`,
+                  color: goal.color,
+                }}
               >
                 <Icon name="target" size={23} />
               </div>
@@ -106,7 +115,10 @@ export function GoalsView() {
             <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-[#efedf5]">
               <div
                 className="h-full rounded-full"
-                style={{ backgroundColor: goal.color, width: `${goal.progress}%` }}
+                style={{
+                  backgroundColor: goal.color,
+                  width: `${goal.progress}%`,
+                }}
               />
             </div>
           </Panel>

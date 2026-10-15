@@ -1,7 +1,7 @@
 ---
-name: "Client Feature Architecture"
-description: "Use when adding or changing features, pages, shared UI, or imports in the Client React application. Covers feature boundaries, folder structure, barrel exports, and aliases."
-applyTo: "Client/src/**"
+name: 'Client Feature Architecture'
+description: 'Use when adding or changing features, pages, shared UI, or imports in the Client React application. Covers feature boundaries, folder structure, barrel exports, and aliases.'
+applyTo: 'Client/src/**'
 ---
 
 # Client Feature Architecture

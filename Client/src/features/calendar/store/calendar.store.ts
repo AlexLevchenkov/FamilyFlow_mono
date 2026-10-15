@@ -50,23 +50,33 @@ export const useCalendarStore = create<CalendarState>((set, get) => ({
     set({ loading: true, error: null });
     try {
       const response = await listApi.getUserLists({ page: 1 });
-      const lists = response.data.data.data.filter(list => list.type === 'events');
+      const lists = response.data.data.data.filter(
+        list => list.type === 'events'
+      );
       const eventsByList = await Promise.all(
         lists.map(async list => {
-          const itemsResponse = await listItemApi.getListItems({ listId: list.id });
+          const itemsResponse = await listItemApi.getListItems({
+            listId: list.id,
+          });
           return itemsResponse.data.data.data
             .map(item => toEvent(item, list))
             .filter((event): event is CalendarEvent => event !== null);
         })
       );
       set({
-        events: eventsByList.flat().sort(
-          (left, right) => Date.parse(left.dueDate) - Date.parse(right.dueDate)
-        ),
+        events: eventsByList
+          .flat()
+          .sort(
+            (left, right) =>
+              Date.parse(left.dueDate) - Date.parse(right.dueDate)
+          ),
         loading: false,
       });
     } catch (error) {
-      set({ error: getApiErrorMessage(error, 'Не вдалося завантажити події'), loading: false });
+      set({
+        error: getApiErrorMessage(error, 'Не вдалося завантажити події'),
+        loading: false,
+      });
     }
   },
 
@@ -76,7 +86,9 @@ export const useCalendarStore = create<CalendarState>((set, get) => ({
     set({ error: null });
     try {
       const listsResponse = await listApi.getUserLists({ page: 1 });
-      let list = listsResponse.data.data.data.find(item => item.type === 'events');
+      let list = listsResponse.data.data.data.find(
+        item => item.type === 'events'
+      );
       if (!list) {
         const created = await listApi.createList({
           title: 'Сімейні події та плани',

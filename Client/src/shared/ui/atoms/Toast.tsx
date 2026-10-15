@@ -88,7 +88,9 @@ const ToastCard = ({ item, onClose }: ToastCardProps) => {
       role="alert"
       className={`pointer-events-auto flex items-start gap-3 rounded-2xl border bg-white/95 px-4 py-3.5 backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 sm:min-w-[320px] max-w-md ${typeConfig.border} ${typeConfig.shadow}`}
     >
-      <div className={`grid size-8 shrink-0 place-items-center rounded-xl ${typeConfig.badge}`}>
+      <div
+        className={`grid size-8 shrink-0 place-items-center rounded-xl ${typeConfig.badge}`}
+      >
         {typeConfig.icon}
       </div>
       <div className="flex-1 pt-0.5">

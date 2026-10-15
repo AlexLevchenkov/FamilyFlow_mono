@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
-import { GetUsersInput, RegisterInput, UpdateUserInput } from "@/middleware";
-import userService from "@services/user.service";
-import apiResponse from "@utils/response";
+import { Request, Response } from 'express';
+import { GetUsersInput, RegisterInput, UpdateUserInput } from '@/middleware';
+import userService from '@services/user.service';
+import apiResponse from '@utils/response';
 
 class UserController {
   async getUsers(req: Request, res: Response): Promise<void> {
@@ -11,7 +11,7 @@ class UserController {
       apiResponse(res, data, 200);
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : "An error occurred";
+        error instanceof Error ? error.message : 'An error occurred';
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
@@ -23,7 +23,7 @@ class UserController {
       apiResponse(res, user, 201);
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : "An error occurred";
+        error instanceof Error ? error.message : 'An error occurred';
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
@@ -34,7 +34,7 @@ class UserController {
       apiResponse(res, data, 200);
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : "An error occurred";
+        error instanceof Error ? error.message : 'An error occurred';
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
@@ -56,7 +56,7 @@ class UserController {
       apiResponse(res, data, 200);
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : "An error occurred";
+        error instanceof Error ? error.message : 'An error occurred';
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
@@ -69,7 +69,7 @@ class UserController {
       apiResponse(res, undefined, 200);
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : "An error occurred";
+        error instanceof Error ? error.message : 'An error occurred';
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   }

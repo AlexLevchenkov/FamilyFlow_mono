@@ -1,6 +1,6 @@
 ---
-name: "Response Style"
-description: "Use when reporting progress or completing software engineering work for the user. Covers language, concise summaries, verification results, links, and transparent status."
+name: 'Response Style'
+description: 'Use when reporting progress or completing software engineering work for the user. Covers language, concise summaries, verification results, links, and transparent status.'
 ---
 
 # Response Style

@@ -1,15 +1,15 @@
-import type { Request, Response } from "express";
-import type { AddFamilyMemberInput } from "@/middleware";
-import apiResponse from "@utils/response";
-import familyService from "@services/family.service";
+import type { Request, Response } from 'express';
+import type { AddFamilyMemberInput } from '@/middleware';
+import apiResponse from '@utils/response';
+import familyService from '@services/family.service';
 
 function reportError(res: Response, error: unknown) {
-  const message = error instanceof Error ? error.message : "An error occurred";
+  const message = error instanceof Error ? error.message : 'An error occurred';
   const statusCode =
-    typeof error === "object" &&
+    typeof error === 'object' &&
     error !== null &&
-    "statusCode" in error &&
-    typeof error.statusCode === "number"
+    'statusCode' in error &&
+    typeof error.statusCode === 'number'
       ? error.statusCode
       : 500;
   apiResponse(res, null, statusCode, message);

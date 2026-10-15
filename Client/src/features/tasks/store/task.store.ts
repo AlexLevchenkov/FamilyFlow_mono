@@ -49,7 +49,9 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     set({ loading: true, error: null });
     try {
       const listsResponse = await listApi.getUserLists({ page: 1 });
-      const lists = listsResponse.data.data.data.filter(list => list.type === 'tasks');
+      const lists = listsResponse.data.data.data.filter(
+        list => list.type === 'tasks'
+      );
       const itemsByList = await Promise.all(
         lists.map(async list => {
           const response = await listItemApi.getListItems({ listId: list.id });
@@ -58,7 +60,10 @@ export const useTaskStore = create<TaskState>((set, get) => ({
       );
       set({ tasks: itemsByList.flat(), loading: false });
     } catch (error) {
-      set({ error: getApiErrorMessage(error, 'Не вдалося завантажити справи'), loading: false });
+      set({
+        error: getApiErrorMessage(error, 'Не вдалося завантажити справи'),
+        loading: false,
+      });
     }
   },
 
@@ -68,7 +73,9 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     set({ error: null });
     try {
       const listsResponse = await listApi.getUserLists({ page: 1 });
-      let list = listsResponse.data.data.data.find(item => item.type === 'tasks');
+      let list = listsResponse.data.data.data.find(
+        item => item.type === 'tasks'
+      );
       if (!list) {
         const createdList = await listApi.createList({
           title: 'Справи',
