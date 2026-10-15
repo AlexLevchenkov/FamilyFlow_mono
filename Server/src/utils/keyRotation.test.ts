@@ -1,11 +1,11 @@
-import keyRotationService from './keyRotation';
-import { updateEnvFile } from './envFileWriter';
+import keyRotationService from "./keyRotation";
+import { updateEnvFile } from "./envFileWriter";
 
-jest.mock('./envFileWriter', () => ({
+jest.mock("./envFileWriter", () => ({
   updateEnvFile: jest.fn(),
 }));
 
-describe('KeyRotation Service', () => {
+describe("KeyRotation Service", () => {
   let originalEnv: NodeJS.ProcessEnv;
   let originalKeys: any;
   let originalLastRotation: Date | null;
@@ -26,21 +26,21 @@ describe('KeyRotation Service', () => {
     jest.clearAllMocks();
   });
 
-  it('should return current keys', () => {
+  it("should return current keys", () => {
     const current = keyRotationService.getCurrentKeys();
-    expect(current).toHaveProperty('access');
-    expect(current).toHaveProperty('refresh');
+    expect(current).toHaveProperty("access");
+    expect(current).toHaveProperty("refresh");
     expect(current.access).toBe((keyRotationService as any).keys.access);
     expect(current.refresh).toBe((keyRotationService as any).keys.refresh);
   });
 
-  it('should return previous keys', () => {
+  it("should return previous keys", () => {
     const previous = keyRotationService.getPreviousKeys();
-    expect(previous).toHaveProperty('previousAccess');
-    expect(previous).toHaveProperty('previousRefresh');
+    expect(previous).toHaveProperty("previousAccess");
+    expect(previous).toHaveProperty("previousRefresh");
   });
 
-  it('should rotate keys successfully', async () => {
+  it("should rotate keys successfully", async () => {
     const oldKeys = { ...keyRotationService.getCurrentKeys() };
 
     await keyRotationService.rotateKeys();
@@ -68,9 +68,9 @@ describe('KeyRotation Service', () => {
     });
   });
 
-  it('should not rotate keys if ROTATION_INTERVAL has not passed', async () => {
+  it("should not rotate keys if ROTATION_INTERVAL has not passed", async () => {
     (keyRotationService as any).lastRotation = new Date();
-    const rotateSpy = jest.spyOn(keyRotationService, 'rotateKeys');
+    const rotateSpy = jest.spyOn(keyRotationService, "rotateKeys");
 
     await keyRotationService.checkAndRotate();
 
@@ -78,11 +78,11 @@ describe('KeyRotation Service', () => {
     rotateSpy.mockRestore();
   });
 
-  it('should rotate keys if ROTATION_INTERVAL has passed', async () => {
+  it("should rotate keys if ROTATION_INTERVAL has passed", async () => {
     const longAgo = new Date(Date.now() - 31 * 24 * 60 * 60 * 1000);
     (keyRotationService as any).lastRotation = longAgo;
     const rotateSpy = jest
-      .spyOn(keyRotationService, 'rotateKeys')
+      .spyOn(keyRotationService, "rotateKeys")
       .mockImplementation(async () => {});
 
     await keyRotationService.checkAndRotate();

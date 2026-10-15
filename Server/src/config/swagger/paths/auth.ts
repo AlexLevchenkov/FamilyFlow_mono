@@ -1,149 +1,149 @@
 export const authPaths = {
-  '/auth/login': {
+  "/auth/login": {
     post: {
-      tags: ['Auth'],
-      summary: 'User login',
+      tags: ["Auth"],
+      summary: "User login",
       requestBody: {
         required: true,
         content: {
-          'application/json': {
+          "application/json": {
             schema: {
-              $ref: '#/components/schemas/LoginRequest',
+              $ref: "#/components/schemas/LoginRequest",
             },
           },
         },
       },
       responses: {
         200: {
-          description: 'Successful login',
+          description: "Successful login",
           content: {
-            'application/json': {
+            "application/json": {
               schema: {
-                $ref: '#/components/schemas/LoginResponse',
+                $ref: "#/components/schemas/LoginResponse",
               },
             },
           },
         },
         401: {
-          description: 'Invalid email or password',
+          description: "Invalid email or password",
         },
         500: {
-          description: 'Failed to generate tokens',
+          description: "Failed to generate tokens",
         },
       },
     },
   },
-  '/auth/logout': {
+  "/auth/logout": {
     get: {
-      tags: ['Auth'],
-      summary: 'User logout',
+      tags: ["Auth"],
+      summary: "User logout",
       security: [{ bearerAuth: [] }],
       responses: {
         200: {
-          description: 'Logged out successfully',
+          description: "Logged out successfully",
         },
         404: {
-          description: 'User not found',
+          description: "User not found",
         },
       },
     },
   },
-  '/auth/refresh-token': {
+  "/auth/refresh-token": {
     post: {
-      tags: ['Auth'],
-      summary: 'Token refresh',
+      tags: ["Auth"],
+      summary: "Token refresh",
       security: [{ bearerAuth: [] }],
       responses: {
         200: {
-          description: 'New tokens',
+          description: "New tokens",
           content: {
-            'application/json': {
+            "application/json": {
               schema: {
-                $ref: '#/components/schemas/RefreshResponse',
+                $ref: "#/components/schemas/RefreshResponse",
               },
             },
           },
         },
         401: {
-          description: 'Unauthorized',
+          description: "Unauthorized",
         },
         404: {
-          description: 'User not found',
+          description: "User not found",
         },
         500: {
-          description: 'Failed to generate tokens',
+          description: "Failed to generate tokens",
         },
       },
     },
   },
-  '/auth/forgot-password': {
+  "/auth/forgot-password": {
     post: {
-      tags: ['Auth'],
-      summary: 'Init reset password',
+      tags: ["Auth"],
+      summary: "Init reset password",
       requestBody: {
         required: true,
         content: {
-          'application/json': {
+          "application/json": {
             schema: {
-              $ref: '#/components/schemas/ForgotPasswordRequest',
+              $ref: "#/components/schemas/ForgotPasswordRequest",
             },
           },
         },
       },
       responses: {
         200: {
-          description: 'Sended mail with link',
+          description: "Sended mail with link",
         },
         404: {
-          description: 'User not found',
+          description: "User not found",
         },
       },
     },
   },
-  '/auth/reset-password': {
+  "/auth/reset-password": {
     post: {
-      tags: ['Auth'],
-      summary: 'Reset password',
+      tags: ["Auth"],
+      summary: "Reset password",
       requestBody: {
         required: true,
         content: {
-          'application/json': {
+          "application/json": {
             schema: {
-              $ref: '#/components/schemas/ResetPasswordRequest',
+              $ref: "#/components/schemas/ResetPasswordRequest",
             },
           },
         },
       },
       responses: {
         200: {
-          description: 'Password is changed',
+          description: "Password is changed",
         },
         401: {
-          description: 'Invalid or expired token',
+          description: "Invalid or expired token",
         },
       },
     },
   },
-  '/auth/verify-email': {
+  "/auth/verify-email": {
     get: {
-      tags: ['Auth'],
-      summary: 'Verify email',
+      tags: ["Auth"],
+      summary: "Verify email",
       requestBody: {
         required: true,
         content: {
-          'application/json': {
+          "application/json": {
             schema: {
-              $ref: '#/components/schemas/EmailVerifyRequest',
+              $ref: "#/components/schemas/EmailVerifyRequest",
             },
           },
         },
       },
       responses: {
         200: {
-          description: 'Email is verified',
+          description: "Email is verified",
         },
         401: {
-          description: 'Invalid or expired token',
+          description: "Invalid or expired token",
         },
       },
     },

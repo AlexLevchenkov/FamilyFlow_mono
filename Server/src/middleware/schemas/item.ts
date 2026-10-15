@@ -1,5 +1,5 @@
-import { makeValidator } from '@utils/validation';
-import z from 'zod';
+import { makeValidator } from "@utils/validation";
+import z from "zod";
 
 const getListItemsSchema = z.object({
   listId: z.coerce.number(),

@@ -1,11 +1,11 @@
-import { PaginatedResponse } from '@appTypes/common.types';
+import { PaginatedResponse } from "@appTypes/common.types";
 import type {
   CreateListRequest,
   ShareListRequest,
   UpdateListRequest,
-} from '@familyflow/contracts';
-import { List, SharedLists } from '@prisma/client';
-import { interfaceToOpenAPI } from '@/utils';
+} from "@familyflow/contracts";
+import { List, SharedLists } from "@prisma/client";
+import { interfaceToOpenAPI } from "@/utils";
 
 export const listsSchemas = {
   PaginatedListsResponse: interfaceToOpenAPI<PaginatedResponse<List>>({
@@ -13,10 +13,10 @@ export const listsSchemas = {
       {
         id: 1,
         userId: 1,
-        title: 'New list',
-        type: 'tasks',
-        color: 'Red',
-        icon: 'Box',
+        title: "New list",
+        type: "tasks",
+        color: "Red",
+        icon: "Box",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -29,31 +29,31 @@ export const listsSchemas = {
     },
   }),
   CreateListRequest: interfaceToOpenAPI<CreateListRequest>({
-    title: 'New list',
-    type: 'tasks',
-    color: 'Red',
-    icon: 'Box',
+    title: "New list",
+    type: "tasks",
+    color: "Red",
+    icon: "Box",
   }),
   UpdateListRequest: interfaceToOpenAPI<UpdateListRequest>({
-    title: 'New list',
-    type: 'tasks',
-    color: 'Red',
-    icon: 'Box',
+    title: "New list",
+    type: "tasks",
+    color: "Red",
+    icon: "Box",
   }),
   ListResponse: interfaceToOpenAPI<List>({
     id: 1,
     userId: 1,
-    title: 'New list',
-    type: 'tasks',
-    color: 'Red',
-    icon: 'Box',
+    title: "New list",
+    type: "tasks",
+    color: "Red",
+    icon: "Box",
     createdAt: new Date(),
     updatedAt: new Date(),
   }),
   shareListRequest: interfaceToOpenAPI<ShareListRequest>({
     listId: 1,
     recipientId: 2,
-    accessTypes: 'fullAccess',
+    accessTypes: "fullAccess",
   }),
   shareListResponse: interfaceToOpenAPI<SharedLists>({
     id: 1,
@@ -61,6 +61,6 @@ export const listsSchemas = {
     ownerId: 1,
     recipientId: 2,
     createdAt: new Date(),
-    accessTypes: 'fullAccess',
+    accessTypes: "fullAccess",
   }),
 };

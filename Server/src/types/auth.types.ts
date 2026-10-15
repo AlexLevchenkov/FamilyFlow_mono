@@ -4,4 +4,4 @@ export type {
   ForgotPasswordResponse,
   ResetPasswordResponse,
   EmailVerifyResponse,
-} from '@familyflow/contracts';
+} from "@familyflow/contracts";

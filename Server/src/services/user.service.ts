@@ -1,18 +1,18 @@
-import bcryptjs from 'bcryptjs';
-import prisma from '@config/prisma';
+import bcryptjs from "bcryptjs";
+import prisma from "@config/prisma";
 import {
   GetUsersInput,
   RegisterInput,
   UpdateUserInput,
   GetUserByIdInput,
   DeleteUserInput,
-} from '@/middleware';
+} from "@/middleware";
 import {
   alreadyExistError,
   internalServerError,
   notFoundError,
   sendCheckEmail,
-} from '@/utils';
+} from "@/utils";
 
 class UserService {
   async getUsers({ page, partName, partEmail }: GetUsersInput) {
@@ -28,13 +28,13 @@ class UserService {
       where,
       skip: page ? Number(page) * itemsPerPage : 0,
       take: itemsPerPage,
-      orderBy: { updatedAt: 'desc' },
+      orderBy: { updatedAt: "desc" },
     });
 
     const total = await prisma.user.count({ where });
 
     if (users.length === 0) {
-      throw notFoundError('User not found');
+      throw notFoundError("User not found");
     }
 
     return {
@@ -59,7 +59,7 @@ class UserService {
     });
 
     if (haveUser) {
-      throw alreadyExistError('User already exists');
+      throw alreadyExistError("User already exists");
     }
 
     const newAccessToken = crypto.randomUUID();
@@ -83,7 +83,7 @@ class UserService {
     const user = await prisma.user.findUnique({ where: { id } });
 
     if (!user) {
-      throw notFoundError('User not found');
+      throw notFoundError("User not found");
     }
 
     return user;
@@ -93,7 +93,7 @@ class UserService {
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
-      throw notFoundError('User not found');
+      throw notFoundError("User not found");
     }
 
     const updatedUser = await prisma.user.update({
@@ -113,14 +113,14 @@ class UserService {
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
-      throw notFoundError('User not found');
+      throw notFoundError("User not found");
     }
 
     const result = await prisma.user.delete({ where: { id: userId } });
     await prisma.refreshToken.deleteMany({ where: { userId } });
 
     if (!result) {
-      throw internalServerError('Failed to delete user');
+      throw internalServerError("Failed to delete user");
     }
   }
 }

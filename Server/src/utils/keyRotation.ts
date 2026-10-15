@@ -1,5 +1,5 @@
-import { randomBytes } from 'crypto';
-import { updateEnvFile } from './envFileWriter';
+import { randomBytes } from "crypto";
+import { updateEnvFile } from "./envFileWriter";
 
 export interface Keys {
   access: string;
@@ -28,7 +28,7 @@ class KeyRotation {
   }
 
   private generateKey(): string {
-    return randomBytes(64).toString('hex');
+    return randomBytes(64).toString("hex");
   }
 
   public async rotateKeys(): Promise<void> {
@@ -57,7 +57,7 @@ class KeyRotation {
   // Check if rotation is needed
   public async checkAndRotate(): Promise<void> {
     if (!this.lastRotation) {
-      this.lastRotation = new Date('1970-01-01T00:00:00Z');
+      this.lastRotation = new Date("1970-01-01T00:00:00Z");
     }
 
     const now = new Date();
@@ -68,14 +68,14 @@ class KeyRotation {
     }
   }
 
-  public getCurrentKeys(): Pick<Keys, 'access' | 'refresh'> {
+  public getCurrentKeys(): Pick<Keys, "access" | "refresh"> {
     return {
       access: this.keys.access,
       refresh: this.keys.refresh,
     };
   }
 
-  public getPreviousKeys(): Pick<Keys, 'previousAccess' | 'previousRefresh'> {
+  public getPreviousKeys(): Pick<Keys, "previousAccess" | "previousRefresh"> {
     return {
       previousAccess: this.keys.previousAccess,
       previousRefresh: this.keys.previousRefresh,

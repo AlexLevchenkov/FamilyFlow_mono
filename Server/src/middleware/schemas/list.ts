@@ -1,14 +1,14 @@
-import z from 'zod';
-import { makeValidator } from '@utils/validation';
-import { AccessTypes, Type } from '@prisma/client';
+import z from "zod";
+import { makeValidator } from "@utils/validation";
+import { AccessTypes, Type } from "@prisma/client";
 
 export type WithUserId<T> = T & { userId: number };
 
-const type = ['shopping', 'tasks', 'events'] as Type[];
-const accessTypes = ['edit', 'fullAccess', 'watch'] as AccessTypes[];
+const type = ["shopping", "tasks", "events"] as Type[];
+const accessTypes = ["edit", "fullAccess", "watch"] as AccessTypes[];
 
 const getUserListsSchema = z.object({
-  page: z.coerce.number().refine(page => page > 0, 'Min page value is 1'),
+  page: z.coerce.number().refine(page => page > 0, "Min page value is 1"),
 });
 
 const getListSchema = z.object({

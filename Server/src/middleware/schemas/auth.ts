@@ -1,21 +1,21 @@
-import z from 'zod';
-import { makeValidator } from '@utils/validation';
+import z from "zod";
+import { makeValidator } from "@utils/validation";
 
 export const passwordSchema = z
   .string()
   .min(8)
   .max(20)
   .refine(password => /[A-Z]/.test(password), {
-    message: 'Password must contain uppercase letters',
+    message: "Password must contain uppercase letters",
   })
   .refine(password => /[a-z]/.test(password), {
-    message: 'Password must contain lowercase letters',
+    message: "Password must contain lowercase letters",
   })
   .refine(password => /[0-9]/.test(password), {
-    message: 'Password must contain numbers',
+    message: "Password must contain numbers",
   })
   .refine(password => /[!@#$%^&*]/.test(password), {
-    message: 'Password must contain special characters (!@#$%^&*)',
+    message: "Password must contain special characters (!@#$%^&*)",
   });
 
 const emailSchema = z
@@ -23,7 +23,7 @@ const emailSchema = z
   .trim()
   .toLowerCase()
   .refine(value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value), {
-    message: 'Invalid email',
+    message: "Invalid email",
   });
 
 const loginSchema = z.object({

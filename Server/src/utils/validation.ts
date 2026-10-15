@@ -1,6 +1,6 @@
-import type { Request, Response, NextFunction } from 'express';
-import { AppError, ValidationError } from '@utils/errors';
-import z from 'zod';
+import type { Request, Response, NextFunction } from "express";
+import { AppError, ValidationError } from "@utils/errors";
+import z from "zod";
 
 type ValidatorSources = {
   body?: boolean;
@@ -11,7 +11,7 @@ type ValidatorSources = {
 export const makeValidator = (
   schema: z.ZodTypeAny,
   sources: ValidatorSources = { body: true },
-  messagePrefix = 'Validation error:'
+  messagePrefix = "Validation error:"
 ) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     try {
@@ -26,11 +26,11 @@ export const makeValidator = (
       if (!parseResult.success) {
         next(
           new ValidationError(
-            'Path: ' +
+            "Path: " +
               req.originalUrl +
-              '. \n ' +
+              ". \n " +
               messagePrefix +
-              parseResult.error.issues.map(e => e.message).join(', ')
+              parseResult.error.issues.map(e => e.message).join(", ")
           )
         );
         return;
@@ -40,7 +40,7 @@ export const makeValidator = (
 
       next();
     } catch {
-      next(new AppError('Validation middleware error', 500));
+      next(new AppError("Validation middleware error", 500));
     }
   };
 };
