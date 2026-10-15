@@ -24,10 +24,13 @@ export const RegistrationForm = () => {
   const onSubmit = (data: RegistrationData) => {
     registration.mutate(data, {
       onSuccess: () => setShowSuccessfulPopup(true),
-      onError: (error) => {
+      onError: error => {
         if (isAxiosError(error)) {
           if (error.response?.status === 409) {
-            setError('email', { type: 'service', message: 'Дана пошта вже зареєстрована' });
+            setError('email', {
+              type: 'service',
+              message: 'Дана пошта вже зареєстрована',
+            });
           }
         }
       },
@@ -88,7 +91,11 @@ export const RegistrationForm = () => {
         />
 
         <label className="-mt-1 flex items-start gap-2 text-sm font-bold leading-normal text-page-copy">
-          <input className="mt-0.5 size-4 shrink-0 accent-selected" required type="checkbox" />
+          <input
+            className="mt-0.5 size-4 shrink-0 accent-selected"
+            required
+            type="checkbox"
+          />
           <span>
             Я погоджуюсь з умовами користування та політикою конфіденційності
           </span>
@@ -117,10 +124,7 @@ export const RegistrationForm = () => {
             Дякуємо за реєстрацію. На вашу пошту надіслано лист для завершення
             реєстрації.
           </p>
-          <Button
-            onClick={() => setShowSuccessfulPopup(false)}
-            type="button"
-          >
+          <Button onClick={() => setShowSuccessfulPopup(false)} type="button">
             Готово
           </Button>
         </div>

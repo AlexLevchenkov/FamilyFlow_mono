@@ -33,4 +33,4 @@ export const Popup = ({ isOpen, onClose, showTime = 3, children }: IPopup) => {
       </div>
     </div>
   );
-}
+};

@@ -46,7 +46,10 @@ export const ForgotPasswordForm = () => {
           register={register('email')}
           error={errors.email}
         />
-        <Button type="submit" disabled={isSubmitting || forgotPassword.isPending}>
+        <Button
+          type="submit"
+          disabled={isSubmitting || forgotPassword.isPending}
+        >
           Надіслати лист <Icon name="chevron" size={17} />
         </Button>
       </form>

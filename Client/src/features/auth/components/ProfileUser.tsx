@@ -1,19 +1,19 @@
-import { useStore } from "@store"
+import { useStore } from '@store';
 
 interface UserProps {
-  role?: string
+  role?: string;
 }
 
-export const ProfileUser = ({ role = "Адміністратор" }: UserProps) => {
-  const { auth } = useStore()
-  const name = auth.user?.name?.trim() || "Олексій К."
+export const ProfileUser = ({ role = 'Адміністратор' }: UserProps) => {
+  const { auth } = useStore();
+  const name = auth.user?.name?.trim() || 'Олексій К.';
   const initials = name
     .split(/\s+/)
     .filter(Boolean)
     .slice(0, 2)
-    .map((part) => part[0])
-    .join("")
-    .toLocaleUpperCase("uk-UA")
+    .map(part => part[0])
+    .join('')
+    .toLocaleUpperCase('uk-UA');
 
   return (
     <div className="flex min-w-0 flex-1 items-center gap-3">
@@ -33,5 +33,5 @@ export const ProfileUser = ({ role = "Адміністратор" }: UserProps) 
         <p className="text-xs text-[#9493a8]">{role}</p>
       </div>
     </div>
-  )
-}
+  );
+};

@@ -8,9 +8,11 @@
   ],
   "scripts": {
     "dev": "concurrently \"npm --prefix Server run dev\" \"npm --prefix Client run dev\"",
-    "dev:mock": "npm --prefix Client run dev:mock"
+    "dev:mock": "npm --prefix Client run dev:mock",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,css,scss,md}\""
   },
   "devDependencies": {
-    "concurrently": "^9.2.1"
+    "concurrently": "^9.2.1",
+    "prettier": "^3.9.10"
   }
 }

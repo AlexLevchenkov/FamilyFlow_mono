@@ -1,5 +1,5 @@
-import { Icon, PageHero, Panel, PrimaryButton } from "@ui"
-import { goals } from "@mocks/data"
+import { Icon, PageHero, Panel, PrimaryButton } from '@ui';
+import { goals } from '@mocks/data';
 
 export function GoalsView() {
   return (
@@ -13,8 +13,8 @@ export function GoalsView() {
             Великі мрії починаються з маленьких кроків
           </h2>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-[#737188]">
-            Зберігайте сімейні бажання, розподіляйте кроки й святкуйте
-            кожне досягнення разом.
+            Зберігайте сімейні бажання, розподіляйте кроки й святкуйте кожне
+            досягнення разом.
           </p>
         </div>
         <PrimaryButton className="shrink-0">
@@ -22,7 +22,7 @@ export function GoalsView() {
         </PrimaryButton>
       </PageHero>
       <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {goals.map((goal) => (
+        {goals.map(goal => (
           <Panel
             as="article"
             className="transition-all hover:-translate-y-0.5 hover:border-page-border-hover hover:shadow-[0_14px_34px_var(--color-page-shadow-soft)]"
@@ -38,10 +38,7 @@ export function GoalsView() {
               >
                 <Icon name="target" size={23} />
               </div>
-              <button
-                aria-label="Більше дій"
-                className="text-[#aaa8b8]"
-              >
+              <button aria-label="Більше дій" className="text-[#aaa8b8]">
                 <Icon name="more" size={19} />
               </button>
             </div>
@@ -51,9 +48,7 @@ export function GoalsView() {
             >
               {goal.category}
             </p>
-            <h3 className="mt-2 text-lg font-extrabold">
-              {goal.title}
-            </h3>
+            <h3 className="mt-2 text-lg font-extrabold">{goal.title}</h3>
             <p className="mt-2 text-sm text-[#9290a4]">{goal.detail}</p>
             <div className="mt-6 flex items-center justify-between text-xs font-extrabold">
               <span className="text-[#8f8da0]">Прогрес</span>
@@ -71,7 +66,10 @@ export function GoalsView() {
           </Panel>
         ))}
       </section>
-      <Panel as="section" className="flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-center">
+      <Panel
+        as="section"
+        className="flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-center"
+      >
         <div className="flex items-center gap-4">
           <div className="grid h-12 w-12 place-items-center rounded-2xl bg-[#fff1dc] text-[#db8c26]">
             <Icon name="sun" size={23} />
@@ -79,8 +77,7 @@ export function GoalsView() {
           <div>
             <h3 className="font-extrabold">Досягнення місяця</h3>
             <p className="mt-1 text-sm text-[#9290a4]">
-              Ви виконали 7 спільних кроків — це на 3 більше, ніж у
-              лютому.
+              Ви виконали 7 спільних кроків — це на 3 більше, ніж у лютому.
             </p>
           </div>
         </div>
@@ -89,5 +86,5 @@ export function GoalsView() {
         </span>
       </Panel>
     </div>
-  )
+  );
 }

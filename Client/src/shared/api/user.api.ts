@@ -17,9 +17,12 @@ export const userApi = {
    * Search and paginate users (GET /user)
    */
   async getUsers(params?: GetUsersParams) {
-    return api.get<ApiResponse<PaginatedUsersResponse>>(API_ENDPOINTS.USER.ROOT, {
-      params,
-    });
+    return api.get<ApiResponse<PaginatedUsersResponse>>(
+      API_ENDPOINTS.USER.ROOT,
+      {
+        params,
+      }
+    );
   },
 
   /**
@@ -33,7 +36,10 @@ export const userApi = {
    * Register a new user (POST /user)
    */
   async register(dto: RegisterUserRequest) {
-    return api.post<ApiResponse<RegisterUserResponse>>(API_ENDPOINTS.USER.ROOT, dto);
+    return api.post<ApiResponse<RegisterUserResponse>>(
+      API_ENDPOINTS.USER.ROOT,
+      dto
+    );
   },
 
   /**

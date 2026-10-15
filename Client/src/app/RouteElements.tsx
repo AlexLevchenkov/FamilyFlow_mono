@@ -28,7 +28,7 @@ function bootstrapSession() {
   if (!sessionBootstrapPromise) {
     sessionBootstrapPromise = authApi
       .refreshToken()
-      .then((response) => {
+      .then(response => {
         useAuthStore.getState().refreshTokens({
           access: response.data.data.accessToken,
         });
@@ -80,7 +80,7 @@ export function RootLayout() {
 }
 
 export function RequireAuth() {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   const location = useLocation();
 
   return isAuthenticated ? (
@@ -91,7 +91,7 @@ export function RequireAuth() {
 }
 
 export function PublicOnly() {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   return isAuthenticated ? <Navigate to="/" replace /> : <Outlet />;
 }
 
@@ -109,14 +109,15 @@ export function DashboardLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const activeNav =
-    Object.entries(navPaths).find(([, path]) => path === location.pathname)?.[0] ??
-    'Огляд';
+    Object.entries(navPaths).find(
+      ([, path]) => path === location.pathname
+    )?.[0] ?? 'Огляд';
 
   return (
     <MainLayout
       activeNav={activeNav}
-      setActiveNav={(nav) => navigate(navPaths[nav] ?? '/')}
-      activeTasksCount={tasks.filter((task) => !task.done).length}
+      setActiveNav={nav => navigate(navPaths[nav] ?? '/')}
+      activeTasksCount={tasks.filter(task => !task.done).length}
       logoutSlot={<LogoutButton />}
       profileSlot={<ProfileUser />}
     >
@@ -144,7 +145,7 @@ export function ResetPasswordRoute() {
 }
 
 export function RouteFallback() {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   return <Navigate to={isAuthenticated ? '/' : '/login'} replace />;
 }
 

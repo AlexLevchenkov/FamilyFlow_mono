@@ -1,7 +1,11 @@
 import { mockDb } from '../mockDb';
 import { ok, err } from './types';
 import type { MockRequestContext, MockResponseResult } from './types';
-import type { PaginatedListsResponse, ListType, AccessType } from '@api/contracts';
+import type {
+  PaginatedListsResponse,
+  ListType,
+  AccessType,
+} from '@api/contracts';
 
 export const listHandlers = {
   getUserLists(ctx: MockRequestContext): MockResponseResult {

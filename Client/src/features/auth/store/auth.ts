@@ -1,11 +1,15 @@
-import { create } from "zustand";
-import type { IUser } from "@features/auth";
+import { create } from 'zustand';
+import type { IUser } from '@features/auth';
 
 interface AuthState {
   accessToken: string | null;
   isAuthenticated: boolean;
   user: IUser | null;
-  login: (tokens: { accessToken: string; rememberMe: boolean, me: IUser }) => void;
+  login: (tokens: {
+    accessToken: string;
+    rememberMe: boolean;
+    me: IUser;
+  }) => void;
   logout: () => void;
   refreshTokens: (tokens: { access: string }) => void;
 }
@@ -17,9 +21,13 @@ function clearPersistedAuth() {
   }
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  accessToken: localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken'),
-  isAuthenticated: !!(localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken')),
+export const useAuthStore = create<AuthState>(set => ({
+  accessToken:
+    localStorage.getItem('accessToken') ||
+    sessionStorage.getItem('accessToken'),
+  isAuthenticated: !!(
+    localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken')
+  ),
   user: {
     name: localStorage.getItem('name') || sessionStorage.getItem('name'),
     avatar: localStorage.getItem('avatar') || sessionStorage.getItem('avatar'),
@@ -29,12 +37,12 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     if (rememberMe) {
       localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('name', me.name || "");
-      localStorage.setItem('avatar', me.avatar || "");
+      localStorage.setItem('name', me.name || '');
+      localStorage.setItem('avatar', me.avatar || '');
     } else {
       sessionStorage.setItem('accessToken', accessToken);
-      sessionStorage.setItem('name', me.name || "");
-      sessionStorage.setItem('avatar', me.avatar || "");
+      sessionStorage.setItem('name', me.name || '');
+      sessionStorage.setItem('avatar', me.avatar || '');
     }
     set({ accessToken, isAuthenticated: true, user: me });
   },
