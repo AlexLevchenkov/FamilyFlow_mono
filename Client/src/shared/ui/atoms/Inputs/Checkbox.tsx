@@ -26,13 +26,13 @@ export const InputCheckbox = ({
           aria-invalid={Boolean(error)}
           className={`mt-0.5 size-4 shrink-0 accent-selected ${error ? 'outline outline-1 outline-red-500' : ''}`}
         />
-        {label && (
-          <label htmlFor={id}>
-            {label}
-          </label>
-        )}
+        {label && <label htmlFor={id}>{label}</label>}
       </div>
-      {error && <p className="text-sm text-red-600" role="alert">{error.message}</p>}
+      {error && (
+        <p className="text-sm text-red-600" role="alert">
+          {error.message}
+        </p>
+      )}
     </div>
   );
 };

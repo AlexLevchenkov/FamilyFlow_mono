@@ -16,11 +16,14 @@ export function TasksProvider({ children }: { children: ReactNode }) {
   }, [filter, tasks]);
 
   const completed = tasks.filter(task => task.done).length;
-  const progress = tasks.length > 0 ? Math.round((completed / tasks.length) * 100) : 0;
+  const progress =
+    tasks.length > 0 ? Math.round((completed / tasks.length) * 100) : 0;
 
   const toggleTask = useCallback((id: number) => {
     setTasks(current =>
-      current.map(task => (task.id === id ? { ...task, done: !task.done } : task))
+      current.map(task =>
+        task.id === id ? { ...task, done: !task.done } : task
+      )
     );
   }, []);
 
@@ -71,5 +74,7 @@ export function TasksProvider({ children }: { children: ReactNode }) {
     ]
   );
 
-  return <TasksContext.Provider value={value}>{children}</TasksContext.Provider>;
+  return (
+    <TasksContext.Provider value={value}>{children}</TasksContext.Provider>
+  );
 }

@@ -29,16 +29,22 @@ export const LoginForm = () => {
           rememberMe: data.rememberMe,
           me: res.data.data.user,
         });
-        navigate("/");
+        navigate('/');
       },
-      onError: (error) => {
+      onError: error => {
         if (isAxiosError(error)) {
           if (error.response?.status === 401) {
-            setError("email", { type: "server", message: "Невірна пошта або пароль" });
-            setError("password", { type: "server", message: "Невірна пошта або пароль" });
+            setError('email', {
+              type: 'server',
+              message: 'Невірна пошта або пароль',
+            });
+            setError('password', {
+              type: 'server',
+              message: 'Невірна пошта або пароль',
+            });
           }
         }
-      }
+      },
     });
   };
 
@@ -75,7 +81,7 @@ export const LoginForm = () => {
         />
         <button
           className="text-xs font-black text-background2"
-          onClick={() => navigate("/reset-password")}
+          onClick={() => navigate('/reset-password')}
           type="button"
         >
           Забули пароль?

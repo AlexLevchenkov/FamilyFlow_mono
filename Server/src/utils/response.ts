@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { Response } from 'express';
 
 function apiResponse<T>(
   res: Response,

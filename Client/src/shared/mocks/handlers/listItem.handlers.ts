@@ -52,7 +52,8 @@ export const listItemHandlers = {
       listId,
       title,
       completed: typeof body.completed === 'boolean' ? body.completed : false,
-      description: body.description !== undefined ? String(body.description) : undefined,
+      description:
+        body.description !== undefined ? String(body.description) : undefined,
       priority: body.priority !== undefined ? Number(body.priority) : 0,
       dueDate: body.dueDate ? String(body.dueDate) : undefined,
       position: body.position !== undefined ? Number(body.position) : 0,
@@ -66,10 +67,17 @@ export const listItemHandlers = {
 
     const updated = mockDb.updateItem(id, {
       title: body.title !== undefined ? String(body.title) : undefined,
-      completed: typeof body.completed === 'boolean' ? body.completed : undefined,
-      description: body.description !== undefined ? String(body.description) : undefined,
+      completed:
+        typeof body.completed === 'boolean' ? body.completed : undefined,
+      description:
+        body.description !== undefined ? String(body.description) : undefined,
       priority: body.priority !== undefined ? Number(body.priority) : undefined,
-      dueDate: body.dueDate !== undefined ? (body.dueDate ? String(body.dueDate) : null) : undefined,
+      dueDate:
+        body.dueDate !== undefined
+          ? body.dueDate
+            ? String(body.dueDate)
+            : null
+          : undefined,
       position: body.position !== undefined ? Number(body.position) : undefined,
     });
     if (!updated) {

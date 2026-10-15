@@ -25,11 +25,17 @@ export const VerifyEmailPage = ({ token }: { token: string }) => {
   return (
     <main className="grid min-h-screen place-items-center bg-white px-5">
       <section className="w-full max-w-md text-center">
-        <div className={`mx-auto mb-6 grid size-16 place-items-center rounded-3xl ${isSuccess ? 'bg-page-success-soft text-page-success' : status === 'error' ? 'bg-red-50 text-red-600' : 'bg-page-lavender text-background2'}`}>
+        <div
+          className={`mx-auto mb-6 grid size-16 place-items-center rounded-3xl ${isSuccess ? 'bg-page-success-soft text-page-success' : status === 'error' ? 'bg-red-50 text-red-600' : 'bg-page-lavender text-background2'}`}
+        >
           <Icon name={isSuccess ? 'check' : 'mail'} size={28} />
         </div>
         <p className="mb-2 text-xs font-black uppercase tracking-widest text-page-accent-bright">
-          {status === 'loading' ? 'Перевірка' : isSuccess ? 'Готово' : 'Безпека акаунта'}
+          {status === 'loading'
+            ? 'Перевірка'
+            : isSuccess
+              ? 'Готово'
+              : 'Безпека акаунта'}
         </p>
         <h1 className="text-3xl font-black tracking-tight text-page-heading">
           {status === 'loading'

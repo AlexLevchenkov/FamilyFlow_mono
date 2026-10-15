@@ -17,9 +17,12 @@ export const listApi = {
    * Get all lists for the authenticated user with pagination (GET /list)
    */
   async getUserLists(params?: GetUserListsParams) {
-    return api.get<ApiResponse<PaginatedListsResponse>>(API_ENDPOINTS.LIST.ROOT, {
-      params,
-    });
+    return api.get<ApiResponse<PaginatedListsResponse>>(
+      API_ENDPOINTS.LIST.ROOT,
+      {
+        params,
+      }
+    );
   },
 
   /**
@@ -54,7 +57,10 @@ export const listApi = {
    * Share a list with another user (POST /list/share)
    */
   async shareList(dto: ShareListRequest) {
-    return api.post<ApiResponse<SharedListModel>>(API_ENDPOINTS.LIST.SHARE, dto);
+    return api.post<ApiResponse<SharedListModel>>(
+      API_ENDPOINTS.LIST.SHARE,
+      dto
+    );
   },
 
   /**

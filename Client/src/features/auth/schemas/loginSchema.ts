@@ -1,43 +1,51 @@
-import z from "zod";
+import z from 'zod';
 
 export const passwordSchema = z
   .string()
   .min(8)
   .max(20)
-  .refine((password) => /[A-Z]/.test(password), {message: "Password must contain uppercase letters"})
-  .refine((password) => /[a-z]/.test(password), {message: "Password must contain lowercase letters"})
-  .refine((password) => /[0-9]/.test(password), {message: "Password must contain numbers"})
-  .refine((password) => /[!@#$%^&*]/.test(password), {message: "Password must contain special characters (!@#$%^&*)"});
+  .refine(password => /[A-Z]/.test(password), {
+    message: 'Password must contain uppercase letters',
+  })
+  .refine(password => /[a-z]/.test(password), {
+    message: 'Password must contain lowercase letters',
+  })
+  .refine(password => /[0-9]/.test(password), {
+    message: 'Password must contain numbers',
+  })
+  .refine(password => /[!@#$%^&*]/.test(password), {
+    message: 'Password must contain special characters (!@#$%^&*)',
+  });
 
 const emailSchema = z
   .string()
   .trim()
   .toLowerCase()
-  .refine(
-    (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
-    { message: "Invalid email" }
-  );
+  .refine(value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value), {
+    message: 'Invalid email',
+  });
 
-export const changePasswordSchema = z.object({
-  currentPassword: z.string(),
-  password: passwordSchema,
-  confirmPassword: z.string().optional(),
-})
-.refine((data) => data.password === data.confirmPassword);
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string(),
+    password: passwordSchema,
+    confirmPassword: z.string().optional(),
+  })
+  .refine(data => data.password === data.confirmPassword);
 
 export const setPasswordSchema = z.object({
   password: passwordSchema,
-})
+});
 
 export const resetPasswordSchema = z
   .object({
     newPassword: passwordSchema,
     confirmPassword: z.string(),
   })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    path: ["confirmPassword"],
-    message: "Паролі не збігаються",
-  })
+  .refine(data => data.newPassword === data.confirmPassword, {
+    path: ['confirmPassword'],
+    message: 'Паролі не збігаються',
+  });
 
 const loginPasswordSchema = z.string().min(8).max(20);
 
@@ -57,8 +65,7 @@ export const RegistrationSchema = z.object({
   repeatPassword: passwordSchema,
   name: z.string().trim().min(2).max(32),
   avatar: z.string().optional(),
-})
-
+});
 
 export type ChangePasswordData = z.infer<typeof changePasswordSchema>;
 export type LoginFormData = z.infer<typeof loginSchema>;

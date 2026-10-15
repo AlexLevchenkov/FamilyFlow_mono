@@ -94,7 +94,8 @@ export function setupMockAdapter(api: AxiosInstance): void {
 
       const result = await matched.handler(context);
 
-      const statusColor = result.status >= 400 ? 'color: #ec6f91;' : 'color: #35b69f;';
+      const statusColor =
+        result.status >= 400 ? 'color: #ec6f91;' : 'color: #35b69f;';
       console.info(
         `%c[Mock API]%c ${method} ${pathname}%c (${result.status} ${result.status < 400 ? 'OK' : 'Error'})`,
         'background: #6b48cc; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold;',

@@ -1,6 +1,6 @@
-import { Icon, PageHero, Panel, PrimaryButton } from "@ui"
-import { FamilyAvatar } from "./FamilyAvatar"
-import { family } from "@mocks/data"
+import { Icon, PageHero, Panel, PrimaryButton } from '@ui';
+import { FamilyAvatar } from './FamilyAvatar';
+import { family } from '@mocks/data';
 
 export function FamilyView() {
   return (
@@ -14,8 +14,8 @@ export function FamilyView() {
             Разом усе простіше
           </h2>
           <p className="mt-3 max-w-xl text-sm leading-6 text-[#737188]">
-            Розподіляйте справи справедливо, залишайтесь на зв’язку та
-            знаходьте більше часу одне для одного.
+            Розподіляйте справи справедливо, залишайтесь на зв’язку та знаходьте
+            більше часу одне для одного.
           </p>
         </div>
         <PrimaryButton className="shrink-0">
@@ -30,21 +30,17 @@ export function FamilyView() {
               color={person.color}
               size="profile"
             />
-            <h3 className="mt-4 text-lg font-extrabold">
-              {person.name}
-            </h3>
+            <h3 className="mt-4 text-lg font-extrabold">{person.name}</h3>
             <p className="mt-1 text-xs font-bold text-[#aaa8b8]">
               {index === 0
-                ? "Адміністратор"
+                ? 'Адміністратор'
                 : index === 1
-                  ? "Дорослий"
-                  : "Дитячий профіль"}
+                  ? 'Дорослий'
+                  : 'Дитячий профіль'}
             </p>
             <div className="mt-5 grid grid-cols-2 divide-x divide-[#efedf4] border-t border-[#efedf4] pt-4">
               <div>
-                <strong className="block text-lg">
-                  {person.tasks}
-                </strong>
+                <strong className="block text-lg">{person.tasks}</strong>
                 <small className="text-[10px] font-bold text-[#aaa8b8]">
                   справи
                 </small>
@@ -62,7 +58,9 @@ export function FamilyView() {
       <section className="grid gap-6 lg:grid-cols-[1.2fr_.8fr]">
         <Panel>
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-black tracking-tight">Активність родини</h2>
+            <h2 className="text-lg font-black tracking-tight">
+              Активність родини
+            </h2>
             <button className="text-xs font-extrabold text-[#7656d0]">
               Переглянути все
             </button>
@@ -70,22 +68,17 @@ export function FamilyView() {
           <div className="mt-5 space-y-4">
             {[
               [
-                "А",
-                "Анна виконала справу",
-                "Замовити продукти на тиждень",
-                "#e76f91",
+                'А',
+                'Анна виконала справу',
+                'Замовити продукти на тиждень',
+                '#e76f91',
               ],
+              ['М', 'Марк додав подію', 'Футбольне тренування', '#f2a13b'],
               [
-                "М",
-                "Марк додав подію",
-                "Футбольне тренування",
-                "#f2a13b",
-              ],
-              [
-                "О",
-                "Олексій оновив ціль",
-                "Сімейна подорож у Карпати",
-                "#5267ca",
+                'О',
+                'Олексій оновив ціль',
+                'Сімейна подорож у Карпати',
+                '#5267ca',
               ],
             ].map(([initial, title, detail, color]) => (
               <div
@@ -117,7 +110,7 @@ export function FamilyView() {
             Активні задачі цього тижня
           </p>
           <div className="mt-6 space-y-4">
-            {family.map((person) => (
+            {family.map(person => (
               <div key={person.name}>
                 <div className="mb-2 flex justify-between text-xs font-extrabold">
                   <span>{person.name}</span>
@@ -138,5 +131,5 @@ export function FamilyView() {
         </Panel>
       </section>
     </div>
-  )
+  );
 }

@@ -7,11 +7,13 @@
 This is a **home management web application** for organizing household tasks and activities. The application helps families and individuals manage their daily life through structured lists, tasks, and planning.
 
 ### Core Purpose
+
 Help users organize and coordinate household activities, shopping, tasks, and events in one place with the ability to share with family members or friends.
 
 ## Main Features
 
 ### MVP (Minimum Viable Product)
+
 1. **Shopping Lists** - Create and manage shopping lists with items
 2. **Task Lists** - Organize to-do items with priorities and due dates
 3. **Event Calendar** - Plan and track events and important dates
@@ -19,6 +21,7 @@ Help users organize and coordinate household activities, shopping, tasks, and ev
 5. **Multi-user Access** - Share lists with family members or friends with read/write permissions
 
 ### Future Enhancements
+
 - Budget tracking and expenses
 - Statistics and analytics
 - Notifications and reminders
@@ -29,6 +32,7 @@ Help users organize and coordinate household activities, shopping, tasks, and ev
 ## Project Structure
 
 ### Repository Structure
+
 ```
 ToDoProject/
 ├── Client/    # Frontend application (React/Next.js - planned)
@@ -36,6 +40,7 @@ ToDoProject/
 ```
 
 ### Backend Code Structure (Conceptual)
+
 ```
 Server/
 ├── src/
@@ -59,6 +64,7 @@ Server/
 ## Technology Stack (Planned)
 
 ### Backend
+
 - **Runtime:** Node.js
 - **Framework:** Express
 - **Language:** TypeScript
@@ -73,6 +79,7 @@ Server/
 - **Development:** nodemon, ts-node, ts-node-dev
 
 ### Frontend (Future)
+
 - React or Next.js
 - TypeScript
 - Material-UI or Tailwind CSS
@@ -83,6 +90,7 @@ Server/
 ### Database Schema
 
 **User**
+
 - `id` (UUID) - Primary key
 - `email` (String, unique) - User email for login
 - `password` (String, hashed) - Hashed password
@@ -92,6 +100,7 @@ Server/
 - **Relations:** owns lists, categories, has shared list access
 
 **RefreshToken**
+
 - `id` (UUID) - Primary key
 - `token` (String, hashed) - Hashed user token
 - `userId` (UUID) - Foreign key to User
@@ -99,8 +108,8 @@ Server/
 - `ipAddress` (String, optional) - Device IP address
 - `expiresAt`, `createdAt`, `updatedAt` - Timestamps
 
-
 **List**
+
 - `id` (UUID) - Primary key
 - `userId` (UUID) - Foreign key to User
 - `title` (String) - List name
@@ -111,6 +120,7 @@ Server/
 - **Relations:** belongs to user, contains items, can be shared
 
 **Item**
+
 - `id` (UUID) - Primary key
 - `listId` (UUID) - Foreign key to List
 - `title` (String) - Item name
@@ -123,6 +133,7 @@ Server/
 - **Relations:** belongs to list
 
 **Category**
+
 - `id` (UUID) - Primary key
 - `userId` (UUID) - Foreign key to User
 - `name` (String) - Category name
@@ -132,6 +143,7 @@ Server/
 - **Relations:** belongs to user
 
 **SharedList**
+
 - `id` (UUID) - Primary key
 - `listId` (UUID) - Foreign key to List
 - `userId` (UUID) - Foreign key to User (shared with)
@@ -143,12 +155,14 @@ Server/
 ## API Concept
 
 ### Authentication Endpoints
+
 - User registration
 - User login
 - Get current user info
 - JWT token-based authentication
 
 ### Lists Endpoints
+
 - Get all user's lists (with filtering)
 - Create new list
 - Get single list with items
@@ -156,6 +170,7 @@ Server/
 - Delete list
 
 ### Items Endpoints
+
 - Get items in a list
 - Add item to list
 - Update item (mark complete, change priority, etc.)
@@ -163,10 +178,12 @@ Server/
 - Reorder items
 
 ### Categories Endpoints
+
 - Manage categories
 - Assign categories to lists
 
 ### Sharing Endpoints
+
 - Share list with user
 - Update sharing permissions
 - Remove sharing access

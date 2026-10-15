@@ -1,11 +1,11 @@
 ---
-name: "FamilyFlow Repository Map"
-description: "Use when navigating or changing the FamilyFlow monorepo. Summarizes the Client, Server, shared API contracts, package boundaries, and validation commands."
+name: 'FamilyFlow Repository Map'
+description: 'Use when navigating or changing the FamilyFlow monorepo. Summarizes the Client, Server, shared API contracts, package boundaries, and validation commands.'
 applyTo:
-  - "Client/src/**"
-  - "Server/src/**"
-  - "Server/prisma/**"
-  - "packages/contracts/**"
+  - 'Client/src/**'
+  - 'Server/src/**'
+  - 'Server/prisma/**'
+  - 'packages/contracts/**'
 ---
 
 # FamilyFlow Repository Map

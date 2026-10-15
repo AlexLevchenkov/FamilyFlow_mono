@@ -1,12 +1,12 @@
-import bcryptjs from "bcryptjs";
-import jwt from "jsonwebtoken";
-import authService from "@/services/auth.service";
-import userService from "@/services/user.service";
-import prisma from "@/config/prisma";
-import { sendCheckEmail } from "@/utils";
+import bcryptjs from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import authService from '@/services/auth.service';
+import userService from '@/services/user.service';
+import prisma from '@/config/prisma';
+import { sendCheckEmail } from '@/utils';
 
-jest.mock("@/utils", () => {
-  const actual = jest.requireActual("@/utils");
+jest.mock('@/utils', () => {
+  const actual = jest.requireActual('@/utils');
   return {
     ...actual,
     sendCheckEmail: jest.fn(),
@@ -14,10 +14,10 @@ jest.mock("@/utils", () => {
   };
 });
 
-describe("AuthService & UserService Registration/Login", () => {
-  const testEmail = "test@example.com";
-  const testPassword = "password123";
-  const testName = "Test User";
+describe('AuthService & UserService Registration/Login', () => {
+  const testEmail = 'test@example.com';
+  const testPassword = 'password123';
+  const testName = 'Test User';
 
   async function clearDatabase() {
     await prisma.item.deleteMany({});
@@ -41,15 +41,15 @@ describe("AuthService & UserService Registration/Login", () => {
     await prisma.$disconnect();
   });
 
-  describe("User Registration", () => {
-    it("should register a new user, hash the password, and send a verification email", async () => {
+  describe('User Registration', () => {
+    it('should register a new user, hash the password, and send a verification email', async () => {
       const result = await userService.register({
         email: testEmail,
         password: testPassword,
         name: testName,
       });
 
-      expect(result).toHaveProperty("name", testName);
+      expect(result).toHaveProperty('name', testName);
 
       const dbUser = await prisma.user.findUnique({
         where: { email: testEmail },
@@ -60,11 +60,11 @@ describe("AuthService & UserService Registration/Login", () => {
 
       expect(sendCheckEmail).toHaveBeenCalledWith(
         testEmail,
-        expect.any(String),
+        expect.any(String)
       );
     });
 
-    it("should not allow registering an existing email", async () => {
+    it('should not allow registering an existing email', async () => {
       await userService.register({
         email: testEmail,
         password: testPassword,
@@ -74,14 +74,14 @@ describe("AuthService & UserService Registration/Login", () => {
       await expect(
         userService.register({
           email: testEmail,
-          password: "differentpassword",
-          name: "Another Name",
-        }),
+          password: 'differentpassword',
+          name: 'Another Name',
+        })
       ).rejects.toThrow(/User already exists/);
     });
   });
 
-  describe("User Login", () => {
+  describe('User Login', () => {
     let registeredUser: any;
 
     beforeEach(async () => {
@@ -95,14 +95,14 @@ describe("AuthService & UserService Registration/Login", () => {
       });
     });
 
-    it("should successfully log in and return tokens and user details", async () => {
+    it('should successfully log in and return tokens and user details', async () => {
       const loginResult = await authService.login({
         email: testEmail,
         password: testPassword,
       });
 
-      expect(loginResult).toHaveProperty("accessToken");
-      expect(loginResult).toHaveProperty("refreshToken");
+      expect(loginResult).toHaveProperty('accessToken');
+      expect(loginResult).toHaveProperty('refreshToken');
       expect(loginResult.user.id).toBe(registeredUser.id);
 
       const dbTokens = await prisma.refreshToken.findMany({
@@ -112,26 +112,26 @@ describe("AuthService & UserService Registration/Login", () => {
       expect(dbTokens[0].jti).toBeDefined();
     });
 
-    it("should throw unauthorized error for invalid password", async () => {
+    it('should throw unauthorized error for invalid password', async () => {
       await expect(
         authService.login({
           email: testEmail,
-          password: "wrongpassword",
-        }),
+          password: 'wrongpassword',
+        })
       ).rejects.toThrow(/Invalid email or password/);
     });
 
-    it("should throw unauthorized error for non-existent email", async () => {
+    it('should throw unauthorized error for non-existent email', async () => {
       await expect(
         authService.login({
-          email: "nonexistent@example.com",
+          email: 'nonexistent@example.com',
           password: testPassword,
-        }),
+        })
       ).rejects.toThrow(/Invalid email or password/);
     });
   });
 
-  describe("Refresh Token Rotation", () => {
+  describe('Refresh Token Rotation', () => {
     let user: any;
     let initialTokens: any;
 
@@ -148,18 +148,18 @@ describe("AuthService & UserService Registration/Login", () => {
       });
     });
 
-    it("should successfully rotate tokens", async () => {
+    it('should successfully rotate tokens', async () => {
       const decoded: any = jwt.decode(initialTokens.refreshToken);
       const userData = {
         id: user.id,
         jti: decoded.jti,
-        role: "user",
+        role: 'user',
       };
 
       const rotated = await authService.refreshToken(userData);
 
-      expect(rotated).toHaveProperty("accessToken");
-      expect(rotated).toHaveProperty("refreshToken");
+      expect(rotated).toHaveProperty('accessToken');
+      expect(rotated).toHaveProperty('refreshToken');
       expect(rotated.refreshToken).not.toBe(initialTokens.refreshToken);
 
       const oldTokenInDb = await prisma.refreshToken.findFirst({
@@ -174,27 +174,27 @@ describe("AuthService & UserService Registration/Login", () => {
       expect(newTokenInDb).not.toBeNull();
     });
 
-    it("should reject refresh requests if old token has been rotated/deleted", async () => {
+    it('should reject refresh requests if old token has been rotated/deleted', async () => {
       const decoded: any = jwt.decode(initialTokens.refreshToken);
       const userData = {
         id: user.id,
         jti: decoded.jti,
-        role: "user",
+        role: 'user',
       };
 
       await authService.refreshToken(userData);
 
       await expect(authService.refreshToken(userData)).rejects.toThrow(
-        /Invalid refresh token/,
+        /Invalid refresh token/
       );
     });
 
-    it("should reject refresh requests if token is expired", async () => {
+    it('should reject refresh requests if token is expired', async () => {
       const decoded: any = jwt.decode(initialTokens.refreshToken);
       const userData = {
         id: user.id,
         jti: decoded.jti,
-        role: "user",
+        role: 'user',
       };
 
       const expiredDate = new Date(Date.now() - 1000);
@@ -204,7 +204,7 @@ describe("AuthService & UserService Registration/Login", () => {
       });
 
       await expect(authService.refreshToken(userData)).rejects.toThrow(
-        /Refresh token expired/,
+        /Refresh token expired/
       );
     });
   });

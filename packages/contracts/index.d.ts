@@ -104,9 +104,9 @@ export interface DeleteUserParams {
   userId: number;
 }
 
-export type ListType = "shopping" | "tasks" | "events";
+export type ListType = 'shopping' | 'tasks' | 'events';
 
-export type AccessType = "watch" | "edit" | "fullAccess";
+export type AccessType = 'watch' | 'edit' | 'fullAccess';
 
 export interface ListModel {
   id: number;

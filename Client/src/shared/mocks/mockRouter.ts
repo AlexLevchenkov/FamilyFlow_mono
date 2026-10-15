@@ -4,7 +4,9 @@ import { listHandlers } from './handlers/list.handlers';
 import { listItemHandlers } from './handlers/listItem.handlers';
 import type { MockRequestContext, MockResponseResult } from './handlers/types';
 
-type RouteHandler = (ctx: MockRequestContext) => MockResponseResult | Promise<MockResponseResult>;
+type RouteHandler = (
+  ctx: MockRequestContext
+) => MockResponseResult | Promise<MockResponseResult>;
 
 interface RouteDefinition {
   method: string;
@@ -69,7 +71,11 @@ register('DELETE', '/listItem/:id', listItemHandlers.deleteListItem);
 export function matchMockRoute(
   method: string,
   pathname: string
-): { handler: RouteHandler; params: Record<string, string>; description: string } | null {
+): {
+  handler: RouteHandler;
+  params: Record<string, string>;
+  description: string;
+} | null {
   const normalizedMethod = method.toUpperCase();
   const normalizedPath = pathname.replace(/\/+$/, '') || '/';
 

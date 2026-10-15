@@ -19,9 +19,9 @@ export const LogoLink = ({
       <div
         className={`
           ${
-            isTextBelow ? 
-            'w-12 sm:w-16 md:w-20 lg:w-24' : 
-            'w-6 sm:w-8 md:w-10 lg:w-12'
+            isTextBelow
+              ? 'w-12 sm:w-16 md:w-20 lg:w-24'
+              : 'w-6 sm:w-8 md:w-10 lg:w-12'
           } 
         `}
       >
@@ -31,10 +31,14 @@ export const LogoLink = ({
         Family
         <b className="text-lightText">Flow</b>
       </span>
-    </div >
-  )
+    </div>
+  );
 
-  return enabledLink ?
-    <a className="inline-block" href="/">{content}</a> :
+  return enabledLink ? (
+    <a className="inline-block" href="/">
+      {content}
+    </a>
+  ) : (
     <div className="inline-block cursor-default">{content}</div>
-}
+  );
+};
