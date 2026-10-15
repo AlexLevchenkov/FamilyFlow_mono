@@ -1,8 +1,8 @@
-const { readdirSync, readFileSync, writeFileSync, existsSync } = require('fs');
-const { join } = require('path');
+const { readdirSync, readFileSync, writeFileSync, existsSync } = require("fs");
+const { join } = require("path");
 
-const basePath = join(__dirname, '../src/models/base.prisma');
-const base = existsSync(basePath) ? readFileSync(basePath, 'utf-8') : '';
+const basePath = join(__dirname, "../src/models/base.prisma");
+const base = existsSync(basePath) ? readFileSync(basePath, "utf-8") : "";
 
 function getAllPrismaFiles(dir) {
   const files = [];
@@ -14,8 +14,8 @@ function getAllPrismaFiles(dir) {
       files.push(...getAllPrismaFiles(fullPath));
     } else if (
       item.isFile() &&
-      item.name.endsWith('.prisma') &&
-      item.name !== 'base.prisma'
+      item.name.endsWith(".prisma") &&
+      item.name !== "base.prisma"
     ) {
       files.push(fullPath);
     }
@@ -24,13 +24,13 @@ function getAllPrismaFiles(dir) {
   return files;
 }
 
-const modelsDir = join(__dirname, '../src/models');
+const modelsDir = join(__dirname, "../src/models");
 const modelFiles = getAllPrismaFiles(modelsDir).map(f =>
-  readFileSync(f, 'utf-8')
+  readFileSync(f, "utf-8")
 );
 
-const schema = [base, ...modelFiles].join('\n\n');
+const schema = [base, ...modelFiles].join("\n\n");
 
-writeFileSync(join(__dirname, './schema.prisma'), schema);
+writeFileSync(join(__dirname, "./schema.prisma"), schema);
 
-console.log('✅ schema.prisma successfully compiled.');
+console.log("✅ schema.prisma successfully compiled.");

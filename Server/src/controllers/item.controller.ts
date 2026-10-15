@@ -1,6 +1,6 @@
-import type { Request, Response } from 'express';
-import itemService from '@services/item.service';
-import apiResponse from '@utils/response';
+import type { Request, Response } from "express";
+import itemService from "@services/item.service";
+import apiResponse from "@utils/response";
 
 class ItemController {
   async getListItems(req: Request, res: Response): Promise<void> {
@@ -9,7 +9,7 @@ class ItemController {
       apiResponse(res, data, 200);
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
@@ -20,7 +20,7 @@ class ItemController {
       apiResponse(res, data, 200);
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
@@ -32,7 +32,7 @@ class ItemController {
       apiResponse(res, data, 200);
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
@@ -42,14 +42,14 @@ class ItemController {
       const data = await itemService.updateListItem({ ...req.validated });
 
       if (!data) {
-        apiResponse(res, null, 401, 'Invalid credentials');
+        apiResponse(res, null, 401, "Invalid credentials");
         return;
       }
 
       apiResponse(res, data, 200);
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
@@ -60,7 +60,7 @@ class ItemController {
       apiResponse(res, undefined, 200);
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   }

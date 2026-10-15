@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import authController from '@controllers/auth.controller';
+import { Router } from "express";
+import authController from "@controllers/auth.controller";
 import {
   authenticate,
   cookieExtractor,
@@ -8,25 +8,25 @@ import {
   validateRequestPasswordReset,
   validateResetPassword,
   validateVerifyEmail,
-} from '@/middleware';
+} from "@/middleware";
 
 const authRouter = Router();
 
-authRouter.post('/login', validateLogin, authController.login);
-authRouter.get('/logout', authenticate, validateLogout, authController.logout);
-authRouter.post('/refresh-token', cookieExtractor, authController.refreshToken);
+authRouter.post("/login", validateLogin, authController.login);
+authRouter.get("/logout", authenticate, validateLogout, authController.logout);
+authRouter.post("/refresh-token", cookieExtractor, authController.refreshToken);
 authRouter.post(
-  '/forgot-password',
+  "/forgot-password",
   validateRequestPasswordReset,
   authController.requestPasswordReset
 );
 authRouter.post(
-  '/reset-password',
+  "/reset-password",
   validateResetPassword,
   authController.resetPassword
 );
 authRouter.get(
-  '/verify-email',
+  "/verify-email",
   validateVerifyEmail,
   authController.verifyEmail
 );

@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express';
+import type { Request, Response } from "express";
 import {
   GetUserListsInput,
   CreateListInput,
@@ -6,9 +6,9 @@ import {
   ShareListInput,
   GetListInput,
   DeleteListInput,
-} from '@/middleware';
-import apiResponse from '@utils/response';
-import listService from '@services/list.service';
+} from "@/middleware";
+import apiResponse from "@utils/response";
+import listService from "@services/list.service";
 
 class ListController {
   async getUserLists(req: Request, res: Response): Promise<void> {
@@ -20,7 +20,7 @@ class ListController {
       apiResponse(res, data, 200);
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
@@ -34,7 +34,7 @@ class ListController {
       apiResponse(res, data, 200);
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
@@ -45,8 +45,8 @@ class ListController {
       const {
         title,
         type,
-        color = '',
-        icon = '',
+        color = "",
+        icon = "",
       }: CreateListInput = req.validated;
 
       const data = await listService.createList({
@@ -60,7 +60,7 @@ class ListController {
       apiResponse(res, data, 201);
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
@@ -72,8 +72,8 @@ class ListController {
         id,
         title,
         type,
-        color = '',
-        icon = '',
+        color = "",
+        icon = "",
       }: UpdateListInput = req.validated;
 
       const data = await listService.updateList({
@@ -87,7 +87,7 @@ class ListController {
       apiResponse(res, data, 200);
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
@@ -101,7 +101,7 @@ class ListController {
       apiResponse(res, undefined, 200);
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
@@ -122,7 +122,7 @@ class ListController {
       apiResponse(res, data, 201);
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   }
@@ -147,7 +147,7 @@ class ListController {
       apiResponse(res, undefined, 201);
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   }

@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
-import authService from '@services/auth.service';
-import { logError } from '@utils/logger';
-import apiResponse from '@utils/response';
+import { Request, Response } from "express";
+import authService from "@services/auth.service";
+import { logError } from "@utils/logger";
+import apiResponse from "@utils/response";
 
 class AuthController {
   login = async (req: Request, res: Response): Promise<void> => {
@@ -18,7 +18,7 @@ class AuthController {
       );
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   };
@@ -30,23 +30,23 @@ class AuthController {
       await authService.logout({ userId: user.id });
 
       try {
-        res.clearCookie('refreshToken', {
+        res.clearCookie("refreshToken", {
           httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'lax',
-          path: '/auth/refresh-token',
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "lax",
+          path: "/auth/refresh-token",
         });
       } catch (err) {
         logError(
-          'Failed to clear refresh token cookie: ' +
+          "Failed to clear refresh token cookie: " +
             (err instanceof Error ? err.message : String(err))
         );
       }
 
-      apiResponse(res, null, 200, 'Logged out successfully');
+      apiResponse(res, null, 200, "Logged out successfully");
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   };
@@ -61,7 +61,7 @@ class AuthController {
       apiResponse(res, { accessToken: data.accessToken }, 200);
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   };
@@ -73,7 +73,7 @@ class AuthController {
       apiResponse(res, null, 200);
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   };
@@ -85,7 +85,7 @@ class AuthController {
       apiResponse(res, null, 200);
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   };
@@ -97,7 +97,7 @@ class AuthController {
       apiResponse(res, null, 200);
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   };
@@ -105,20 +105,20 @@ class AuthController {
   _addRefreshTokenToCookie = (res: Response, token: string): void => {
     try {
       const refreshExpiresDays = parseInt(
-        process.env.REFRESH_EXPIRES_IN || '14'
+        process.env.REFRESH_EXPIRES_IN || "14"
       );
       const maxAge = 1000 * 60 * 60 * 24 * refreshExpiresDays;
 
-      res.cookie('refreshToken', token, {
+      res.cookie("refreshToken", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
         maxAge,
-        path: '/auth/refresh-token',
+        path: "/auth/refresh-token",
       });
     } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       apiResponse(res, null, error.statusCode, errorMessage);
     }
   };

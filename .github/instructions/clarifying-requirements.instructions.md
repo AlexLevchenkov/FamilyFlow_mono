@@ -1,6 +1,6 @@
 ---
-name: 'Clarifying Requirements'
-description: 'Use when a software request has ambiguous scope, multiple plausible behaviors, meaningful trade-offs, or unresolved edge cases. Guides when and how to ask the user before implementation.'
+name: "Clarifying Requirements"
+description: "Use when a software request has ambiguous scope, multiple plausible behaviors, meaningful trade-offs, or unresolved edge cases. Guides when and how to ask the user before implementation."
 ---
 
 # Clarifying Requirements

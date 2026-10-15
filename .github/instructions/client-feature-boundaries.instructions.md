@@ -1,7 +1,7 @@
 ---
-name: 'Client Feature Boundaries'
-description: 'Use when adding or changing Client features, feature state, page composition, or shared modules. Defines feature ownership and cross-feature collaboration boundaries in Client/src.'
-applyTo: 'Client/src/**'
+name: "Client Feature Boundaries"
+description: "Use when adding or changing Client features, feature state, page composition, or shared modules. Defines feature ownership and cross-feature collaboration boundaries in Client/src."
+applyTo: "Client/src/**"
 ---
 
 # Client Feature Boundaries

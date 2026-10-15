@@ -1,7 +1,7 @@
-import type { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import keyRotationService from '@utils/keyRotation';
-import { AppError, unauthorizedError } from '@utils/errors';
+import type { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import keyRotationService from "@utils/keyRotation";
+import { AppError, unauthorizedError } from "@utils/errors";
 
 export const authenticate = (
   req: Request,
@@ -11,14 +11,14 @@ export const authenticate = (
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-      next(unauthorizedError('No token provided'));
+      next(unauthorizedError("No token provided"));
       return;
     }
 
-    const [bearer, token] = authHeader.split(' ');
+    const [bearer, token] = authHeader.split(" ");
 
-    if (bearer !== 'Bearer' || !token) {
-      next(unauthorizedError('Invalid token format'));
+    if (bearer !== "Bearer" || !token) {
+      next(unauthorizedError("Invalid token format"));
       return;
     }
 
@@ -31,23 +31,23 @@ export const authenticate = (
     } catch {
       try {
         if (!previousKeys.previousAccess) {
-          next(unauthorizedError('Invalid token'));
+          next(unauthorizedError("Invalid token"));
           return;
         }
         payload = jwt.verify(token, previousKeys.previousAccess);
       } catch {
-        next(unauthorizedError('Invalid token'));
+        next(unauthorizedError("Invalid token"));
       }
     }
 
     req.user = {
       id: payload.userId,
       role: payload.role,
-      jti: '',
+      jti: "",
     };
 
     next();
   } catch (error) {
-    next(new AppError('Authentication middleware error', 500));
+    next(new AppError("Authentication middleware error", 500));
   }
 };

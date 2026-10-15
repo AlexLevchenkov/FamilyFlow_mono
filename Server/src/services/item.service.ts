@@ -1,12 +1,12 @@
-import prisma from '@config/prisma';
+import prisma from "@config/prisma";
 import {
   CreateItemInput,
   DeleteItemInput,
   GetListItemInput,
   GetListItemsInput,
   UpdateItemInput,
-} from '@/middleware';
-import { internalServerError, notFoundError } from '@/utils';
+} from "@/middleware";
+import { internalServerError, notFoundError } from "@/utils";
 
 class ItemService {
   async getListItems({ listId, page = 1 }: GetListItemsInput) {
@@ -16,7 +16,7 @@ class ItemService {
       where: { listId },
       skip: page ? (page - 1) * itemsPerPage : undefined,
       take: itemsPerPage,
-      orderBy: [{ completed: 'desc' }, { priority: 'desc' }, { title: 'asc' }],
+      orderBy: [{ completed: "desc" }, { priority: "desc" }, { title: "asc" }],
     });
 
     const total = await prisma.item.count({ where: { listId } });
@@ -38,7 +38,7 @@ class ItemService {
     });
 
     if (!item) {
-      throw notFoundError('Can`t find item per ID');
+      throw notFoundError("Can`t find item per ID");
     }
 
     return item;
@@ -50,7 +50,7 @@ class ItemService {
     completed = false,
     priority = 0,
     position = 0,
-    description = '',
+    description = "",
     dueDate,
   }: CreateItemInput) {
     const createdItem = await prisma.item.create({

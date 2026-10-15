@@ -1,8 +1,8 @@
-import { Request } from 'express';
-import bcryptjs from 'bcryptjs';
-import { randomUUID } from 'crypto';
-import prisma from '@config/prisma';
-import { LoginInput, LogoutInput, WithUserId } from '@/middleware';
+import { Request } from "express";
+import bcryptjs from "bcryptjs";
+import { randomUUID } from "crypto";
+import prisma from "@config/prisma";
+import { LoginInput, LogoutInput, WithUserId } from "@/middleware";
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -10,7 +10,7 @@ import {
   notFoundError,
   sendResetEmail,
   unauthorizedError,
-} from '@/utils';
+} from "@/utils";
 
 class AuthService {
   login = async ({ email, password }: LoginInput) => {
@@ -21,7 +21,7 @@ class AuthService {
     });
 
     if (!user || !bcryptjs.compareSync(password, user.password)) {
-      throw unauthorizedError('Invalid email or password');
+      throw unauthorizedError("Invalid email or password");
     }
 
     const jti = randomUUID();
@@ -31,7 +31,7 @@ class AuthService {
 
     if (!accessToken || !refreshToken) {
       throw internalServerError(
-        'Failed to generate tokens user.id: ' + user.id
+        "Failed to generate tokens user.id: " + user.id
       );
     }
 
@@ -41,7 +41,7 @@ class AuthService {
         userId: user.id,
         expiresAt: new Date(
           Date.now() +
-            parseInt(process.env.REFRESH_EXPIRES_IN || '14') *
+            parseInt(process.env.REFRESH_EXPIRES_IN || "14") *
               24 *
               60 *
               60 *
@@ -60,7 +60,7 @@ class AuthService {
   logout = async ({ userId, jti }: WithUserId<LogoutInput>) => {
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
-      throw notFoundError('User not found');
+      throw notFoundError("User not found");
     }
 
     if (jti) {
@@ -72,7 +72,7 @@ class AuthService {
     }
   };
 
-  refreshToken = async (userData: Request['user']) => {
+  refreshToken = async (userData: Request["user"]) => {
     if (!userData || !userData.id || !userData.jti) {
       throw unauthorizedError();
     }
@@ -82,20 +82,20 @@ class AuthService {
 
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
-      throw notFoundError('User not found');
+      throw notFoundError("User not found");
     }
 
     const existing = await prisma.refreshToken.findFirst({
       where: { userId, jti },
     });
     if (!existing) {
-      throw unauthorizedError('Invalid refresh token');
+      throw unauthorizedError("Invalid refresh token");
     }
 
     await prisma.refreshToken.delete({ where: { id: existing.id } });
 
     if (existing.expiresAt && existing.expiresAt < new Date()) {
-      throw unauthorizedError('Refresh token expired');
+      throw unauthorizedError("Refresh token expired");
     }
 
     const newJti = randomUUID();
@@ -104,7 +104,7 @@ class AuthService {
     const newRefreshToken = generateRefreshToken(userId, newJti);
 
     if (!newAccessToken || !newRefreshToken) {
-      throw internalServerError('Failed to generate tokens. UserId: ' + userId);
+      throw internalServerError("Failed to generate tokens. UserId: " + userId);
     }
 
     await prisma.refreshToken.create({
@@ -113,7 +113,7 @@ class AuthService {
         jti: newJti,
         expiresAt: new Date(
           Date.now() +
-            parseInt(process.env.REFRESH_EXPIRES_IN || '30') *
+            parseInt(process.env.REFRESH_EXPIRES_IN || "30") *
               24 *
               60 *
               60 *
@@ -131,7 +131,7 @@ class AuthService {
   requestPasswordReset = async ({ email }: { email: string }) => {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-      throw notFoundError('User not found');
+      throw notFoundError("User not found");
     }
 
     const newAccessToken = crypto.randomUUID();
@@ -162,7 +162,7 @@ class AuthService {
       user.resetTokenExp == null ||
       user.resetTokenExp < new Date()
     ) {
-      throw unauthorizedError('Invalid or expired token');
+      throw unauthorizedError("Invalid or expired token");
     }
 
     const hashed = await bcryptjs.hash(newPassword, 10);
@@ -178,7 +178,7 @@ class AuthService {
     const user = await prisma.user.findFirst({ where: { resetToken: token } });
 
     if (!user) {
-      throw unauthorizedError('Invalid or expired token');
+      throw unauthorizedError("Invalid or expired token");
     }
 
     await prisma.user.update({
