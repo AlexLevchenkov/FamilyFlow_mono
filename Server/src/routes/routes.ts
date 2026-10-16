@@ -3,7 +3,7 @@ import authRouter from "./auth.routes";
 import listRouter from "./list.routes";
 import itemListRouter from "./listItem.routes";
 import userRouter from "./user.routes";
-import { authenticate } from "@/middleware";
+import { authenticate } from "@middleware";
 
 function setupRoutes(app: Express): void {
   app.use("/auth", authRouter);

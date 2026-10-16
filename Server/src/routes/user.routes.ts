@@ -6,7 +6,7 @@ import {
   validateGetUsers,
   validateRegister,
   validateUpdateUser,
-} from "@/middleware";
+} from "@middleware";
 import userController from "@controllers/user.controller";
 
 const userRouter = Router();

@@ -5,7 +5,7 @@ import type {
   UpdateListRequest,
 } from "@familyflow/contracts";
 import { List, SharedLists } from "@prisma/client";
-import { interfaceToOpenAPI } from "@/utils";
+import { interfaceToOpenAPI } from "@utils";
 
 export const listsSchemas = {
   PaginatedListsResponse: interfaceToOpenAPI<PaginatedResponse<List>>({

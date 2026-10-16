@@ -8,8 +8,8 @@ import {
   UpdateListInput,
   WithUserId,
   ShareListInput,
-} from "@/middleware";
-import { alreadyExistError, internalServerError, notFoundError } from "@/utils";
+} from "@middleware";
+import { alreadyExistError, internalServerError, notFoundError } from "@utils";
 
 interface enoughRightInterface {
   userId: number;

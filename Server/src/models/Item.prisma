@@ -1,15 +1,15 @@
 model Item {
-  id             Int       @id @default(autoincrement())
-  listId         Int
-  list           List      @relation(fields: [listId], references: [id])
-  title          String
-  description    String?
-  completed      Boolean
-  priority       Int       @default(0)
-  dueDate        DateTime?
-  position       Int       @default(0)
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id              Int           @id @default(autoincrement())
+  listId          Int
+  list            List          @relation(fields: [listId], references: [id])
+  title           String
+  description     String?
+  completed       Boolean
+  priority        Int           @default(0)
+  dueDate         DateTime?
+  position        Int           @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 
   @@index([listId])
 }

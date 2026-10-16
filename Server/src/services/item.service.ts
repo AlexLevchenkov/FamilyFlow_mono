@@ -4,9 +4,10 @@ import {
   DeleteItemInput,
   GetListItemInput,
   GetListItemsInput,
+  GetListsItemsInput,
   UpdateItemInput,
-} from "@/middleware";
-import { internalServerError, notFoundError } from "@/utils";
+} from "@middleware";
+import { internalServerError, notFoundError } from "@utils";
 
 class ItemService {
   async getListItems({ listId, page = 1 }: GetListItemsInput) {

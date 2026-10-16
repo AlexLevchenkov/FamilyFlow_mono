@@ -2,6 +2,7 @@ export function log(
   message: string,
   level: "info" | "warn" | "error" = "info"
 ): void {
+  if (process.env.NODE_ENV === "test") return;
   if (level == "info" && process.env.NODE_ENV !== "developer") return;
   const timestamp = new Date().toISOString();
   console[level](`[${timestamp}] [${level.toUpperCase()}]: ${message}`);

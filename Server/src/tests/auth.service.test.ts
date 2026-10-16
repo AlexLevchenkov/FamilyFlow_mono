@@ -1,12 +1,12 @@
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
-import authService from "@/services/auth.service";
-import userService from "@/services/user.service";
-import prisma from "@/config/prisma";
-import { sendCheckEmail } from "@/utils";
+import authService from "@services/auth.service";
+import userService from "@services/user.service";
+import prisma from "@config/prisma";
+import { sendCheckEmail } from "@utils";
 
-jest.mock("@/utils", () => {
-  const actual = jest.requireActual("@/utils");
+jest.mock("@utils", () => {
+  const actual = jest.requireActual("@utils");
   return {
     ...actual,
     sendCheckEmail: jest.fn(),

@@ -21,7 +21,9 @@ export function TaskRow({ task, toggleTask }: TaskRowProps) {
             ? 'border-[#48b99d] bg-[#48b99d] text-white'
             : 'border-page-control-border text-transparent hover:border-[#8260d9]'
         }`}
-        onClick={() => toggleTask(task.id)}
+        onClick={() => {
+          if (task.id !== undefined) toggleTask(task.id);
+        }}
       >
         {task.done && <Icon name="check" size={15} />}
       </button>

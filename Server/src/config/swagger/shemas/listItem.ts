@@ -4,7 +4,7 @@ import type {
   CreateListItemRequest,
   UpdateListItemRequest,
 } from "@familyflow/contracts";
-import { interfaceToOpenAPI } from "@/utils";
+import { interfaceToOpenAPI } from "@utils";
 
 const item: Item = {
   id: 1,

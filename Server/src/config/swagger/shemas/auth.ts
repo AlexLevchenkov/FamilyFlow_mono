@@ -6,7 +6,7 @@ import type {
   VerifyEmailQuery,
   LoginRequest,
 } from "@familyflow/contracts";
-import { interfaceToOpenAPI } from "@/utils";
+import { interfaceToOpenAPI } from "@utils";
 
 export const authSchemas = {
   LoginRequest: interfaceToOpenAPI<LoginRequest>({

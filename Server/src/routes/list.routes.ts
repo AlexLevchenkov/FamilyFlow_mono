@@ -7,7 +7,7 @@ import {
   validateUpdateList,
   validateDeleteList,
   validateShareList,
-} from "@/middleware";
+} from "@middleware";
 
 const listRouter = Router();
 

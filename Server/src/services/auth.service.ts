@@ -2,7 +2,7 @@ import { Request } from "express";
 import bcryptjs from "bcryptjs";
 import { randomUUID } from "crypto";
 import prisma from "@config/prisma";
-import { LoginInput, LogoutInput, WithUserId } from "@/middleware";
+import { LoginInput, LogoutInput, WithUserId } from "@middleware";
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -10,7 +10,7 @@ import {
   notFoundError,
   sendResetEmail,
   unauthorizedError,
-} from "@/utils";
+} from "@utils";
 
 class AuthService {
   login = async ({ email, password }: LoginInput) => {

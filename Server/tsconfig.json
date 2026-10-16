@@ -12,14 +12,23 @@
     "moduleResolution": "node",
     "baseUrl": "./src",
     "paths": {
+      "@config": ["config/index.ts"],
       "@config/*": ["config/*"],
+      "@controllers": ["controllers/index.ts"],
       "@controllers/*": ["controllers/*"],
+      "@cron": ["cron/index.ts"],
       "@cron/*": ["cron/*"],
+      "@middleware": ["middleware/index.ts"],
       "@middleware/*": ["middleware/*"],
+      "@models": ["models/index.ts"],
       "@models/*": ["models/*"],
+      "@routes": ["routes/index.ts"],
       "@routes/*": ["routes/*"],
+      "@services": ["services/index.ts"],
       "@services/*": ["services/*"],
+      "@appTypes": ["types/index.ts"],
       "@appTypes/*": ["types/*"],
+      "@utils": ["utils/index.ts"],
       "@utils/*": ["utils/*"],
       "@/*": ["*"]
     }

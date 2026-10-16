@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { GetUsersInput, RegisterInput, UpdateUserInput } from "@/middleware";
+import { GetUsersInput, RegisterInput, UpdateUserInput } from "@middleware";
 import userService from "@services/user.service";
 import apiResponse from "@utils/response";
 

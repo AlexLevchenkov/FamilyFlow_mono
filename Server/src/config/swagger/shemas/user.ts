@@ -5,7 +5,7 @@ import type {
   UpdateUserRequest,
   UserPublic,
 } from "@familyflow/contracts";
-import { interfaceToOpenAPI } from "@/utils";
+import { interfaceToOpenAPI } from "@utils";
 
 export const usersSchemas = {
   PaginatedUsersResponse: interfaceToOpenAPI<PaginatedResponse<UserPublic>>({

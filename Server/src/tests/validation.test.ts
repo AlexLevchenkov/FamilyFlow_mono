@@ -1,6 +1,6 @@
 import z from "zod";
 import { Request, Response, NextFunction } from "express";
-import { makeValidator, ValidationError, AppError } from "@/utils";
+import { makeValidator, ValidationError, AppError } from "@utils";
 
 function mockReq(overrides: Partial<Request> = {}): Request {
   return {

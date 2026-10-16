@@ -6,7 +6,7 @@ import {
   ShareListInput,
   GetListInput,
   DeleteListInput,
-} from "@/middleware";
+} from "@middleware";
 import apiResponse from "@utils/response";
 import listService from "@services/list.service";
 

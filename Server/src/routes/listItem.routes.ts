@@ -6,7 +6,7 @@ import {
   validateGetListItem,
   validateGetListItems,
   validateUpdateItem,
-} from "@/middleware";
+} from "@middleware";
 
 const itemListRouter = Router();
 

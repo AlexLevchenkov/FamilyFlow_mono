@@ -6,19 +6,13 @@ import {
   useNavigate,
   useParams,
 } from 'react-router-dom';
-import { AuthPage, VerifyEmailPage } from '@pages';
 import { authApi } from '@api/auth.api';
-import { ToastContainer } from '@ui';
+import { TasksProvider, useTasksContext } from '@features/tasks';
+import { LogoutButton, ProfileUser } from '@features/auth';
 import { useAuthStore } from '@store/auth';
-import { TasksProvider } from '@features/tasks/hooks/TasksProvider';
-import { useTasksContext } from '@features/tasks/hooks/useTasks';
 import { MainLayout } from '@layouts/MainLayout';
-import { LogoutButton } from '@features/auth/components/LogoutButton';
-import { ProfileUser } from '@features/auth/components/ProfileUser';
-import { PrivacyPage } from '@pages/Privacy';
-import { SupportPage } from '@pages/Support';
-import { TermsPage } from '@pages/Terms';
-import { SettingsPage } from '@pages/Settings';
+import { AuthPage, VerifyEmailPage, PrivacyPage, SupportPage, TermsPage, SettingsPage } from '@pages';
+import { ToastContainer } from '@ui';
 
 let sessionBootstrapPromise: Promise<void> | null = null;
 

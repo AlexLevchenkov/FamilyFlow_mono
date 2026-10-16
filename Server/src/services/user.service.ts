@@ -6,13 +6,13 @@ import {
   UpdateUserInput,
   GetUserByIdInput,
   DeleteUserInput,
-} from "@/middleware";
+} from "@middleware";
 import {
   alreadyExistError,
   internalServerError,
   notFoundError,
   sendCheckEmail,
-} from "@/utils";
+} from "@utils";
 
 class UserService {
   async getUsers({ page, partName, partEmail }: GetUsersInput) {

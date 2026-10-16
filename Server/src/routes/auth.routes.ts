@@ -8,7 +8,7 @@ import {
   validateRequestPasswordReset,
   validateResetPassword,
   validateVerifyEmail,
-} from "@/middleware";
+} from "@middleware";
 
 const authRouter = Router();
 
