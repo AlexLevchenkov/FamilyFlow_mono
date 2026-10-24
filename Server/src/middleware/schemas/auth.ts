@@ -48,14 +48,6 @@ const verifyEmailSchema = z.object({
   token: z.string(),
 });
 
-export type LoginInput = z.infer<typeof loginSchema>;
-export type LogoutInput = z.infer<typeof logoutSchema>;
-export type RequestPasswordResetInput = z.infer<
-  typeof requestPasswordResetSchema
->;
-export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
-export type VerifyEmailInput = z.infer<typeof verifyEmailSchema>;
-
 export const validateLogin = makeValidator(loginSchema);
 export const validateLogout = makeValidator(logoutSchema);
 export const validateRequestPasswordReset = makeValidator(

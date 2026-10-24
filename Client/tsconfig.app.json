@@ -26,30 +26,27 @@
 
     "baseUrl": "./src",
     "paths": {
+      "@features/*": ["features/*"],
+      "@pages": ["pages/index.ts"],
+      "@pages/*": ["pages/*"],
       "@api": ["shared/api/index.ts"],
       "@api/*": ["shared/api/*"],
       "@assets/*": ["shared/assets/*"],
-      "@features/*": ["features/*"],
-      "@hooks/*": ["features/auth/hooks/*"],
       "@layouts/*": ["shared/layouts/*"],
       "@lib/*": ["shared/lib/*"],
       "@types": ["shared/types/index.ts"],
       "@types/*": ["shared/types/*"],
       "@mocks": ["shared/mocks/index.ts"],
       "@mocks/*": ["shared/mocks/*"],
-      "@pages": ["pages/index.ts"],
-      "@pages/*": ["pages/*"],
-      "@schemas": ["features/auth/schemas/index.ts"],
-      "@schemas/*": ["features/auth/schemas/*"],
-      "@store/*": ["features/auth/store/*"],
-      "@store": ["features/auth/store/index.ts"],
       "@styles/*": ["shared/styles/*"],
       "@ui": ["shared/ui/index.ts"],
       "@ui/*": ["shared/ui/*"],
       "@atoms/*": ["shared/ui/atoms/*"],
       "@molecules/*": ["shared/ui/molecules/*"],
       "@organisms/*": ["shared/ui/organisms/*"],
-      "@templates/*": ["shared/ui/templates/*"]
+      "@templates/*": ["shared/ui/templates/*"],
+      "@store": ["store/index.ts"],
+      "@store/*": ["store/*"]
     }
   },
   "include": ["src/**/*", "vitest.setup.ts"]

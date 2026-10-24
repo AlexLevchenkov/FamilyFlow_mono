@@ -25,15 +25,7 @@ const getUserByIdSchema = z.object({
   id: z.coerce.number().int().min(1),
 });
 
-const deleteUserSchema = z.object({
-  userId: z.coerce.number().int().min(1),
-});
-
-export type GetUsersInput = z.infer<typeof getUsersSchema>;
-export type RegisterInput = z.infer<typeof registerSchema>;
-export type UpdateUserInput = z.infer<typeof updateUserSchema>;
-export type GetUserByIdInput = z.infer<typeof getUserByIdSchema>;
-export type DeleteUserInput = z.infer<typeof deleteUserSchema>;
+const deleteUserSchema = z.object({});
 
 export const validateGetUsers = makeValidator(getUsersSchema, {
   query: true,
@@ -47,6 +39,4 @@ export const validateUpdateUser = makeValidator(updateUserSchema, {
 export const validateGetUser = makeValidator(getUserByIdSchema, {
   params: true,
 });
-export const validateDeleteUser = makeValidator(deleteUserSchema, {
-  query: true,
-});
+export const validateDeleteUser = makeValidator(deleteUserSchema, {});

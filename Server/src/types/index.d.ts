@@ -12,4 +12,10 @@ declare module "express-serve-static-core" {
   }
 }
 
+declare global {
+  interface Window {
+    ui: any;
+  }
+}
+
 export {};

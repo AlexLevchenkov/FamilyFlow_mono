@@ -1,22 +1,25 @@
-import { Request, Response, NextFunction } from "express";
-import { AppError } from "@utils/errors";
+import type { ErrorRequestHandler } from "express";
+import apiResponse from "@utils/response";
 
-export function errorHandler(
-  err: any,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  if (err instanceof AppError) {
-    return res.status(err.statusCode).json({
-      status: "error",
-      message: err.message,
-    });
-  }
+const errorHandler: ErrorRequestHandler = (
+  error,
+  _req,
+  res,
+  _next
+) => {
+  const statusCode =
+    typeof error.statusCode === "number" &&
+    error.statusCode >= 400 &&
+    error.statusCode <= 599
+      ? error.statusCode
+      : 500;
 
-  console.error(err);
-  return res.status(500).json({
-    status: "error",
-    message: "Internal Server Error",
-  });
-}
+  const message =
+    statusCode === 500
+      ? "Internal server error"
+      : error.message || "An error occurred";
+
+  apiResponse(res, null, statusCode, message);
+};
+
+export default errorHandler;

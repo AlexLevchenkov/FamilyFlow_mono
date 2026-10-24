@@ -1,47 +1,42 @@
-import { PaginatedResponse } from "@appTypes/common.types";
-import type { User } from "@prisma/client";
 import type {
+  PaginatedResponse,
   RegisterUserRequest,
   UpdateUserRequest,
   UserPublic,
 } from "@familyflow/contracts";
 import { interfaceToOpenAPI } from "@utils";
 
+const owner: UserPublic = {
+  name: "Seed Owner",
+  avatar: "https://example.com/avatars/seed-owner.png",
+};
+
 export const usersSchemas = {
   PaginatedUsersResponse: interfaceToOpenAPI<PaginatedResponse<UserPublic>>({
     data: [
-      {
-        name: "John Doe",
-        avatar: "https://example.com/jone-doe-avatar",
-      },
-      {
-        name: "John Doe",
-        avatar: "https://example.com/jone-doe-avatar",
-      },
-      {
-        name: "John Doe",
-        avatar: "https://example.com/jone-doe-avatar",
-      },
+      owner,
+      { name: "Seed Parent", avatar: null },
+      { name: "Seed Child", avatar: null },
+      { name: "Seed Member", avatar: null },
+      { name: "Seed Outsider", avatar: null },
     ],
     pagination: {
-      total: 1,
+      total: 5,
       page: 1,
       limit: 10,
       totalPages: 1,
     },
   }),
   CreateUserRequest: interfaceToOpenAPI<RegisterUserRequest>({
-    email: "user@example.com",
-    password: "Password123!@#",
-    name: "John Doe",
+    email: "seed.owner@familyflow.test",
+    password: "SeedPass1!",
+    name: "Seed Owner",
   }),
   UpdateUserRequest: interfaceToOpenAPI<UpdateUserRequest>({
-    email: "user@example.com",
-    name: "John Doe",
-    avatar: "https/example.com/jone-doe-avatar",
+    userId: 1,
+    email: "seed.owner@familyflow.test",
+    name: "Seed Owner",
+    avatar: "https://example.com/avatars/seed-owner.png",
   }),
-  UserResponse: interfaceToOpenAPI<UserPublic>({
-    name: "John Doe",
-    avatar: "https://example.com/jone-doe-avatar",
-  }),
+  UserResponse: interfaceToOpenAPI<UserPublic>(owner),
 };

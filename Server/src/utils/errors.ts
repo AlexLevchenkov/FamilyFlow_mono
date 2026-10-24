@@ -21,6 +21,10 @@ export function unauthorizedError(message: string = "Unauthorized") {
   return new AppError(message, 401);
 }
 
+export function forbiddenError(message: string = "Forbidden") {
+  return new AppError(message, 403);
+}
+
 export function notFoundError(message: string = "Resource not found") {
   return new AppError(message, 404);
 }

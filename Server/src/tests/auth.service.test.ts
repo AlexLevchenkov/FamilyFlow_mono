@@ -20,9 +20,6 @@ describe("AuthService & UserService Registration/Login", () => {
   const testName = "Test User";
 
   async function clearDatabase() {
-    await prisma.item.deleteMany({});
-    await prisma.sharedLists.deleteMany({});
-    await prisma.list.deleteMany({});
     await prisma.refreshToken.deleteMany({});
     await prisma.user.deleteMany({});
   }

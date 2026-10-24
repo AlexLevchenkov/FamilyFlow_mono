@@ -2,11 +2,16 @@ import { Request, Response } from "express";
 import authService from "@services/auth.service";
 import { logError } from "@utils/logger";
 import apiResponse from "@utils/response";
+import { LoginDataResponse, LoginRequest } from "@familyflow/contracts";
 
 class AuthController {
   login = async (req: Request, res: Response): Promise<void> => {
     try {
-      const data = await authService.login({ ...req.validated });
+      const { email, password }: LoginRequest = req.validated;
+      const data: LoginDataResponse = await authService.login({
+        email,
+        password,
+      });
       this._addRefreshTokenToCookie(res, data.refreshToken);
       apiResponse(
         res,
@@ -27,7 +32,7 @@ class AuthController {
     try {
       const { user } = req;
 
-      await authService.logout({ userId: user.id });
+      await authService.logout({ userId: user.id, jti: user.jti! });
 
       try {
         res.clearCookie("refreshToken", {

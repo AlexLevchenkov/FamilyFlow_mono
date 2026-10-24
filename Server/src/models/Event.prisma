@@ -1,0 +1,22 @@
+model Event {
+  id            Int           @id @default(autoincrement())
+  userId        Int
+  user          User          @relation(fields: [userId], references: [id])
+  title         String
+  color         String
+  date          DateTime
+  repeatability Repeatability
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([userId])
+}
+
+enum Repeatability {
+  day
+  working
+  week
+  month
+  quarter
+  year
+}

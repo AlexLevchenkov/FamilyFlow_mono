@@ -2,7 +2,16 @@ import { Request } from "express";
 import bcryptjs from "bcryptjs";
 import { randomUUID } from "crypto";
 import prisma from "@config/prisma";
-import { LoginInput, LogoutInput, WithUserId } from "@middleware";
+import {
+  ForgotPasswordRequest,
+  LoginDataResponse,
+  LoginRequest,
+  LogoutQuery,
+  RefreshTokenResponse,
+  ResetPasswordRequest,
+  VerifyEmailQuery,
+  WithUserId,
+} from "@familyflow/contracts";
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -13,7 +22,10 @@ import {
 } from "@utils";
 
 class AuthService {
-  login = async ({ email, password }: LoginInput) => {
+  login = async ({
+    email,
+    password,
+  }: LoginRequest): Promise<LoginDataResponse> => {
     const user = await prisma.user.findUnique({
       where: {
         email: email,
@@ -57,7 +69,7 @@ class AuthService {
     };
   };
 
-  logout = async ({ userId, jti }: WithUserId<LogoutInput>) => {
+  logout = async ({ userId, jti }: WithUserId<LogoutQuery>): Promise<void> => {
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
       throw notFoundError("User not found");
@@ -72,7 +84,9 @@ class AuthService {
     }
   };
 
-  refreshToken = async (userData: Request["user"]) => {
+  refreshToken = async (
+    userData: Request["user"]
+  ): Promise<RefreshTokenResponse> => {
     if (!userData || !userData.id || !userData.jti) {
       throw unauthorizedError();
     }
@@ -128,13 +142,15 @@ class AuthService {
     };
   };
 
-  requestPasswordReset = async ({ email }: { email: string }) => {
+  requestPasswordReset = async ({
+    email,
+  }: ForgotPasswordRequest): Promise<void> => {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
       throw notFoundError("User not found");
     }
 
-    const newAccessToken = crypto.randomUUID();
+    const newAccessToken = randomUUID();
 
     await prisma.user.update({
       where: { id: user.id },
@@ -145,16 +161,12 @@ class AuthService {
     });
 
     await sendResetEmail(email, newAccessToken);
-    return true;
   };
 
   resetPassword = async ({
     token,
     newPassword,
-  }: {
-    token: string;
-    newPassword: string;
-  }) => {
+  }: ResetPasswordRequest): Promise<void> => {
     const user = await prisma.user.findFirst({ where: { resetToken: token } });
 
     if (
@@ -170,11 +182,9 @@ class AuthService {
       where: { id: user.id },
       data: { password: hashed, resetToken: null, resetTokenExp: null },
     });
-
-    return true;
   };
 
-  verifyEmail = async ({ token }: { token: string }) => {
+  verifyEmail = async ({ token }: VerifyEmailQuery): Promise<void> => {
     const user = await prisma.user.findFirst({ where: { resetToken: token } });
 
     if (!user) {
@@ -185,8 +195,6 @@ class AuthService {
       where: { id: user.id },
       data: { resetToken: null, resetTokenExp: null, emailVerified: true },
     });
-
-    return true;
   };
 
   _removeAllOldTokens = async () => {

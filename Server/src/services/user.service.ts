@@ -1,12 +1,15 @@
 import bcryptjs from "bcryptjs";
 import prisma from "@config/prisma";
 import {
-  GetUsersInput,
-  RegisterInput,
-  UpdateUserInput,
-  GetUserByIdInput,
-  DeleteUserInput,
-} from "@middleware";
+  GetUsersParams,
+  PaginatedUsersResponse,
+  RegisterUserRequest,
+  DeleteUserParams,
+  GetById,
+  UpdateUserRequest,
+  UserDetail,
+  UserPublic,
+} from "@familyflow/contracts";
 import {
   alreadyExistError,
   internalServerError,
@@ -15,7 +18,11 @@ import {
 } from "@utils";
 
 class UserService {
-  async getUsers({ page, partName, partEmail }: GetUsersInput) {
+  async getUsers({
+    page,
+    partName,
+    partEmail,
+  }: GetUsersParams): Promise<PaginatedUsersResponse> {
     const itemsPerPage = Number(process.env.ITEMS_PER_PAGE);
     const where = {
       AND: [
@@ -51,7 +58,11 @@ class UserService {
     };
   }
 
-  async register({ email, password, name }: RegisterInput) {
+  async register({
+    email,
+    password,
+    name,
+  }: RegisterUserRequest): Promise<UserPublic> {
     const haveUser = await prisma.user.findFirst({
       where: {
         email,
@@ -79,7 +90,7 @@ class UserService {
     return { avatar: user.avatar, name: user.name };
   }
 
-  async getUserById({ id }: GetUserByIdInput) {
+  async getUserById({ id }: GetById): Promise<UserDetail> {
     const user = await prisma.user.findUnique({ where: { id } });
 
     if (!user) {
@@ -89,7 +100,12 @@ class UserService {
     return user;
   }
 
-  async updateUser({ userId, name, avatar, email }: UpdateUserInput) {
+  async updateUser({
+    userId,
+    name,
+    avatar,
+    email,
+  }: UpdateUserRequest): Promise<UserDetail> {
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
@@ -109,7 +125,7 @@ class UserService {
     return updatedUser;
   }
 
-  async deleteUser({ userId }: DeleteUserInput) {
+  async deleteUser({ userId }: DeleteUserParams): Promise<void> {
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {

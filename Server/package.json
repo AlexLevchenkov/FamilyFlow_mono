@@ -18,6 +18,7 @@
     "prisma:migrate:reset": "prisma migrate reset",
     "prisma:migrate:test": "cross-env NODE_ENV=test prisma migrate deploy",
     "db:sync": "npm run prisma:migrate && npm run prisma:migrate:test && npm run prisma:generate",
+    "seed": "ts-node --files -r tsconfig-paths/register src/scripts/seed.ts",
     "test": "jest --runInBand"
   },
   "scriptDescriptions": {
@@ -29,7 +30,8 @@
     "prisma:generate": "Generate Prisma Client (runs prisma:build first).",
     "prisma:migrate": "Create/apply migrations in dev (runs prisma:build first).",
     "prisma:migrate:deploy": "Apply existing migrations (CI/production).",
-    "prisma:migrate:reset": "Drop and recreate DB, then apply migrations (dev only)."
+    "prisma:migrate:reset": "Drop and recreate DB, then apply migrations (dev only).",
+    "seed": "Insert a reusable set of test users, family members, tasks, events, goals, and goal steps via services."
   },
   "dependencies": {
     "@familyflow/contracts": "^1.0.0",
@@ -47,6 +49,7 @@
     "nodemailer": "^8.0.6",
     "pg": "^8.20.0",
     "swagger-jsdoc": "^6.2.8",
+    "swagger-ui": "^5.34.0",
     "swagger-ui-express": "^5.0.1",
     "zod": "^4.1.13"
   },
@@ -61,6 +64,7 @@
     "@types/nodemailer": "^8.0.0",
     "@types/supertest": "^7.2.0",
     "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui": "^5.32.1",
     "@types/swagger-ui-express": "^4.1.8",
     "cross-env": "^10.1.0",
     "jest": "^30.4.2",

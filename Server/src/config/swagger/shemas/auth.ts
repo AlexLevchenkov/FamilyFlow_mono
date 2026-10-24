@@ -1,34 +1,35 @@
 import type {
-  ForgotPasswordRequest,
+  LoginRequest,
   LoginResponse,
-  RefreshResponse,
+  RefreshTokenResponse,
+  ForgotPasswordRequest,
   ResetPasswordRequest,
   VerifyEmailQuery,
-  LoginRequest,
 } from "@familyflow/contracts";
 import { interfaceToOpenAPI } from "@utils";
 
 export const authSchemas = {
   LoginRequest: interfaceToOpenAPI<LoginRequest>({
-    email: "super@gmail.com",
-    password: "Password123!@#",
+    email: "seed.owner@familyflow.test",
+    password: "SeedPass1!",
   }),
   LoginResponse: interfaceToOpenAPI<LoginResponse>({
     accessToken: "jwt-token",
     user: {
-      name: "John Doe",
-      avatar: "https://example.com/jone-doe-avatar",
+      name: "Seed Owner",
+      avatar: "https://example.com/avatars/seed-owner.png",
     },
   }),
-  RefreshResponse: interfaceToOpenAPI<RefreshResponse>({
+  RefreshResponse: interfaceToOpenAPI<RefreshTokenResponse>({
     accessToken: "jwt-token",
+    refreshToken: "jwt-refresh-token",
   }),
   ForgotPasswordRequest: interfaceToOpenAPI<ForgotPasswordRequest>({
-    email: "super@gmail.com",
+    email: "seed.owner@familyflow.test",
   }),
   ResetPasswordRequest: interfaceToOpenAPI<ResetPasswordRequest>({
     token: "secretToken",
-    newPassword: "Password456!@#",
+    newPassword: "SeedPass1!",
   }),
   EmailVerifyRequest: interfaceToOpenAPI<VerifyEmailQuery>({
     token: "secretToken",

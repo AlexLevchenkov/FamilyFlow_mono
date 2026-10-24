@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 function ensurePrismaClientSymlink() {
-  const projectRoot = path.resolve(__dirname, "..");
+  const projectRoot = path.resolve(__dirname, "../..");
   const generated = path.join(projectRoot, "node_modules", ".prisma");
   const targetDir = path.join(
     projectRoot,

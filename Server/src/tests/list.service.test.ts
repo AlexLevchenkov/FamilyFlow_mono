@@ -1,5 +1,5 @@
 import prisma from "@config/prisma";
-import listService from "@services/list.service";
+import listService from "@services/task.service";
 import bcryptjs from "bcryptjs";
 
 async function createUser(email: string, name: string) {

@@ -35,12 +35,6 @@ const deleteItemSchema = z.object({
   id: z.coerce.number(),
 });
 
-export type GetListItemsInput = z.infer<typeof getListItemsSchema>;
-export type GetListItemInput = z.infer<typeof getListItemSchema>;
-export type CreateItemInput = z.infer<typeof createItemSchema>;
-export type UpdateItemInput = z.infer<typeof updateItemSchema>;
-export type DeleteItemInput = z.infer<typeof deleteItemSchema>;
-
 export const validateGetListItems = makeValidator(getListItemsSchema, {
   query: true,
 });

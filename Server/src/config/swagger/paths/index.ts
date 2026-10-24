@@ -1,11 +1,15 @@
 import { authPaths } from "./auth";
-import { itemListPaths } from "./item";
-import { listPaths } from "./lists";
-import { userPaths } from "./users";
+import { eventPaths } from "./event";
+import { goalPaths } from "./goal";
+import { taskPaths } from "./task";
+import { userPaths } from "./user";
+import { familyPaths } from "./family";
 
 export const paths = {
   ...authPaths,
-  ...listPaths,
-  ...itemListPaths,
+  ...eventPaths,
+  ...familyPaths,
+  ...goalPaths,
+  ...taskPaths,
   ...userPaths,
 };

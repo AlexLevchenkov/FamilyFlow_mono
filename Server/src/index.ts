@@ -2,7 +2,7 @@ import "@cron/cleanupTokens";
 import swaggerUi from "swagger-ui-express";
 import setupRoutes from "@routes/routes";
 import app from "@config/express";
-import { errorHandler } from "@middleware/error";
+import errorHandler from "@middleware/error";
 import { swaggerOptions } from "@config/swagger";
 
 const PORT = process.env.PORT || 3000;

@@ -1,0 +1,61 @@
+enum GoalType {
+  AMOUNT
+  COUNTER
+  STEPS
+}
+
+enum GoalStatus {
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+}
+
+model Goal {
+  id           Int        @id @default(autoincrement())
+  familyId     Int
+  createdById  Int
+
+  title        String     @db.VarChar(150)
+  description  String?    @db.Text
+
+  type         GoalType
+  status       GoalStatus @default(ACTIVE)
+
+  currentValue Int?       @default(0) 
+  targetValue  Int?   
+
+  unit         String?    @db.VarChar(30)
+  currency     String?    @db.VarChar(3)
+
+  startsAt     DateTime?
+  dueDate      DateTime?
+
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  family       Family     @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  createdBy    User       @relation(fields: [createdById], references: [id])
+  steps        GoalStep[]
+
+  @@index([familyId, status])
+  @@index([createdById])
+  @@index([dueDate])
+}
+
+model GoalStep {
+  id          Int       @id @default(autoincrement())
+  goalId      Int
+
+  title       String    @db.VarChar(150)
+  description String?   @db.Text
+  position    Int       @default(0)
+  completed   Boolean   @default(false)
+
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  goal        Goal      @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  @@index([goalId, position])
+}
