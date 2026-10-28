@@ -35,7 +35,7 @@ export const eventPaths = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/CreateEventRequest",
+              $ref: "#/components/schemas/CreateEventBody",
             },
           },
         },
@@ -105,7 +105,7 @@ export const eventPaths = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/UpdateEventRequest",
+              $ref: "#/components/schemas/UpdateEventBody",
             },
           },
         },

@@ -33,15 +33,14 @@ export interface GetUserTasksParams {
 
 export type PaginatedTasksResponse = PaginatedResponse<TaskModel>;
 
-export interface CreateTaskRequest {
+export interface CreateTaskBody {
   title: string;
   type: TaskType;
   visibility: Visibility;
   date: Date;
 }
 
-export interface UpdateTaskRequest {
-  id: number;
+export interface UpdateTaskBody {
   title: string;
   type: TaskType;
   visibility: Visibility;

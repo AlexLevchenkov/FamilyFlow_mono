@@ -18,10 +18,8 @@ export interface PaginatedResponse<T> {
 
 export type WithUserId<T> = T & { userId: number };
 
-export interface GetById {
+export interface ById {
   id: number;
 }
 
-export interface DeleteById {
-  id: number;
-}
+export type WithId<T> = T & { id: number };

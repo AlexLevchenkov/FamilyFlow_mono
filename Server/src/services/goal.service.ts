@@ -1,12 +1,12 @@
 import { Prisma } from "@prisma/client";
 import prisma from "@config/prisma";
-import { alreadyExistError, internalServerError, notFoundError } from "@utils";
+import { alreadyExistError, notFoundError } from "@utils";
 import {
-  CreateGoalRequest,
-  DeleteById,
-  GetById,
+  CreateGoalBody,
+  ById,
   GetGoalsParams,
-  UpdateGoalRequest,
+  UpdateGoalBody,
+  WithId,
   WithUserId,
   PaginatedGoalsResponse,
   GoalModel,
@@ -55,7 +55,7 @@ class GoalServices {
     };
   }
 
-  async getGoalById({ id }: GetById): Promise<GoalModel> {
+  async getGoalById({ id }: ById): Promise<GoalModel> {
     const goal = await prisma.goal.findFirst({ where: { id } });
 
     if (!goal) {
@@ -77,7 +77,7 @@ class GoalServices {
     description,
     unit,
     currency,
-  }: WithUserId<CreateGoalRequest>): Promise<GoalModel> {
+  }: WithUserId<CreateGoalBody>): Promise<GoalModel> {
     const haveGoal = await prisma.goal.findFirst({
       where: { createdById: userId, title, type },
     });
@@ -121,7 +121,7 @@ class GoalServices {
     description,
     unit,
     currency,
-  }: WithUserId<UpdateGoalRequest>): Promise<GoalModel> {
+  }: WithUserId<WithId<UpdateGoalBody>>): Promise<GoalModel> {
     const haveGoal = await prisma.goal.findFirst({
       where: { id },
     });
@@ -155,7 +155,7 @@ class GoalServices {
     return updatedGoal;
   }
 
-  async deleteGoal({ id }: DeleteById): Promise<void> {
+  async deleteGoal({ id }: ById): Promise<void> {
     const haveGoal = await prisma.goal.findFirst({
       where: { id },
     });

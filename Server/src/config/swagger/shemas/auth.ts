@@ -1,15 +1,15 @@
 import type {
-  LoginRequest,
+  LoginBody,
   LoginResponse,
   RefreshTokenResponse,
-  ForgotPasswordRequest,
-  ResetPasswordRequest,
+  ForgotPasswordBody,
+  ResetPasswordBody,
   VerifyEmailQuery,
 } from "@familyflow/contracts";
 import { interfaceToOpenAPI } from "@utils";
 
 export const authSchemas = {
-  LoginRequest: interfaceToOpenAPI<LoginRequest>({
+  LoginBody: interfaceToOpenAPI<LoginBody>({
     email: "seed.owner@familyflow.test",
     password: "SeedPass1!",
   }),
@@ -24,14 +24,14 @@ export const authSchemas = {
     accessToken: "jwt-token",
     refreshToken: "jwt-refresh-token",
   }),
-  ForgotPasswordRequest: interfaceToOpenAPI<ForgotPasswordRequest>({
+  ForgotPasswordBody: interfaceToOpenAPI<ForgotPasswordBody>({
     email: "seed.owner@familyflow.test",
   }),
-  ResetPasswordRequest: interfaceToOpenAPI<ResetPasswordRequest>({
+  ResetPasswordBody: interfaceToOpenAPI<ResetPasswordBody>({
     token: "secretToken",
     newPassword: "SeedPass1!",
   }),
-  EmailVerifyRequest: interfaceToOpenAPI<VerifyEmailQuery>({
+  EmailVerifyQuery: interfaceToOpenAPI<VerifyEmailQuery>({
     token: "secretToken",
   }),
 };

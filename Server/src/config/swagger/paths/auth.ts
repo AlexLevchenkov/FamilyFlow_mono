@@ -8,7 +8,7 @@ export const authPaths = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/LoginRequest",
+              $ref: "#/components/schemas/LoginBody",
             },
           },
         },
@@ -85,7 +85,7 @@ export const authPaths = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/ForgotPasswordRequest",
+              $ref: "#/components/schemas/ForgotPasswordBody",
             },
           },
         },
@@ -109,7 +109,7 @@ export const authPaths = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/ResetPasswordRequest",
+              $ref: "#/components/schemas/ResetPasswordBody",
             },
           },
         },
@@ -133,7 +133,7 @@ export const authPaths = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/EmailVerifyRequest",
+              $ref: "#/components/schemas/EmailVerifyQuery",
             },
           },
         },

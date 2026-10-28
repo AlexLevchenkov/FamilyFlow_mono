@@ -1,8 +1,8 @@
 import type {
-  CreateGoalRequest,
+  CreateGoalBody,
   GoalModel,
   PaginatedResponse,
-  UpdateGoalRequest,
+  UpdateGoalBody,
 } from "@familyflow/contracts";
 import { interfaceToOpenAPI } from "@utils";
 
@@ -80,7 +80,7 @@ export const goalSchemas = {
       totalPages: 1,
     },
   }),
-  CreateItemsListRequest: interfaceToOpenAPI<CreateGoalRequest>({
+  CreateItemsListRequest: interfaceToOpenAPI<CreateGoalBody>({
     title: vacationFund.title,
     description: vacationFund.description,
     type: vacationFund.type,
@@ -92,8 +92,7 @@ export const goalSchemas = {
     startsAt: vacationFund.startsAt,
     dueDate: vacationFund.dueDate,
   }),
-  UpdateItemsListRequest: interfaceToOpenAPI<UpdateGoalRequest>({
-    id: vacationFund.id,
+  UpdateItemsListRequest: interfaceToOpenAPI<UpdateGoalBody>({
     title: vacationFund.title,
     description: vacationFund.description,
     status: vacationFund.status,

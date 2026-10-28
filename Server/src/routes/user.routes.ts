@@ -11,7 +11,7 @@ import userController from "@controllers/user.controller";
 
 const userRouter = Router();
 
-userRouter.get("/me", userController.me);
+userRouter.get("/me", authenticate, userController.me);
 
 userRouter.get(
   "/:id",

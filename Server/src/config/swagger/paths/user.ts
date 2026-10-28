@@ -79,7 +79,7 @@ export const userPaths = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/UpdateUserRequest",
+              $ref: "#/components/schemas/UpdateUserBody",
             },
           },
         },

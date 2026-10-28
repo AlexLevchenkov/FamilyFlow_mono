@@ -42,7 +42,6 @@ export const authenticate = (
 
     req.user = {
       id: payload.userId,
-      role: payload.role,
       jti: "",
     };
 

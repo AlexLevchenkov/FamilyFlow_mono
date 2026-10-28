@@ -1,7 +1,7 @@
 import type {
   PaginatedResponse,
-  RegisterUserRequest,
-  UpdateUserRequest,
+  RegisterUserBody,
+  UpdateUserBody,
   UserPublic,
 } from "@familyflow/contracts";
 import { interfaceToOpenAPI } from "@utils";
@@ -27,12 +27,12 @@ export const usersSchemas = {
       totalPages: 1,
     },
   }),
-  CreateUserRequest: interfaceToOpenAPI<RegisterUserRequest>({
+  CreateUserRequest: interfaceToOpenAPI<RegisterUserBody>({
     email: "seed.owner@familyflow.test",
     password: "SeedPass1!",
     name: "Seed Owner",
   }),
-  UpdateUserRequest: interfaceToOpenAPI<UpdateUserRequest>({
+  UpdateUserBody: interfaceToOpenAPI<UpdateUserBody>({
     userId: 1,
     email: "seed.owner@familyflow.test",
     name: "Seed Owner",

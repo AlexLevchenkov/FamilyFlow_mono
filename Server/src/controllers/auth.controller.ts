@@ -2,12 +2,16 @@ import { Request, Response } from "express";
 import authService from "@services/auth.service";
 import { logError } from "@utils/logger";
 import apiResponse from "@utils/response";
-import { LoginDataResponse, LoginRequest } from "@familyflow/contracts";
+import {
+  ForgotPasswordBody,
+  LoginBody,
+  LoginDataResponse,
+} from "@familyflow/contracts";
 
 class AuthController {
   login = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { email, password }: LoginRequest = req.validated;
+      const { email, password }: LoginBody = req.validated?.body;
       const data: LoginDataResponse = await authService.login({
         email,
         password,
@@ -48,7 +52,7 @@ class AuthController {
         );
       }
 
-      apiResponse(res, null, 200, "Logged out successfully");
+      apiResponse(res, null, 200);
     } catch (error: any) {
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";
@@ -59,9 +63,10 @@ class AuthController {
   refreshToken = async (req: Request, res: Response): Promise<void> => {
     try {
       const { user } = req;
-
-      const data = await authService.refreshToken(user);
-
+      const data = await authService.refreshToken({
+        userId: user.id,
+        jti: user.jti!,
+      });
       this._addRefreshTokenToCookie(res, data.refreshToken);
       apiResponse(res, { accessToken: data.accessToken }, 200);
     } catch (error: any) {
@@ -73,7 +78,7 @@ class AuthController {
 
   requestPasswordReset = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { email } = req.body;
+      const { email }: ForgotPasswordBody = req.validated?.body;
       await authService.requestPasswordReset({ email });
       apiResponse(res, null, 200);
     } catch (error: any) {
@@ -85,7 +90,7 @@ class AuthController {
 
   resetPassword = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { token, newPassword } = req.validated;
+      const { token, newPassword } = req.validated?.body;
       await authService.resetPassword({ token, newPassword });
       apiResponse(res, null, 200);
     } catch (error: any) {
@@ -97,7 +102,7 @@ class AuthController {
 
   verifyEmail = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { token } = req.validated;
+      const { token } = req.validated?.body;
       await authService.verifyEmail({ token });
       apiResponse(res, null, 200);
     } catch (error: any) {

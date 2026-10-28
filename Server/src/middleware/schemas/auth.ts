@@ -31,10 +31,6 @@ const loginSchema = z.object({
   password: z.string().min(8).max(20),
 });
 
-const logoutSchema = z.object({
-  jti: z.string().optional(),
-});
-
 const requestPasswordResetSchema = z.object({
   email: z.email(),
 });
@@ -49,12 +45,10 @@ const verifyEmailSchema = z.object({
 });
 
 export const validateLogin = makeValidator(loginSchema);
-export const validateLogout = makeValidator(logoutSchema);
 export const validateRequestPasswordReset = makeValidator(
   requestPasswordResetSchema
 );
 export const validateResetPassword = makeValidator(resetPasswordSchema);
 export const validateVerifyEmail = makeValidator(verifyEmailSchema, {
-  body: false,
   query: true,
 });

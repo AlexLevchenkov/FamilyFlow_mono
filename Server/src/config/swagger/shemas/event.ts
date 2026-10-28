@@ -1,8 +1,8 @@
 import type {
-  CreateEventRequest,
+  CreateEventBody,
   EventModel,
   PaginatedResponse,
-  UpdateEventRequest,
+  UpdateEventBody,
 } from "@familyflow/contracts";
 import { interfaceToOpenAPI } from "@utils";
 
@@ -89,14 +89,13 @@ export const eventSchemas = {
       totalPages: 1,
     },
   }),
-  CreateEventRequest: interfaceToOpenAPI<CreateEventRequest>({
+  CreateEventBody: interfaceToOpenAPI<CreateEventBody>({
     title: morningStandup.title,
     color: morningStandup.color,
     date: morningStandup.date,
     repeatability: morningStandup.repeatability,
   }),
-  UpdateEventRequest: interfaceToOpenAPI<UpdateEventRequest>({
-    id: morningStandup.id,
+  UpdateEventBody: interfaceToOpenAPI<UpdateEventBody>({
     title: morningStandup.title,
     color: morningStandup.color,
     date: morningStandup.date,

@@ -3,10 +3,9 @@ import prisma from "@config/prisma";
 import {
   GetUsersParams,
   PaginatedUsersResponse,
-  RegisterUserRequest,
-  DeleteUserParams,
-  GetById,
-  UpdateUserRequest,
+  RegisterUserBody,
+  ById,
+  UpdateUserBody,
   UserDetail,
   UserPublic,
 } from "@familyflow/contracts";
@@ -62,7 +61,7 @@ class UserService {
     email,
     password,
     name,
-  }: RegisterUserRequest): Promise<UserPublic> {
+  }: RegisterUserBody): Promise<UserPublic> {
     const haveUser = await prisma.user.findFirst({
       where: {
         email,
@@ -90,7 +89,7 @@ class UserService {
     return { avatar: user.avatar, name: user.name };
   }
 
-  async getUserById({ id }: GetById): Promise<UserDetail> {
+  async getUserById({ id }: ById): Promise<UserDetail> {
     const user = await prisma.user.findUnique({ where: { id } });
 
     if (!user) {
@@ -105,7 +104,7 @@ class UserService {
     name,
     avatar,
     email,
-  }: UpdateUserRequest): Promise<UserDetail> {
+  }: UpdateUserBody): Promise<UserDetail> {
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
@@ -125,15 +124,15 @@ class UserService {
     return updatedUser;
   }
 
-  async deleteUser({ userId }: DeleteUserParams): Promise<void> {
-    const user = await prisma.user.findUnique({ where: { id: userId } });
+  async deleteUser({ id }: ById): Promise<void> {
+    const user = await prisma.user.findUnique({ where: { id } });
 
     if (!user) {
       throw notFoundError("User not found");
     }
 
-    const result = await prisma.user.delete({ where: { id: userId } });
-    await prisma.refreshToken.deleteMany({ where: { userId } });
+    const result = await prisma.user.delete({ where: { id } });
+    await prisma.refreshToken.deleteMany({ where: { userId: id } });
 
     if (!result) {
       throw internalServerError("Failed to delete user");

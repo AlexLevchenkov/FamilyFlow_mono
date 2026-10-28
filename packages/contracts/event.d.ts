@@ -20,15 +20,14 @@ export interface GetEventsParams {
 
 export type PaginatedEventsResponse = PaginatedResponse<EventModel>;
 
-export interface CreateEventRequest {
+export interface CreateEventBody {
   title: string;
   color: string;
   date: Date;
   repeatability: Repeatability;
 }
 
-export interface UpdateEventRequest {
-  id: number;
+export interface UpdateEventBody {
   title: string;
   color: string;
   date: Date;

@@ -23,19 +23,15 @@ export interface GetUsersParams {
 
 export type PaginatedUsersResponse = PaginatedResponse<UserPublic>;
 
-export interface RegisterUserRequest {
+export interface RegisterUserBody {
   email: string;
   password: string;
   name: string;
 }
 
-export interface UpdateUserRequest {
+export interface UpdateUserBody {
   email?: string;
   name?: string;
   avatar?: string;
-  userId: number;
-}
-
-export interface DeleteUserParams {
   userId: number;
 }

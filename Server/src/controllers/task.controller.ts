@@ -1,10 +1,9 @@
 import {
-  CreateTaskRequest,
-  DeleteById,
-  GetById,
+  CreateTaskBody,
+  ById,
   GetUserTasksParams,
   PaginatedTasksResponse,
-  UpdateTaskRequest,
+  UpdateTaskBody,
 } from "@familyflow/contracts";
 import taskService from "@services/task.service";
 import apiResponse from "@utils/response";
@@ -13,7 +12,7 @@ import asyncHandler from "@utils/asyncHandler";
 class TaskController {
   getUserTasks = asyncHandler(async (req, res) => {
     const { user } = req;
-    const { page, limit } = req.validated as GetUserTasksParams;
+    const { page, limit } = req.validated?.params as GetUserTasksParams;
 
     const data: PaginatedTasksResponse = await taskService.getUserTasks({
       userId: user.id,
@@ -25,7 +24,7 @@ class TaskController {
   });
 
   getTaskById = asyncHandler(async (req, res) => {
-    const { id } = req.validated as GetById;
+    const { id } = req.validated?.params as ById;
 
     const data = await taskService.getTaskById({ id });
 
@@ -34,8 +33,8 @@ class TaskController {
 
   createTask = asyncHandler(async (req, res) => {
     const { user } = req;
-    const { title, type, visibility, date } =
-      req.validated as CreateTaskRequest;
+    const { title, type, visibility, date } = req.validated
+      ?.body as CreateTaskBody;
 
     const data = await taskService.createTask({
       userId: user.id,
@@ -50,8 +49,9 @@ class TaskController {
 
   updateTask = asyncHandler(async (req, res) => {
     const { user } = req;
-    const { id, title, type, visibility, status, date } =
-      req.validated as UpdateTaskRequest;
+    const { id } = req.validated?.params as ById;
+    const { title, type, visibility, status, date } = req.validated
+      ?.body as UpdateTaskBody;
 
     const data = await taskService.updateTask({
       userId: user.id,
@@ -67,7 +67,7 @@ class TaskController {
   });
 
   deleteTask = asyncHandler(async (req, res) => {
-    const { id } = req.validated as DeleteById;
+    const { id } = req.validated?.params as ById;
 
     await taskService.deleteTask({ id });
 

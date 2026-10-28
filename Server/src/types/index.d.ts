@@ -5,10 +5,13 @@ declare module "express-serve-static-core" {
     user: {
       id: number;
       jti: string;
-      role?: string;
     };
     refreshToken?: string;
-    validated?: any;
+    validated?: {
+      body: any;
+      query: any;
+      params: any;
+    };
   }
 }
 

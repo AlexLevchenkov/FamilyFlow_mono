@@ -2,13 +2,13 @@ import type { Request, Response } from "express";
 import apiResponse from "@utils/response";
 import familyService from "@services/family.service";
 import {
-  CreateFamilyRequest,
+  CreateFamilyBody,
   FamilyModel,
   FamilyById,
-  UpdateFamilyRequest,
-  AddFamilyMemberRequest,
-  UpdateFamilyMemberRoleRequest,
-  DeleteFamilyMemberInput,
+  UpdateFamilyBody,
+  AddFamilyMemberBody,
+  UpdateFamilyMemberRoleBody,
+  FamilyWithMemberId,
 } from "@familyflow/contracts";
 
 class FamilyController {
@@ -29,7 +29,7 @@ class FamilyController {
   async getFamilyById(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { familyId }: FamilyById = req.validated;
+      const { familyId } = req.validated?.params as FamilyById;
       const data = await familyService.getFamilyById({
         userId: user.id,
         familyId,
@@ -45,7 +45,7 @@ class FamilyController {
   async createFamily(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { name }: CreateFamilyRequest = req.validated;
+      const { name } = req.validated?.body as CreateFamilyBody;
       const data = await familyService.createFamily({
         userId: user.id,
         name,
@@ -61,7 +61,8 @@ class FamilyController {
   async updateFamily(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { familyId, name }: UpdateFamilyRequest = req.validated;
+      const { name } = req.validated?.body as UpdateFamilyBody;
+      const { familyId } = req.validated?.params as FamilyById;
       const data = await familyService.updateFamily({
         userId: user.id,
         familyId,
@@ -78,7 +79,7 @@ class FamilyController {
   async deleteFamily(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { familyId }: FamilyById = req.validated;
+      const { familyId } = req.validated?.params as FamilyById;
       const data = await familyService.deleteFamily({
         userId: user.id,
         familyId,
@@ -94,7 +95,7 @@ class FamilyController {
   async getMembers(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { familyId }: FamilyById = req.validated;
+      const { familyId } = req.validated?.params as FamilyById;
       const data = await familyService.getMembers({
         userId: user.id,
         familyId,
@@ -110,14 +111,13 @@ class FamilyController {
   async addMember(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { familyId, email, targetUserId, role }: AddFamilyMemberRequest =
-        req.validated;
+      const { familyId } = req.validated?.params as FamilyById;
+      const { email, role } = req.validated?.body as AddFamilyMemberBody;
 
       const data = await familyService.addMember({
         userId: user.id,
         familyId,
         email,
-        targetUserId,
         role,
       });
       apiResponse(res, data, 201);
@@ -131,8 +131,9 @@ class FamilyController {
   async updateMemberRole(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { familyId, memberId, role }: UpdateFamilyMemberRoleRequest =
-        req.validated;
+      const { familyId, memberId } = req.validated
+        ?.params as FamilyWithMemberId;
+      const { role } = req.validated?.body as UpdateFamilyMemberRoleBody;
 
       const data = await familyService.updateMemberRole({
         userId: user.id,
@@ -151,7 +152,8 @@ class FamilyController {
   async removeMember(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { familyId, memberId }: DeleteFamilyMemberInput = req.validated;
+      const { familyId, memberId } = req.validated
+        ?.params as FamilyWithMemberId;
 
       const data = await familyService.removeMember({
         userId: user.id,

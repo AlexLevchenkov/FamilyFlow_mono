@@ -29,25 +29,23 @@ export interface FamilyById {
   familyId: number;
 }
 
-export interface CreateFamilyRequest {
+export interface FamilyWithMemberId extends FamilyById {
+  memberId: number;
+}
+
+export interface CreateFamilyBody {
   name: string;
 }
 
-export interface UpdateFamilyRequest extends FamilyById {
+export interface UpdateFamilyBody {
   name: string;
 }
 
-export interface AddFamilyMemberRequest extends FamilyById {
-  email?: string;
-  targetUserId?: number;
+export interface AddFamilyMemberBody {
+  email: string;
   role?: FamilyRole;
 }
 
-export interface UpdateFamilyMemberRoleRequest extends FamilyById {
-  memberId: number;
+export interface UpdateFamilyMemberRoleBody {
   role: FamilyRole;
-}
-
-export interface DeleteFamilyMemberInput extends FamilyById {
-  memberId: number;
 }

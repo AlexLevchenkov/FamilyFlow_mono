@@ -9,27 +9,41 @@ const familyRoles: [FamilyRole, ...FamilyRole[]] = [
   "MEMBER",
 ];
 
+const familyIdParamSchema = z.coerce
+  .number()
+  .int()
+  .positive("Invalid family ID");
+const memberIdParamSchema = z.coerce
+  .number()
+  .int()
+  .positive("Invalid member ID");
+const familyNameSchema = z.coerce
+  .string()
+  .trim()
+  .min(1, "Family name is required")
+  .max(100);
+
 const createFamilySchema = z.object({
-  name: z.coerce.string().trim().min(1, "Family name is required").max(100),
+  name: familyNameSchema,
 });
 
 const getFamilyByIdSchema = z.object({
-  familyId: z.coerce.number().int().positive("Invalid family ID"),
+  familyId: familyIdParamSchema,
 });
 
 const updateFamilySchema = z.object({
-  familyId: z.coerce.number().int().positive("Invalid family ID"),
-  name: z.coerce.string().trim().min(1, "Family name is required").max(100),
+  familyId: familyIdParamSchema,
+  name: familyNameSchema,
 });
 
 const deleteFamilySchema = z.object({
-  familyId: z.coerce.number().int().positive("Invalid family ID"),
+  familyId: familyIdParamSchema,
 });
 
 const addFamilyMemberSchema = z
   .object({
-    familyId: z.coerce.number().int().positive("Invalid family ID"),
-    userId: z.coerce.number().int().positive().optional(),
+    familyId: familyIdParamSchema,
+    userId: z.coerce.number().int().positive(),
     email: z
       .string()
       .trim()
@@ -48,14 +62,14 @@ const addFamilyMemberSchema = z
   );
 
 const updateFamilyMemberRoleSchema = z.object({
-  familyId: z.coerce.number().int().positive("Invalid family ID"),
-  memberId: z.coerce.number().int().positive("Invalid member ID"),
+  familyId: familyIdParamSchema,
+  memberId: memberIdParamSchema,
   role: z.enum(familyRoles),
 });
 
 const deleteFamilyMemberSchema = z.object({
-  id: z.coerce.number().int().positive("Invalid family ID"),
-  memberId: z.coerce.number().int().positive("Invalid member ID"),
+  id: familyIdParamSchema,
+  memberId: memberIdParamSchema,
 });
 
 export const validateCreateFamily = makeValidator(createFamilySchema, {

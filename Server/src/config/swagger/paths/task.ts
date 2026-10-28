@@ -35,7 +35,7 @@ export const taskPaths = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/CreateTaskRequest",
+              $ref: "#/components/schemas/CreateTaskBody",
             },
           },
         },
@@ -105,7 +105,7 @@ export const taskPaths = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/UpdateTaskRequest",
+              $ref: "#/components/schemas/UpdateTaskBody",
             },
           },
         },

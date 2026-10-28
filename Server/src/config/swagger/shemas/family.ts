@@ -1,8 +1,8 @@
 import type {
-  CreateFamilyRequest,
-  UpdateFamilyRequest,
-  AddFamilyMemberRequest,
-  UpdateFamilyMemberRoleRequest,
+  CreateFamilyBody,
+  UpdateFamilyBody,
+  AddFamilyMemberBody,
+  UpdateFamilyMemberRoleBody,
   FamilyModel,
   FamilyMemberModel,
 } from "@familyflow/contracts";
@@ -81,23 +81,17 @@ const familySample: FamilyModel = {
 export const familySchemas = {
   FamilyResponse: interfaceToOpenAPI<FamilyModel>(familySample),
   FamilyMemberResponse: interfaceToOpenAPI<FamilyMemberModel>(parentMember),
-  CreateFamilyRequest: interfaceToOpenAPI<CreateFamilyRequest>({
+  CreateFamilyBody: interfaceToOpenAPI<CreateFamilyBody>({
     name: familySample.name,
   }),
-  UpdateFamilyRequest: interfaceToOpenAPI<UpdateFamilyRequest>({
-    familyId: familySample.id,
+  UpdateFamilyBody: interfaceToOpenAPI<UpdateFamilyBody>({
     name: familySample.name,
   }),
-  AddFamilyMemberRequest: interfaceToOpenAPI<AddFamilyMemberRequest>({
-    familyId: parentMember.familyId,
-    email: parentMember.user?.email,
-    targetUserId: parentMember.userId,
-    role: parentMember.role,
+  AddFamilyMemberBody: interfaceToOpenAPI<AddFamilyMemberBody>({
+    email: childMember.user!.email,
+    role: childMember.role,
   }),
-  UpdateFamilyMemberRoleRequest:
-    interfaceToOpenAPI<UpdateFamilyMemberRoleRequest>({
-      familyId: parentMember.familyId,
-      memberId: parentMember.userId,
-      role: parentMember.role,
-    }),
+  UpdateFamilyMemberRoleBody: interfaceToOpenAPI<UpdateFamilyMemberRoleBody>({
+    role: childMember.role,
+  }),
 };

@@ -29,7 +29,7 @@ export interface GetGoalsParams {
 
 export type PaginatedGoalsResponse = PaginatedResponse<GoalModel>;
 
-export interface CreateGoalRequest {
+export interface CreateGoalBody {
   title: string;
   description: string | null;
   type: GoalType;
@@ -42,8 +42,7 @@ export interface CreateGoalRequest {
   dueDate: Date | null;
 }
 
-export interface UpdateGoalRequest {
-  id: number;
+export interface UpdateGoalBody {
   title: string;
   description: string | null;
   status: GoalStatus;

@@ -1,6 +1,6 @@
 import { UserPublic } from "./user";
 
-export interface LoginRequest {
+export interface LoginBody {
   email: string;
   password: string;
 }
@@ -18,11 +18,11 @@ export interface RefreshTokenResponse {
   refreshToken: string;
 }
 
-export interface ForgotPasswordRequest {
+export interface ForgotPasswordBody {
   email: string;
 }
 
-export interface ResetPasswordRequest {
+export interface ResetPasswordBody {
   token: string;
   newPassword: string;
 }
@@ -31,6 +31,6 @@ export interface VerifyEmailQuery {
   token: string;
 }
 
-export interface LogoutQuery {
+export interface JTI {
   jti?: string;
 }

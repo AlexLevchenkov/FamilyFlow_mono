@@ -3,14 +3,14 @@ import bcryptjs from "bcryptjs";
 import { randomUUID } from "crypto";
 import prisma from "@config/prisma";
 import {
-  ForgotPasswordRequest,
+  ForgotPasswordBody,
   LoginDataResponse,
-  LoginRequest,
-  LogoutQuery,
+  LoginBody,
   RefreshTokenResponse,
-  ResetPasswordRequest,
+  ResetPasswordBody,
   VerifyEmailQuery,
   WithUserId,
+  JTI,
 } from "@familyflow/contracts";
 import {
   generateAccessToken,
@@ -25,7 +25,7 @@ class AuthService {
   login = async ({
     email,
     password,
-  }: LoginRequest): Promise<LoginDataResponse> => {
+  }: LoginBody): Promise<LoginDataResponse> => {
     const user = await prisma.user.findUnique({
       where: {
         email: email,
@@ -38,7 +38,7 @@ class AuthService {
 
     const jti = randomUUID();
 
-    const accessToken = generateAccessToken(user.id);
+    const accessToken = generateAccessToken(user.id, jti);
     const refreshToken = generateRefreshToken(user.id, jti);
 
     if (!accessToken || !refreshToken) {
@@ -69,7 +69,7 @@ class AuthService {
     };
   };
 
-  logout = async ({ userId, jti }: WithUserId<LogoutQuery>): Promise<void> => {
+  logout = async ({ userId, jti }: WithUserId<JTI>): Promise<void> => {
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
       throw notFoundError("User not found");
@@ -84,16 +84,10 @@ class AuthService {
     }
   };
 
-  refreshToken = async (
-    userData: Request["user"]
-  ): Promise<RefreshTokenResponse> => {
-    if (!userData || !userData.id || !userData.jti) {
-      throw unauthorizedError();
-    }
-
-    const userId = userData.id;
-    const jti = userData.jti;
-
+  refreshToken = async ({
+    userId,
+    jti,
+  }: WithUserId<JTI>): Promise<RefreshTokenResponse> => {
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
       throw notFoundError("User not found");
@@ -114,7 +108,7 @@ class AuthService {
 
     const newJti = randomUUID();
 
-    const newAccessToken = generateAccessToken(userId);
+    const newAccessToken = generateAccessToken(userId, newJti);
     const newRefreshToken = generateRefreshToken(userId, newJti);
 
     if (!newAccessToken || !newRefreshToken) {
@@ -144,7 +138,7 @@ class AuthService {
 
   requestPasswordReset = async ({
     email,
-  }: ForgotPasswordRequest): Promise<void> => {
+  }: ForgotPasswordBody): Promise<void> => {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
       throw notFoundError("User not found");
@@ -166,7 +160,7 @@ class AuthService {
   resetPassword = async ({
     token,
     newPassword,
-  }: ResetPasswordRequest): Promise<void> => {
+  }: ResetPasswordBody): Promise<void> => {
     const user = await prisma.user.findFirst({ where: { resetToken: token } });
 
     if (

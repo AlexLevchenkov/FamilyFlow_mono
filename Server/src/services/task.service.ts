@@ -1,14 +1,14 @@
 import { Prisma, Visibility } from "@prisma/client";
 import prisma from "@config/prisma";
 import {
-  CreateTaskRequest,
-  DeleteById,
-  GetById,
+  CreateTaskBody,
+  ById,
   GetUserTasksParams,
   PaginatedTasksResponse,
   TaskModel,
-  UpdateTaskRequest,
+  UpdateTaskBody,
   WithUserId,
+  WithId,
 } from "@familyflow/contracts";
 import { alreadyExistError, notFoundError } from "@utils";
 
@@ -64,7 +64,7 @@ class TaskServices {
     };
   }
 
-  async getTaskById({ id }: GetById): Promise<TaskModel> {
+  async getTaskById({ id }: ById): Promise<TaskModel> {
     const task = await prisma.task.findFirst({ where: { id } });
 
     if (!task) {
@@ -80,7 +80,7 @@ class TaskServices {
     type,
     visibility,
     date,
-  }: WithUserId<CreateTaskRequest>): Promise<TaskModel> {
+  }: WithUserId<CreateTaskBody>): Promise<TaskModel> {
     const haveTask = await prisma.task.findFirst({
       where: { userId, title, type },
     });
@@ -104,7 +104,7 @@ class TaskServices {
     visibility,
     status,
     date,
-  }: WithUserId<UpdateTaskRequest>): Promise<TaskModel> {
+  }: WithUserId<WithId<UpdateTaskBody>>): Promise<TaskModel> {
     const haveTask = await prisma.task.findFirst({
       where: { userId, id },
     });
@@ -129,7 +129,7 @@ class TaskServices {
     return updatedTask;
   }
 
-  async deleteTask({ id }: DeleteById): Promise<void> {
+  async deleteTask({ id }: ById): Promise<void> {
     const haveTask = await prisma.task.findFirst({
       where: { id },
     });

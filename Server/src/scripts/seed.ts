@@ -271,7 +271,7 @@ async function seed() {
     });
     if (!alreadyMember) {
       await familyService.addMember({
-        currentUserId: owner.id,
+        userId: owner.id,
         familyId: family.id,
         email: usersByKey[key].email,
         role,
@@ -357,12 +357,13 @@ async function seed() {
     await goalService.createGoal({
       userId: usersByKey.parent.id,
       title: "[seed] Books read",
-      description: "Family reading challenge",
+      description: "Read 12 books",
       type: "COUNTER",
       status: "COMPLETED",
       currentValue: 12,
       targetValue: 12,
-      unit: "books",
+      currency: "books",
+      unit: null,
       startsAt: daysFromNow(-60),
       dueDate: daysFromNow(-1),
     });
@@ -383,6 +384,7 @@ async function seed() {
       status: "ARCHIVED",
       currentValue: 1,
       targetValue: 3,
+      currency: null,
       unit: "steps",
       startsAt: daysFromNow(-30),
       dueDate: daysFromNow(120),

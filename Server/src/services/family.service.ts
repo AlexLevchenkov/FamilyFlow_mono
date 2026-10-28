@@ -1,12 +1,12 @@
 import prisma from "@config/prisma";
 import type {
-  AddFamilyMemberRequest,
-  CreateFamilyRequest,
-  DeleteFamilyMemberInput,
+  AddFamilyMemberBody,
+  CreateFamilyBody,
   FamilyById,
   FamilyRole,
-  UpdateFamilyMemberRoleRequest,
-  UpdateFamilyRequest,
+  FamilyWithMemberId,
+  UpdateFamilyMemberRoleBody,
+  UpdateFamilyBody,
   WithUserId,
 } from "@familyflow/contracts";
 import { Family, FamilyMember } from "@prisma/client";
@@ -95,7 +95,7 @@ class FamilyService {
   async createFamily({
     userId,
     name,
-  }: WithUserId<CreateFamilyRequest>): Promise<Family | null> {
+  }: WithUserId<CreateFamilyBody>): Promise<Family | null> {
     const existingMembership = await prisma.familyMember.findFirst({
       where: { userId },
     });
@@ -145,7 +145,7 @@ class FamilyService {
     userId,
     familyId,
     name,
-  }: WithUserId<UpdateFamilyRequest>): Promise<Family> {
+  }: WithUserId<UpdateFamilyBody> & FamilyById): Promise<Family> {
     const membership = await prisma.familyMember.findUnique({
       where: {
         familyId_userId: {
@@ -251,9 +251,8 @@ class FamilyService {
     userId,
     familyId,
     email,
-    targetUserId,
     role = "MEMBER",
-  }: WithUserId<AddFamilyMemberRequest>): Promise<FamilyMember> {
+  }: WithUserId<AddFamilyMemberBody> & FamilyById): Promise<FamilyMember> {
     const currentMember = await prisma.familyMember.findUnique({
       where: {
         familyId_userId: {
@@ -277,16 +276,10 @@ class FamilyService {
       throw forbiddenError("Only OWNER can grant OWNER role");
     }
 
-    let targetUser = null;
-    if (targetUserId) {
-      targetUser = await prisma.user.findUnique({
-        where: { id: targetUserId },
-      });
-    } else if (email) {
-      targetUser = await prisma.user.findUnique({
-        where: { email },
-      });
-    }
+    const targetUser = await prisma.user.findUnique({
+      where: { email },
+      select: { id: true },
+    });
 
     if (!targetUser) {
       throw notFoundError("User not found");
@@ -339,7 +332,9 @@ class FamilyService {
     familyId,
     memberId,
     role,
-  }: WithUserId<UpdateFamilyMemberRoleRequest>) {
+  }: WithUserId<
+    FamilyById & UpdateFamilyMemberRoleBody & { memberId: number }
+  >) {
     const currentMember = await prisma.familyMember.findUnique({
       where: {
         familyId_userId: {
@@ -423,7 +418,7 @@ class FamilyService {
     userId,
     familyId,
     memberId,
-  }: WithUserId<DeleteFamilyMemberInput>) {
+  }: WithUserId<FamilyWithMemberId>) {
     const currentMember = await prisma.familyMember.findUnique({
       where: {
         familyId_userId: {

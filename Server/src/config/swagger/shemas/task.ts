@@ -1,8 +1,8 @@
 import type {
-  CreateTaskRequest,
+  CreateTaskBody,
   TaskModel,
   PaginatedResponse,
-  UpdateTaskRequest,
+  UpdateTaskBody,
 } from "@familyflow/contracts";
 import { interfaceToOpenAPI } from "@utils";
 
@@ -139,14 +139,13 @@ export const tasksSchemas = {
       totalPages: 1,
     },
   }),
-  CreateItemsListRequest: interfaceToOpenAPI<CreateTaskRequest>({
+  CreateItemsListRequest: interfaceToOpenAPI<CreateTaskBody>({
     title: groceryRun.title,
     type: groceryRun.type,
     visibility: groceryRun.visibility,
     date: groceryRun.date,
   }),
-  UpdateItemsListRequest: interfaceToOpenAPI<UpdateTaskRequest>({
-    id: groceryRun.id,
+  UpdateItemsListRequest: interfaceToOpenAPI<UpdateTaskBody>({
     title: groceryRun.title,
     type: groceryRun.type,
     visibility: groceryRun.visibility,

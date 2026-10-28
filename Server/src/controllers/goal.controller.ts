@@ -2,18 +2,17 @@ import type { Request, Response } from "express";
 import apiResponse from "@utils/response";
 import goalService from "@services/goal.service";
 import {
-  CreateGoalRequest,
-  DeleteById,
-  GetById,
+  CreateGoalBody,
+  ById,
   GetGoalsParams,
-  UpdateGoalRequest,
+  UpdateGoalBody,
 } from "@familyflow/contracts";
 
 class GoalController {
   async getUserGoals(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { page }: GetGoalsParams = req.validated;
+      const { page } = req.validated?.params as GetGoalsParams;
 
       const data = await goalService.getUserGoals({ userId: user.id, page });
       apiResponse(res, data, 200);
@@ -26,7 +25,7 @@ class GoalController {
 
   async getGoalById(req: Request, res: Response): Promise<void> {
     try {
-      const { id }: GetById = req.validated;
+      const { id } = req.validated?.params as ById;
 
       const data = await goalService.getGoalById({ id });
       apiResponse(res, data, 200);
@@ -51,7 +50,7 @@ class GoalController {
         description,
         unit,
         currency,
-      }: CreateGoalRequest = req.validated;
+      } = req.validated?.body as CreateGoalBody;
 
       const data = await goalService.createGoal({
         userId: user.id,
@@ -78,8 +77,8 @@ class GoalController {
   async updateGoal(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
+      const { id } = req.validated?.params as ById;
       const {
-        id,
         title,
         status,
         currentValue,
@@ -88,7 +87,7 @@ class GoalController {
         description,
         unit,
         currency,
-      }: UpdateGoalRequest = req.validated;
+      } = req.validated?.body as UpdateGoalBody;
 
       const data = await goalService.updateGoal({
         userId: user.id,
@@ -112,7 +111,7 @@ class GoalController {
 
   async deleteGoal(req: Request, res: Response): Promise<void> {
     try {
-      const { id }: DeleteById = req.validated;
+      const { id } = req.validated?.params as ById;
 
       await goalService.deleteGoal({ id });
       apiResponse(res, undefined, 200);

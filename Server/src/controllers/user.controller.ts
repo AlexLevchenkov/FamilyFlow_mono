@@ -2,12 +2,11 @@ import { Request, Response } from "express";
 import userService from "@services/user.service";
 import apiResponse from "@utils/response";
 import {
-  DeleteUserParams,
-  GetById,
+  ById,
   GetUsersParams,
   PaginatedUsersResponse,
-  RegisterUserRequest,
-  UpdateUserRequest,
+  RegisterUserBody,
+  UpdateUserBody,
   UserDetail,
   UserPublic,
 } from "@familyflow/contracts";
@@ -20,7 +19,7 @@ class UserController {
       const data: UserDetail = await userService.getUserById({
         id: user.id,
       });
-      apiResponse(res, data, 200);
+      apiResponse(res, { name: data.name, avatar: data.avatar }, 200);
     } catch (error: any) {
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";
@@ -30,7 +29,8 @@ class UserController {
 
   async getUsers(req: Request, res: Response) {
     try {
-      const { page, partEmail, partName }: GetUsersParams = req.validated;
+      const { page, partEmail, partName } = req.validated
+        ?.params as GetUsersParams;
 
       const data: PaginatedUsersResponse = await userService.getUsers({
         page,
@@ -48,7 +48,7 @@ class UserController {
 
   async register(req: Request, res: Response) {
     try {
-      const { email, password, name }: RegisterUserRequest = req.validated;
+      const { email, password, name } = req.validated?.body as RegisterUserBody;
 
       const user: UserPublic = await userService.register({
         email,
@@ -65,7 +65,7 @@ class UserController {
 
   async getUserById(req: Request, res: Response) {
     try {
-      const { id }: GetById = req.validated;
+      const { id } = req.validated?.params as ById;
 
       const data: UserDetail = await userService.getUserById({
         id,
@@ -81,7 +81,7 @@ class UserController {
   async updateUser(req: Request, res: Response) {
     try {
       const { user } = req;
-      const { email, name, avatar } = req.validated as UpdateUserRequest;
+      const { email, name, avatar } = req.validated?.body as UpdateUserBody;
 
       const data: UserDetail = await userService.updateUser({
         userId: user.id,
@@ -101,7 +101,7 @@ class UserController {
   async deleteUser(req: Request, res: Response) {
     try {
       const { user } = req;
-      await userService.deleteUser({ userId: user.id });
+      await userService.deleteUser({ id: user.id });
       apiResponse(res, undefined, 200);
     } catch (error: any) {
       const errorMessage =

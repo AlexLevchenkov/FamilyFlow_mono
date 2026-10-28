@@ -1,6 +1,6 @@
 import jwt, { SignOptions } from "jsonwebtoken";
 
-export const generateAccessToken = (userId: number) => {
+export const generateAccessToken = (userId: number, jti: string) => {
   const secret = process.env.ACCESS_SECRET;
   const signOptions = {
     expiresIn: `${process.env.ACCESS_EXPIRES_IN}m`,
@@ -13,7 +13,7 @@ export const generateAccessToken = (userId: number) => {
     throw new Error("ACCESS_SECRET or ACCESS_EXPIRES_IN is not defined");
   }
 
-  return jwt.sign({ userId }, secret, signOptions);
+  return jwt.sign({ userId, jti }, secret, signOptions);
 };
 
 export const generateRefreshToken = (userId: number, jti: string) => {
@@ -23,7 +23,6 @@ export const generateRefreshToken = (userId: number, jti: string) => {
     algorithm: "HS256",
     issuer: "familyflow-api",
     audience: "familyflow-client",
-    jwtid: jti,
   } as SignOptions;
 
   if (!secret) {
@@ -34,7 +33,7 @@ export const generateRefreshToken = (userId: number, jti: string) => {
     throw new Error("REFRESH_EXPIRES_IN is not defined");
   }
 
-  return jwt.sign({ userId }, secret, signOptions);
+  return jwt.sign({ userId, jti }, secret, signOptions);
 };
 
 export const getDataFromAccessToken = (token: string) => {
@@ -48,7 +47,7 @@ export const getDataFromAccessToken = (token: string) => {
     audience: "familyflow-client",
   });
 
-  return data;
+  return data as { userId: number; jti: string };
 };
 
 export const getDataFromRefreshToken = (token: string) => {
@@ -62,5 +61,5 @@ export const getDataFromRefreshToken = (token: string) => {
     audience: "familyflow-client",
   });
 
-  return data;
+  return data as { userId: number; jti: string };
 };

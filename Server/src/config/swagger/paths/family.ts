@@ -31,7 +31,7 @@ export const familyPaths = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/CreateFamilyRequest",
+              $ref: "#/components/schemas/CreateFamilyBody",
             },
           },
         },
@@ -103,7 +103,7 @@ export const familyPaths = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/UpdateFamilyRequest",
+              $ref: "#/components/schemas/UpdateFamilyBody",
             },
           },
         },
@@ -148,7 +148,7 @@ export const familyPaths = {
       },
     },
   },
-  "/family/{id}/members": {
+  "/family/{familyId}/members": {
     get: {
       tags: ["Family"],
       summary: "Get all members of the family",
@@ -156,7 +156,7 @@ export const familyPaths = {
       parameters: [
         {
           in: "path",
-          name: "id",
+          name: "familyId",
           required: true,
           description: "Numeric ID of the family",
           schema: { type: "integer" },
@@ -188,7 +188,7 @@ export const familyPaths = {
       parameters: [
         {
           in: "path",
-          name: "id",
+          name: "familyId",
           required: true,
           description: "Numeric ID of the family",
           schema: { type: "integer" },
@@ -199,7 +199,7 @@ export const familyPaths = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/AddFamilyMemberRequest",
+              $ref: "#/components/schemas/AddFamilyMemberBody",
             },
           },
         },
@@ -224,7 +224,7 @@ export const familyPaths = {
       },
     },
   },
-  "/family/{id}/members/{memberId}": {
+  "/family/{familyId}/members/{memberId}": {
     put: {
       tags: ["Family"],
       summary: "Update family member role (OWNER, PARENT, CHILD, MEMBER)",
@@ -232,7 +232,7 @@ export const familyPaths = {
       parameters: [
         {
           in: "path",
-          name: "id",
+          name: "familyId",
           required: true,
           description: "Numeric ID of the family",
           schema: { type: "integer" },
@@ -250,7 +250,7 @@ export const familyPaths = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/UpdateFamilyMemberRoleRequest",
+              $ref: "#/components/schemas/UpdateFamilyMemberRoleBody",
             },
           },
         },
@@ -280,7 +280,7 @@ export const familyPaths = {
       parameters: [
         {
           in: "path",
-          name: "id",
+          name: "familyId",
           required: true,
           description: "Numeric ID of the family",
           schema: { type: "integer" },

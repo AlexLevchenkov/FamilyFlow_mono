@@ -4,7 +4,6 @@ import {
   authenticate,
   cookieExtractor,
   validateLogin,
-  validateLogout,
   validateRequestPasswordReset,
   validateResetPassword,
   validateVerifyEmail,
@@ -13,7 +12,7 @@ import {
 const authRouter = Router();
 
 authRouter.post("/login", validateLogin, authController.login);
-authRouter.get("/logout", authenticate, validateLogout, authController.logout);
+authRouter.get("/logout", authenticate, authController.logout);
 authRouter.post("/refresh-token", cookieExtractor, authController.refreshToken);
 authRouter.post(
   "/forgot-password",

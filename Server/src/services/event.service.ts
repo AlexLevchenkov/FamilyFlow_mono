@@ -1,12 +1,12 @@
 import prisma from "@config/prisma";
 import {
-  CreateEventRequest,
-  DeleteById,
+  CreateEventBody,
   EventModel,
-  GetById,
+  ById,
   GetEventsParams,
   PaginatedEventsResponse,
-  UpdateEventRequest,
+  UpdateEventBody,
+  WithId,
   WithUserId,
 } from "@familyflow/contracts";
 import { alreadyExistError, notFoundError } from "@utils";
@@ -41,7 +41,7 @@ class EventServices {
     };
   }
 
-  async getEventById({ id }: GetById): Promise<EventModel> {
+  async getEventById({ id }: ById): Promise<EventModel> {
     const event = await prisma.event.findFirst({ where: { id } });
 
     if (!event) {
@@ -57,7 +57,7 @@ class EventServices {
     color = "",
     date = new Date(),
     repeatability = "day",
-  }: WithUserId<CreateEventRequest>): Promise<EventModel> {
+  }: WithUserId<CreateEventBody>): Promise<EventModel> {
     const haveEvent = await prisma.event.findFirst({
       where: { userId, title, color, date },
     });
@@ -79,7 +79,7 @@ class EventServices {
     color,
     date,
     repeatability,
-  }: UpdateEventRequest): Promise<EventModel> {
+  }: WithId<UpdateEventBody>): Promise<EventModel> {
     const haveEvent = await prisma.event.findFirst({
       where: { id },
     });
@@ -96,7 +96,7 @@ class EventServices {
     return updatedEvent;
   }
 
-  async deleteEvent({ id }: DeleteById): Promise<void> {
+  async deleteEvent({ id }: ById): Promise<void> {
     const haveEvent = await prisma.event.findFirst({
       where: { id },
     });

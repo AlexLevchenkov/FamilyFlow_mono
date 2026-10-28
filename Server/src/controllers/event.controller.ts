@@ -2,18 +2,17 @@ import type { Request, Response } from "express";
 import apiResponse from "@utils/response";
 import eventService from "@services/event.service";
 import {
-  CreateEventRequest,
-  DeleteById,
-  GetById,
+  CreateEventBody,
+  ById,
   GetEventsParams,
-  UpdateEventRequest,
+  UpdateEventBody,
 } from "@familyflow/contracts";
 
 class EventController {
   async getUserEvents(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { page }: GetEventsParams = req.validated;
+      const { page } = req.validated?.params as GetEventsParams;
 
       const data = await eventService.getUserEvents({ userId: user.id, page });
       apiResponse(res, data, 200);
@@ -26,7 +25,7 @@ class EventController {
 
   async getEventById(req: Request, res: Response): Promise<void> {
     try {
-      const { id }: GetById = req.validated;
+      const { id } = req.validated?.params as ById;
 
       const data = await eventService.getEventById({ id });
       apiResponse(res, data, 200);
@@ -40,8 +39,8 @@ class EventController {
   async createEvent(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { title, color, date, repeatability } =
-        req.validated as CreateEventRequest;
+      const { title, color, date, repeatability } = req.validated
+        ?.body as CreateEventBody;
 
       const data = await eventService.createEvent({
         userId: user.id,
@@ -61,8 +60,9 @@ class EventController {
 
   async updateEvent(req: Request, res: Response): Promise<void> {
     try {
-      const { id, title, color, date, repeatability }: UpdateEventRequest =
-        req.validated;
+      const { id } = req.validated?.params as ById;
+      const { title, color, date, repeatability } = req.validated
+        ?.body as UpdateEventBody;
 
       const data = await eventService.updateEvent({
         id,
@@ -81,7 +81,7 @@ class EventController {
 
   async deleteEvent(req: Request, res: Response): Promise<void> {
     try {
-      const { id }: DeleteById = req.validated;
+      const { id } = req.validated?.params as ById;
 
       await eventService.deleteEvent({ id });
       apiResponse(res, undefined, 200);

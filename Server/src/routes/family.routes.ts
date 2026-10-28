@@ -14,27 +14,39 @@ const familyRouter = Router();
 
 familyRouter.get("/my", familyController.getCurrentUserFamily);
 familyRouter.post("/", validateCreateFamily, familyController.createFamily);
-familyRouter.get("/:id", validateGetFamilyById, familyController.getFamilyById);
-familyRouter.put("/:id", validateUpdateFamily, familyController.updateFamily);
-familyRouter.delete("/:id", validateDeleteFamily, familyController.deleteFamily);
+familyRouter.get(
+  "/:familyId",
+  validateGetFamilyById,
+  familyController.getFamilyById
+);
+familyRouter.put(
+  "/:familyId",
+  validateUpdateFamily,
+  familyController.updateFamily
+);
+familyRouter.delete(
+  "/:familyId",
+  validateDeleteFamily,
+  familyController.deleteFamily
+);
 
 familyRouter.get(
-  "/:id/members",
+  "/:familyId/members",
   validateGetFamilyById,
   familyController.getMembers
 );
 familyRouter.post(
-  "/:id/members",
+  "/:familyId/members",
   validateAddFamilyMember,
   familyController.addMember
 );
 familyRouter.put(
-  "/:id/members/:memberId",
+  "/:familyId/members/:memberId",
   validateUpdateFamilyMemberRole,
   familyController.updateMemberRole
 );
 familyRouter.delete(
-  "/:id/members/:memberId",
+  "/:familyId/members/:memberId",
   validateDeleteFamilyMember,
   familyController.removeMember
 );
