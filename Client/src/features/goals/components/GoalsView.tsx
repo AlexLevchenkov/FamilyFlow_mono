@@ -6,13 +6,13 @@ export function GoalsView() {
     <div className="space-y-6">
       <PageHero variant="goals">
         <div>
-          <p className="text-xs font-extrabold uppercase tracking-[0.15em] text-[#7054c5]">
+          <p className="text-xs font-extrabold uppercase tracking-[0.15em] text-primary">
             Спільний прогрес
           </p>
           <h2 className="mt-3 text-3xl font-extrabold tracking-tight">
             Великі мрії починаються з маленьких кроків
           </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-[#737188]">
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-lightText">
             Зберігайте сімейні бажання, розподіляйте кроки й святкуйте кожне
             досягнення разом.
           </p>
@@ -25,7 +25,7 @@ export function GoalsView() {
         {goals.map(goal => (
           <Panel
             as="article"
-            className="transition-all hover:-translate-y-0.5 hover:border-page-border-hover hover:shadow-[0_14px_34px_var(--color-page-shadow-soft)]"
+            className="transition-all hover:-translate-y-0.5 hover:border-borderHover hover:shadow-[0_14px_34px_var(--color-shadowSoft)]"
             key={goal.title}
           >
             <div className="flex items-start justify-between gap-3">
@@ -38,7 +38,7 @@ export function GoalsView() {
               >
                 <Icon name="target" size={23} />
               </div>
-              <button aria-label="Більше дій" className="text-[#aaa8b8]">
+              <button aria-label="Більше дій" className="text-textPlaceholder">
                 <Icon name="more" size={19} />
               </button>
             </div>
@@ -49,12 +49,12 @@ export function GoalsView() {
               {goal.category}
             </p>
             <h3 className="mt-2 text-lg font-extrabold">{goal.title}</h3>
-            <p className="mt-2 text-sm text-[#9290a4]">{goal.detail}</p>
+            <p className="mt-2 text-sm text-lightText">{goal.detail}</p>
             <div className="mt-6 flex items-center justify-between text-xs font-extrabold">
-              <span className="text-[#8f8da0]">Прогрес</span>
+              <span className="text-lightText">Прогрес</span>
               <span>{goal.progress}%</span>
             </div>
-            <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-[#efedf5]">
+            <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-background">
               <div
                 className="h-full rounded-full"
                 style={{
@@ -71,17 +71,17 @@ export function GoalsView() {
         className="flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-center"
       >
         <div className="flex items-center gap-4">
-          <div className="grid h-12 w-12 place-items-center rounded-2xl bg-[#fff1dc] text-[#db8c26]">
+          <div className="grid h-12 w-12 place-items-center rounded-2xl bg-warningSoft text-warning">
             <Icon name="sun" size={23} />
           </div>
           <div>
             <h3 className="font-extrabold">Досягнення місяця</h3>
-            <p className="mt-1 text-sm text-[#9290a4]">
+            <p className="mt-1 text-sm text-lightText">
               Ви виконали 7 спільних кроків — це на 3 більше, ніж у лютому.
             </p>
           </div>
         </div>
-        <span className="rounded-full bg-[#f4efff] px-4 py-2 text-xs font-extrabold text-[#7054c5]">
+        <span className="rounded-full bg-primarySoft px-4 py-2 text-xs font-extrabold text-primary">
           +43% прогресу
         </span>
       </Panel>

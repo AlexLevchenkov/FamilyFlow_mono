@@ -1,12 +1,12 @@
-import { useStore } from '@store';
+import { useEffect, useState } from 'react';
+import { useCurrentUserQuery } from '@hooks';
 
-interface UserProps {
-  role?: string;
-}
+interface UserProps {}
 
-export const ProfileUser = ({ role = 'Адміністратор' }: UserProps) => {
-  const { auth } = useStore();
-  const name = auth.user?.name?.trim() || 'Олексій К.';
+export const ProfileUser = () => {
+  const { user, refetch } = useCurrentUserQuery();
+  const [hasImageError, setHasImageError] = useState(false);
+  const name = user?.name || 'Велком';
   const initials = name
     .split(/\s+/)
     .filter(Boolean)
@@ -15,22 +15,30 @@ export const ProfileUser = ({ role = 'Адміністратор' }: UserProps) 
     .join('')
     .toLocaleUpperCase('uk-UA');
 
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
+  useEffect(() => {
+    setHasImageError(false);
+  }, [user?.avatar]);
+
   return (
     <div className="flex min-w-0 flex-1 items-center gap-3">
-      {auth.user?.avatar ? (
+      {user?.avatar && !hasImageError ? (
         <img
           alt={name}
           className="size-10 shrink-0 rounded-full object-cover"
-          src={auth.user.avatar}
+          src={user.avatar}
+          onError={() => setHasImageError(true)}
         />
       ) : (
-        <div className="grid size-10 shrink-0 place-items-center rounded-full bg-[#dfe6ff] text-sm font-extrabold text-[#5267ca]">
+        <div className="grid size-10 shrink-0 place-items-center rounded-full bg-gradientBlue text-sm font-extrabold text-info">
           {initials}
         </div>
       )}
       <div className="min-w-0">
         <p className="truncate text-sm font-extrabold">{name}</p>
-        <p className="text-xs text-[#9493a8]">{role}</p>
       </div>
     </div>
   );

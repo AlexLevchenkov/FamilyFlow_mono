@@ -1,4 +1,4 @@
-import { mockDb } from './mockDb';
+import { mockDb } from './database';
 
 const STORAGE_KEY = 'familyflow_use_mocks';
 

@@ -1,15 +1,9 @@
 import { create } from 'zustand';
-import type { IUser } from '@features/auth';
 
 interface AuthState {
   accessToken: string | null;
   isAuthenticated: boolean;
-  user: IUser | null;
-  login: (tokens: {
-    accessToken: string;
-    rememberMe: boolean;
-    me: IUser;
-  }) => void;
+  login: (tokens: { accessToken: string; rememberMe: boolean }) => void;
   logout: () => void;
   refreshTokens: (tokens: { access: string }) => void;
 }
@@ -24,31 +18,26 @@ function clearPersistedAuth() {
 export const useAuthStore = create<AuthState>(set => ({
   accessToken:
     localStorage.getItem('accessToken') ||
-    sessionStorage.getItem('accessToken'),
+    sessionStorage.getItem('accessToken') ||
+    '',
   isAuthenticated: !!(
-    localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken')
+    localStorage.getItem('accessToken') ||
+    sessionStorage.getItem('accessToken') ||
+    false
   ),
-  user: {
-    name: localStorage.getItem('name') || sessionStorage.getItem('name'),
-    avatar: localStorage.getItem('avatar') || sessionStorage.getItem('avatar'),
-  },
-  login: ({ accessToken, rememberMe, me }) => {
+  login: ({ accessToken, rememberMe }) => {
     clearPersistedAuth();
 
     if (rememberMe) {
       localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('name', me.name || '');
-      localStorage.setItem('avatar', me.avatar || '');
     } else {
       sessionStorage.setItem('accessToken', accessToken);
-      sessionStorage.setItem('name', me.name || '');
-      sessionStorage.setItem('avatar', me.avatar || '');
     }
-    set({ accessToken, isAuthenticated: true, user: me });
+    set({ accessToken, isAuthenticated: true });
   },
   logout: () => {
     clearPersistedAuth();
-    set({ accessToken: null, isAuthenticated: false, user: null });
+    set({ accessToken: null, isAuthenticated: false });
   },
   refreshTokens: ({ access }) => {
     if (localStorage.getItem('accessToken')) {
@@ -59,3 +48,8 @@ export const useAuthStore = create<AuthState>(set => ({
     set({ accessToken: access });
   },
 }));
+
+// Debug helper
+if (import.meta.env.DEV) {
+  Object.assign(window, { useAuthStore });
+}

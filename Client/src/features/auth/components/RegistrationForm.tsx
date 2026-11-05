@@ -3,9 +3,12 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { isAxiosError } from 'axios';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { RegistrationSchema, type RegistrationData } from '@schemas';
-import { useRegistration } from '@hooks/AuthHooks';
 import { Button, Icon, Input, Popup } from '@ui';
+import {
+  registrationSchema,
+  type RegistrationData,
+  useRegistration,
+} from '@features/auth';
 
 export const RegistrationForm = () => {
   const [showSuccessfulPopup, setShowSuccessfulPopup] = useState(false);
@@ -18,7 +21,7 @@ export const RegistrationForm = () => {
     formState: { errors, isSubmitting },
     setError,
   } = useForm<RegistrationData>({
-    resolver: zodResolver(RegistrationSchema),
+    resolver: zodResolver(registrationSchema),
   });
 
   const onSubmit = (data: RegistrationData) => {
@@ -90,7 +93,7 @@ export const RegistrationForm = () => {
           error={errors.repeatPassword}
         />
 
-        <label className="-mt-1 flex items-start gap-2 text-sm font-bold leading-normal text-page-copy">
+        <label className="-mt-1 flex items-start gap-2 text-sm font-bold leading-normal text-lightText">
           <input
             className="mt-0.5 size-4 shrink-0 accent-selected"
             required
@@ -117,10 +120,10 @@ export const RegistrationForm = () => {
       <Popup
         isOpen={showSuccessfulPopup}
         onClose={() => setShowSuccessfulPopup(false)}
-        showTime={3}
+        showTime={999}
       >
         <div className="grid gap-4">
-          <p className="text-sm leading-relaxed text-page-copy">
+          <p className="text-sm leading-relaxed text-lightText">
             Дякуємо за реєстрацію. На вашу пошту надіслано лист для завершення
             реєстрації.
           </p>

@@ -1,11 +1,15 @@
-import { authHandlers } from './handlers/auth.handlers';
-import { userHandlers } from './handlers/user.handlers';
-import { listHandlers } from './handlers/list.handlers';
-import { listItemHandlers } from './handlers/listItem.handlers';
-import type { MockRequestContext, MockResponseResult } from './handlers/types';
+import {
+  authHandlers,
+  eventHandlers,
+  familyHandlers,
+  goalHandlers,
+  taskHandlers,
+  userHandlers,
+} from './handlers';
+import type { MockRequestContext, MockResponseResult } from './handlers';
 
 type RouteHandler = (
-  ctx: MockRequestContext
+  ctx: MockRequestContext<any>
 ) => MockResponseResult | Promise<MockResponseResult>;
 
 interface RouteDefinition {
@@ -42,28 +46,52 @@ register('POST', '/auth/forgot-password', authHandlers.forgotPassword);
 register('POST', '/auth/reset-password', authHandlers.resetPassword);
 register('GET', '/auth/verify-email', authHandlers.verifyEmail);
 
-// 2. User routes
+// 2. Event routes
+register('GET', '/event', eventHandlers.getEvents);
+register('POST', '/event', eventHandlers.createEvent);
+register('GET', '/event/:id', eventHandlers.getEventById);
+register('PUT', '/event/:id', eventHandlers.updateEvent);
+register('DELETE', '/event/:id', eventHandlers.deleteEvent);
+
+// 3. Family routes
+register('GET', '/family/my', familyHandlers.getMyFamily);
+register('POST', '/family', familyHandlers.createFamily);
+register('GET', '/family/:id', familyHandlers.getFamilyById);
+register('PUT', '/family/:id', familyHandlers.updateFamily);
+register('DELETE', '/family/:id', familyHandlers.deleteFamily);
+register('GET', '/family/:id/members', familyHandlers.getFamilyMembers);
+register('POST', '/family/:id/members', familyHandlers.addFamilyMember);
+register(
+  'PUT',
+  '/family/:id/members/:memberId',
+  familyHandlers.updateFamilyMemberRole
+);
+register(
+  'DELETE',
+  '/family/:id/members/:memberId',
+  familyHandlers.removeFamilyMember
+);
+
+// 4. Goal routes
+register('GET', '/goal', goalHandlers.getGoals);
+register('POST', '/goal', goalHandlers.createGoal);
+register('GET', '/goal/:id', goalHandlers.getGoalById);
+register('PUT', '/goal/:id', goalHandlers.updateGoal);
+register('DELETE', '/goal/:id', goalHandlers.deleteGoal);
+
+// 5. Task routes
+register('GET', '/task', taskHandlers.getTasks);
+register('POST', '/task', taskHandlers.createTask);
+register('GET', '/task/:id', taskHandlers.getTaskById);
+register('PUT', '/task/:id', taskHandlers.updateTask);
+register('DELETE', '/task/:id', taskHandlers.deleteTask);
+
+// 6. User routes
 register('GET', '/user', userHandlers.getUsers);
 register('POST', '/user', userHandlers.register);
 register('PUT', '/user', userHandlers.updateUser);
 register('DELETE', '/user', userHandlers.deleteUser);
 register('GET', '/user/:id', userHandlers.getUserById);
-
-// 3. List routes (specific paths like /list/share must be registered before /list/:id)
-register('POST', '/list/share', listHandlers.shareList);
-register('DELETE', '/list/share', listHandlers.removeSharingList);
-register('GET', '/list', listHandlers.getUserLists);
-register('POST', '/list', listHandlers.createList);
-register('GET', '/list/:id', listHandlers.getListById);
-register('PUT', '/list/:id', listHandlers.updateList);
-register('DELETE', '/list/:id', listHandlers.deleteList);
-
-// 4. ListItem routes
-register('GET', '/listItem', listItemHandlers.getListItems);
-register('POST', '/listItem', listItemHandlers.createListItem);
-register('GET', '/listItem/:id', listItemHandlers.getListItemById);
-register('PUT', '/listItem/:id', listItemHandlers.updateListItem);
-register('DELETE', '/listItem/:id', listItemHandlers.deleteListItem);
 
 /**
  * Match an incoming request to a mock handler.

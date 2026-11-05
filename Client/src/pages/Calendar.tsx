@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CalendarView } from '@features/calendar';
+import { CalendarView } from '@features/event';
 
 export function Calendar() {
   const [selectedDay, setSelectedDay] = useState(26);

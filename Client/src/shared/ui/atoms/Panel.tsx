@@ -13,7 +13,7 @@ export function Panel({
 }: PanelProps) {
   return (
     <Component
-      className={`rounded-3xl border border-page-border bg-white p-6 shadow-[0_9px_28px_var(--color-page-shadow-panel)] max-sm:rounded-2xl max-sm:p-5 ${className}`}
+      className={`rounded-3xl border border-border bg-white p-6 shadow-[0_9px_28px_var(--color-shadowPanel)] max-sm:rounded-2xl max-sm:p-5 ${className}`}
     >
       {children}
     </Component>

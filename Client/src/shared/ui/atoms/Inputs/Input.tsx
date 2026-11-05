@@ -42,15 +42,12 @@ export const Input = ({
   return (
     <div className="grid gap-2">
       {label && (
-        <label
-          htmlFor={id}
-          className="block text-sm font-black text-page-label"
-        >
+        <label htmlFor={id} className="block text-sm font-black text-text">
           {label}
         </label>
       )}
       <div
-        className={`relative flex h-[52px] items-center pl-3 rounded-[14px] border bg-panelsColor text-page-faint transition duration-150 focus-within:border-page-focus focus-within:bg-white focus-within:shadow-[0_0_0_4px_var(--color-page-focus-soft)] focus-within:text-selected ${error ? 'border-red-500 focus-within:border-red-500' : 'border-page-border'}`}
+        className={`relative flex h-[52px] items-center pl-3 rounded-[14px] border bg-panelsColor text-textPlaceholder transition duration-150 focus-within:border-focus focus-within:bg-white focus-within:shadow-[0_0_0_4px_var(--color-focusSoft)] focus-within:text-selected ${error ? 'border-red-500 focus-within:border-red-500' : 'border-border'}`}
       >
         {icon && <Icon name={icon} size={19} />}
         <input
@@ -62,12 +59,12 @@ export const Input = ({
           minLength={minLength}
           required={required}
           aria-invalid={Boolean(error)}
-          className="h-full min-w-0 flex-1 border-0 bg-transparent px-3.5 text-base font-bold text-page-heading outline-none placeholder:font-semibold placeholder:text-page-placeholder"
+          className="h-full min-w-0 flex-1 border-0 bg-transparent px-3.5 text-base font-bold text-text outline-none placeholder:font-semibold placeholder:text-textPlaceholder"
         />
         {type === 'password' && (
           <button
             aria-label={showPassword ? 'Приховати пароль' : 'Показати пароль'}
-            className="py-2.5 pr-4 pl-1 text-page-faint"
+            className="py-2.5 pr-4 pl-1 text-textPlaceholder"
             onClick={togglePassword}
             type="button"
           >

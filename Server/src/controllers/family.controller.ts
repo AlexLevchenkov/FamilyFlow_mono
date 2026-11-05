@@ -15,7 +15,7 @@ class FamilyController {
   async getCurrentUserFamily(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const data: FamilyModel = await familyService.getCurrentUserFamily({
+      const data = await familyService.getCurrentUserFamily({
         userId: user.id,
       });
       apiResponse(res, data, 200);

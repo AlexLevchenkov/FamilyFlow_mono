@@ -3,11 +3,11 @@ import type {
   AddFamilyMemberBody,
   CreateFamilyBody,
   FamilyById,
-  FamilyRole,
   FamilyWithMemberId,
   UpdateFamilyMemberRoleBody,
   UpdateFamilyBody,
   WithUserId,
+  FamilyModel,
 } from "@familyflow/contracts";
 import { Family, FamilyMember } from "@prisma/client";
 import {
@@ -18,7 +18,9 @@ import {
 } from "@utils";
 
 class FamilyService {
-  async getCurrentUserFamily({ userId }: WithUserId<{}>): Promise<Family> {
+  async getCurrentUserFamily({
+    userId,
+  }: WithUserId<{}>): Promise<FamilyModel | null> {
     const membership = await prisma.familyMember.findFirst({
       where: { userId },
       include: {
@@ -43,16 +45,24 @@ class FamilyService {
     });
 
     if (!membership || !membership.family) {
-      throw notFoundError("User does not belong to any family");
+      return null;
     }
 
-    return membership.family;
+    const family: FamilyModel = {
+      id: membership.family.id,
+      name: membership.family.name,
+      createdAt: membership.family.createdAt,
+      updatedAt: membership.family.updatedAt,
+      members: membership.family.FamilyMember,
+    };
+
+    return family;
   }
 
   async getFamilyById({
     userId,
     familyId,
-  }: WithUserId<FamilyById>): Promise<Family> {
+  }: WithUserId<FamilyById>): Promise<FamilyModel> {
     const membership = await prisma.familyMember.findUnique({
       where: {
         familyId_userId: {
@@ -66,7 +76,7 @@ class FamilyService {
       throw forbiddenError("You are not a member of this family");
     }
 
-    const family = await prisma.family.findUnique({
+    const familyData = await prisma.family.findUnique({
       where: { id: familyId },
       include: {
         FamilyMember: {
@@ -85,9 +95,17 @@ class FamilyService {
       },
     });
 
-    if (!family) {
+    if (!familyData) {
       throw notFoundError("Family not found");
     }
+
+    const family: FamilyModel = {
+      id: familyData.id,
+      name: familyData.name,
+      createdAt: familyData.createdAt,
+      updatedAt: familyData.updatedAt,
+      members: familyData.FamilyMember,
+    };
 
     return family;
   }
@@ -138,7 +156,19 @@ class FamilyService {
       });
     });
 
-    return newFamily;
+    if (!newFamily) {
+      throw new Error("Failed to create family");
+    }
+
+    const family: FamilyModel = {
+      id: newFamily.id,
+      name: newFamily.name,
+      createdAt: newFamily.createdAt,
+      updatedAt: newFamily.updatedAt,
+      members: newFamily.FamilyMember,
+    };
+
+    return family;
   }
 
   async updateFamily({
@@ -183,7 +213,15 @@ class FamilyService {
       },
     });
 
-    return updated;
+    const family: FamilyModel = {
+      id: updated.id,
+      name: updated.name,
+      createdAt: updated.createdAt,
+      updatedAt: updated.updatedAt,
+      members: updated.FamilyMember,
+    };
+
+    return family;
   }
 
   async deleteFamily({

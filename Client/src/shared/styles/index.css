@@ -15,59 +15,75 @@ body {
 }
 
 @theme {
-  /* Colors */
-  --color-text: #0f266a;
-  --color-lightText: #225fbf;
+  /* Brand */
+  --color-primary: #7955d6;
+  --color-primaryLight: #aa7de8;
+  --color-primaryHover: #684dc8;
+  --color-primarySoft: #f0eaff;
+  --color-primaryMuted: #dcd6ed;
+
+  /* Text */
+  --color-text: #29274c;
+  --color-lightText: #747186;
+  --color-textMuted: #8e8b9d;
+  --color-textPlaceholder: #aaa7b6;
   --color-white: #fafafe;
+
+  /* Backgrounds */
+  --color-background: #f6f2fb;
   --color-asideBack: #f6f2fb;
-  --color-background: #e0e3f9;
   --color-panelsColor: #fefdfe;
-  --color-selected: #8d6ace;
-  --color-background1: #8d6ace;
+  --color-background1: #7955d6;
   --color-background2: #684dc8;
+  --color-selected: #f0eaff;
 
-  /* Shared semantic palette */
-  --color-page-heading: #29274c;
-  --color-page-visual-heading: #2e2c62;
-  --color-page-copy: #747186;
-  --color-page-muted: #8e8b9d;
-  --color-page-faint: #aaa7b6;
-  --color-page-label: #46445f;
-  --color-page-control: #514f66;
-  --color-page-placeholder: #b5b2bf;
-  --color-page-border: #ebe9f2;
-  --color-page-border-hover: #ded8ee;
-  --color-page-border-accent: #cfc7e7;
-  --color-page-control-border: #c9c6d5;
-  --color-page-focus: #9a7cde;
-  --color-page-focus-soft: rgba(126, 87, 215, 0.08);
-  --color-page-success: #36a98d;
-  --color-page-success-soft: #e5f8f1;
-  --color-page-surface: #faf9fd;
-  --color-page-lavender: #f7f4ff;
-  --color-page-lavender-active: #f0eaff;
-  --color-page-gradient-lavender: #eee8ff;
-  --color-page-gradient-blue: #e9edff;
-  --color-page-gradient-mint: #e5f4ef;
-  --color-page-accent-bright: #7d56da;
-  --color-page-overlay-white: rgba(255, 255, 255, 0.85);
-  --color-page-overlay-white-medium: rgba(255, 255, 255, 0.7);
-  --color-page-overlay-white-soft: rgba(255, 255, 255, 0.55);
-  --color-page-shadow-soft: rgba(61, 55, 96, 0.09);
-  --color-page-shadow-panel: rgba(61, 55, 96, 0.055);
-  --color-page-shadow-welcome: rgba(64, 54, 112, 0.08);
-  --color-page-shadow-accent: rgba(107, 72, 204, 0.2);
+  /* Borders */
+  --color-border: #ebe9f2;
+  --color-borderHover: #ded8ee;
+  --color-borderStrong: #c9c6d5;
 
-  /* fontFamily */
+  /* Focus */
+  --color-focus: #9a7cde;
+  --color-focusSoft: rgba(126, 87, 215, 0.08);
+
+  /* Status */
+  --color-success: #36a98d;
+  --color-successSoft: #e5f8f1;
+
+  --color-danger: #e76f91;
+  --color-dangerSoft: #fbe2eb;
+
+  --color-warning: #f2a13b;
+  --color-warningSoft: #fff1dc;
+
+  --color-info: #538fc5;
+  --color-infoSoft: #e8f1ff;
+
+  /* Decorative gradients */
+  --color-gradientLavender: #f4efff;
+  --color-gradientBlue: #e9edff;
+  --color-gradientMint: #e5f4ef;
+
+  /* Overlays */
+  --color-overlayWhite: rgba(255, 255, 255, 0.85);
+  --color-overlaywhiteMedium: rgba(255, 255, 255, 0.7);
+  --color-overlayWhiteSoft: rgba(255, 255, 255, 0.55);
+
+  /* Shadows */
+  --color-shadowSoft: rgba(61, 55, 96, 0.09);
+  --color-shadowPanel: rgba(61, 55, 96, 0.055);
+  --color-shadowAccent: rgba(107, 72, 204, 0.2);
+
+  /* Font */
   --font-main: 'Nunito Sans', ui-rounded, system-ui, sans-serif;
 
-  /* fontSize */
+  /* Font sizes */
   --text-sm: 12px;
   --text-base: 14px;
   --text-lg: 18px;
   --text-xl: 22px;
 
-  /* borderRadius */
+  /* Border radius */
   --radius-main: 10px;
   --radius-form: 24px;
   --radius-max: 999px;

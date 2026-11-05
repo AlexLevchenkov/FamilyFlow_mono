@@ -10,17 +10,16 @@ import {
 import { Icon } from '@ui';
 
 const authEyebrowClasses =
-  'mb-2 text-xs font-black uppercase tracking-widest text-page-accent-bright';
+  'mb-2 text-xs font-black uppercase tracking-widest text-primary';
 const authHeadingClasses =
-  'm-0 text-3xl font-black leading-tight tracking-tighter text-page-heading md:text-4xl';
+  'm-0 text-3xl font-black leading-tight tracking-tighter text-text md:text-4xl';
 const socialButtonClasses =
-  'flex min-h-11 items-center justify-center gap-2.5 rounded-xl border border-page-border text-sm font-black text-page-control transition duration-150 hover:border-page-border-accent hover:bg-page-surface';
+  'flex min-h-11 items-center justify-center gap-2.5 rounded-xl border border-border text-sm font-black text-text transition duration-150 hover:border-primaryMuted hover:bg-panelsColor';
 const floatingCardClasses =
   'z-40 flex items-center gap-2.5 rounded-2xl border border-white/75 bg-white/80 p-3 shadow-xl backdrop-blur-md';
-const floatingCardTitleClasses =
-  'block text-xs font-black text-page-visual-heading';
+const floatingCardTitleClasses = 'block text-xs font-black text-text';
 const floatingCardDetailClasses =
-  'mt-0.5 block text-xs font-bold text-page-muted';
+  'mt-0.5 block text-xs font-bold text-textMuted';
 
 export function AuthPage({ view, token }: { view: AuthView; token?: string }) {
   const navigate = useNavigate();
@@ -82,7 +81,7 @@ export function AuthPage({ view, token }: { view: AuthView; token?: string }) {
         <div className="m-auto w-full max-w-110 pt-12 pb-9 max-lg:pt-14">
           {view !== 'login' && (
             <button
-              className="mb-7 flex items-center gap-2 text-sm font-extrabold text-page-muted"
+              className="mb-7 flex items-center gap-2 text-sm font-extrabold text-textMuted"
               onClick={() => navigate('/login')}
             >
               <Icon name="arrow" size={17} /> Назад до входу
@@ -90,7 +89,7 @@ export function AuthPage({ view, token }: { view: AuthView; token?: string }) {
           )}
           <p className={authEyebrowClasses}>{content.eyebrow}</p>
           <h1 className={authHeadingClasses}>{content.title}</h1>
-          <p className="mt-3 max-w-sm text-base leading-relaxed text-page-copy">
+          <p className="mt-3 max-w-sm text-base leading-relaxed text-lightText">
             {content.description}
           </p>
 
@@ -103,10 +102,10 @@ export function AuthPage({ view, token }: { view: AuthView; token?: string }) {
 
           {(view === 'login' || view === 'register') && (
             <>
-              <div className="my-6 flex items-center gap-3 text-xs font-bold text-page-faint">
-                <span className="h-px flex-1 bg-page-border" />
+              <div className="my-6 flex items-center gap-3 text-xs font-bold text-textPlaceholder">
+                <span className="h-px flex-1 bg-border" />
                 <span>або продовжити через</span>
-                <span className="h-px flex-1 bg-page-border" />
+                <span className="h-px flex-1 bg-border" />
               </div>
               <div className="grid grid-cols-2 gap-2.5">
                 <button
@@ -122,7 +121,7 @@ export function AuthPage({ view, token }: { view: AuthView; token?: string }) {
                   <b className="text-base">●</b> Apple
                 </button>
               </div>
-              <p className="mt-6 text-center text-sm font-bold text-page-muted">
+              <p className="mt-6 text-center text-sm font-bold text-textMuted">
                 {view === 'login' ? 'Ще не з нами?' : 'Вже маєте акаунт?'}
                 <button
                   className="ml-1 font-black text-background2"
@@ -137,24 +136,24 @@ export function AuthPage({ view, token }: { view: AuthView; token?: string }) {
           )}
         </div>
 
-        <p className="text-xs font-bold text-page-faint">
+        <p className="text-xs font-bold text-textPlaceholder">
           © 2026 FamilyFlow · Створено для родин
         </p>
       </section>
 
-      <section className="relative mt-3 mr-3 mb-3 min-h-[calc(100vh-24px)] overflow-hidden rounded-3xl bg-[radial-gradient(circle_at_80%_15%,rgba(255,255,255,0.55),transparent_25%),linear-gradient(145deg,var(--color-page-gradient-lavender)_0%,var(--color-page-gradient-blue)_50%,var(--color-page-gradient-mint)_100%)] max-lg:hidden">
+      <section className="relative mt-3 mr-3 mb-3 min-h-[calc(100vh-24px)] overflow-hidden rounded-3xl bg-[radial-gradient(circle_at_80%_15%,rgba(255,255,255,0.55),transparent_25%),linear-gradient(145deg,var(--color-gradientLavender)_0%,var(--color-gradientBlue)_50%,var(--color-gradientMint)_100%)] max-lg:hidden">
         <div className="absolute -right-36 -top-28 size-96 rounded-full bg-white/15" />
         <div className="absolute -bottom-44 -left-38 size-112 rounded-full border-8 border-white/40 opacity-70" />
         <div className="absolute top-[8%] left-[8%] z-30">
           <span className="inline-block rounded-full border border-[rgba(99,74,180,0.13)] bg-white/55 px-3 py-2 text-xs font-black uppercase tracking-widest text-background2">
             Сімейний простір №1
           </span>
-          <h2 className="mt-4 text-3xl font-black leading-none tracking-tighter text-page-visual-heading md:text-5xl">
+          <h2 className="mt-4 text-3xl font-black leading-none tracking-tighter text-text md:text-5xl">
             Менше рутини.
             <br />
             Більше часу разом.
           </h2>
-          <p className="mt-4 max-w-sm text-base leading-relaxed text-page-copy">
+          <p className="mt-4 max-w-sm text-base leading-relaxed text-lightText">
             Домовляйтесь, плануйте і підтримуйте одне одного щодня.
           </p>
         </div>
@@ -167,7 +166,7 @@ export function AuthPage({ view, token }: { view: AuthView; token?: string }) {
           />
         </div>
         <div className={`absolute top-[33%] right-[7%] ${floatingCardClasses}`}>
-          <span className="grid size-7 place-items-center rounded-lg bg-page-success-soft text-page-success">
+          <span className="grid size-7 place-items-center rounded-lg bg-successSoft text-success">
             <Icon name="check" size={13} />
           </span>
           <div>
@@ -181,13 +180,13 @@ export function AuthPage({ view, token }: { view: AuthView; token?: string }) {
           className={`absolute bottom-[9%] left-[5%] ${floatingCardClasses}`}
         >
           <div className="flex pl-2">
-            <i className="-ml-2 grid size-7 place-items-center rounded-full border-2 border-white bg-[#dfe5ff] text-xs font-black not-italic text-[#5267ca]">
+            <i className="-ml-2 grid size-7 place-items-center rounded-full border-2 border-white bg-gradientBlue text-xs font-black not-italic text-info">
               О
             </i>
-            <i className="-ml-2 grid size-7 place-items-center rounded-full border-2 border-white bg-[#fbe2eb] text-xs font-black not-italic text-[#d55f82]">
+            <i className="-ml-2 grid size-7 place-items-center rounded-full border-2 border-white bg-dangerSoft text-xs font-black not-italic text-danger">
               А
             </i>
-            <i className="-ml-2 grid size-7 place-items-center rounded-full border-2 border-white bg-[#fff0d8] text-xs font-black not-italic text-[#db8c26]">
+            <i className="-ml-2 grid size-7 place-items-center rounded-full border-2 border-white bg-warningSoft text-xs font-black not-italic text-warning">
               М
             </i>
           </div>

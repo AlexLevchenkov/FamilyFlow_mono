@@ -28,9 +28,11 @@ export function MyTasks() {
               className="mb-4 h-2 w-12 rounded-full"
               style={{ backgroundColor: color as string }}
             />
-            <p className="text-sm font-bold text-[#8f8da0]">{label}</p>
+            <p className="text-sm font-bold text-lightText">{label}</p>
             <p className="mt-2 text-3xl font-extrabold">{value}</p>
-            <p className="mt-1 text-xs font-bold text-[#aaa8b8]">{detail}</p>
+            <p className="mt-1 text-xs font-bold text-textPlaceholder">
+              {detail}
+            </p>
           </Panel>
         ))}
       </section>

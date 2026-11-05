@@ -1,8 +1,7 @@
 import axios from 'axios';
-import { useAuthStore } from '@store/auth';
+import { authApi, useAuthStore } from '@features/auth';
 import { API_CONFIG } from './config';
 import { toast } from '@ui';
-import { authApi } from './auth.api';
 
 import { setupMockAdapter } from '@mocks';
 
@@ -20,7 +19,7 @@ function refreshAccessToken() {
     refreshPromise = authApi
       .refreshToken()
       .then(response => {
-        const accessToken = response.data.data.accessToken;
+        const accessToken = response.accessToken;
         if (!accessToken) {
           throw new Error('Refresh response did not include an access token');
         }

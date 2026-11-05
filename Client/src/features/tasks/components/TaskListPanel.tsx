@@ -40,16 +40,16 @@ export function TaskListPanel({
       <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h2 className="text-[19px] font-black tracking-[-0.25px]">{title}</h2>
-          <p className="mt-1 text-sm text-[#9290a4]">{description}</p>
+          <p className="mt-1 text-sm text-lightText">{description}</p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="flex rounded-xl bg-[#f2f1f8] p-1">
+          <div className="flex rounded-xl bg-background p-1">
             {filters.map(item => (
               <button
                 className={`rounded-[9px] px-3 py-1.5 text-xs font-extrabold transition-all ${
                   filter === item
-                    ? 'bg-white text-[#6445c2] shadow-[0_2px_8px_rgba(54,48,88,0.09)]'
-                    : 'text-[#8f8da0]'
+                    ? 'bg-white text-primary shadow-[0_2px_8px_rgba(54,48,88,0.09)]'
+                    : 'text-lightText'
                 }`}
                 key={item}
                 onClick={() => setFilter(item)}
@@ -73,10 +73,10 @@ export function TaskListPanel({
       </div>
 
       {showComposer && (
-        <div className="mt-3 flex flex-col gap-2 rounded-2xl border border-[#d9d2f4] bg-[#faf9ff] p-3 sm:flex-row">
+        <div className="mt-3 flex flex-col gap-2 rounded-2xl border border-primarySoft bg-panelsColor p-3 sm:flex-row">
           <input
             autoFocus
-            className="min-w-0 flex-1 rounded-xl border border-[#e5e1f2] bg-white px-4 py-2.5 text-sm font-bold outline-none focus:border-[#8b63de]"
+            className="min-w-0 flex-1 rounded-xl border border-primarySoft bg-white px-4 py-2.5 text-sm font-bold outline-none focus:border-primary"
             onChange={event => setNewTask(event.target.value)}
             onKeyDown={event => event.key === 'Enter' && addTask()}
             placeholder="Напишіть нову справу..."
@@ -86,7 +86,7 @@ export function TaskListPanel({
             Додати
           </PrimaryButton>
           <button
-            className="px-3 text-sm font-extrabold text-[#88869a]"
+            className="px-3 text-sm font-extrabold text-lightText"
             onClick={() => setShowComposer(false)}
           >
             Скасувати
@@ -96,8 +96,8 @@ export function TaskListPanel({
 
       {showFooterAdd && !showComposer && (
         <button
-          className="mt-3 flex w-full items-center justify-center gap-2 rounded-[14px] border border-dashed border-page-border-accent p-3 text-xs font-black
-          text-page-accent-bright transition-all hover:border-page-border-accent hover:bg-page-lavender-active"
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-[14px] border border-dashed border-primaryMuted p-3 text-xs font-black
+          text-primary transition-all hover:border-primaryMuted hover:bg-primarySoft"
           onClick={() => setShowComposer(true)}
         >
           <Icon name="plus" size={18} /> Додати нову справу

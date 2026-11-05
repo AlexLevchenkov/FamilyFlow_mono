@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForgotPassword } from '@hooks/AuthHooks';
+import { Button, Icon, Input } from '@ui';
 import {
+  ForgotPasswordModal,
   forgotPasswordSchema,
-  type ForgotPasswordData,
-} from '@schemas/loginSchema';
-import { Button, Input } from '@ui';
-import { ForgotPasswordModal } from './ForgotPasswordModal';
-import { Icon } from '@ui';
+  useForgotPassword,
+} from '@features/auth';
+import type { ForgotPasswordBody } from '@types';
 
 export const ForgotPasswordForm = () => {
   const [showSuccess, setShowSuccess] = useState(false);
@@ -18,11 +17,11 @@ export const ForgotPasswordForm = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<ForgotPasswordData>({
+  } = useForm<ForgotPasswordBody>({
     resolver: zodResolver(forgotPasswordSchema),
   });
 
-  const onSubmit = (data: ForgotPasswordData) => {
+  const onSubmit = (data: ForgotPasswordBody) => {
     forgotPassword.mutate(data, {
       onSuccess: res => {
         if (res.status === 200) {

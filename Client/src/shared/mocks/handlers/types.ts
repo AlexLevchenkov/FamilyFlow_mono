@@ -1,9 +1,9 @@
-export interface MockRequestContext {
+export interface MockRequestContext<T = unknown> {
   url: string;
   method: string;
   params: Record<string, string>;
   query: Record<string, string | undefined>;
-  body: Record<string, unknown> | null | undefined;
+  body: T | null | undefined;
 }
 
 export interface MockResponseResult {

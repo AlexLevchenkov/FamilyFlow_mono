@@ -6,13 +6,17 @@ import {
   useNavigate,
   useParams,
 } from 'react-router-dom';
-import { authApi } from '@api/auth.api';
+import {
+  authApi,
+  LogoutButton,
+  ProfileUser,
+  useAuthStore,
+} from '@features/auth';
 import { TasksProvider, useTasksContext } from '@features/tasks';
-import { LogoutButton, ProfileUser } from '@features/auth';
-import { useAuthStore } from '@store/auth';
 import { MainLayout } from '@layouts/MainLayout';
-import { AuthPage, VerifyEmailPage, PrivacyPage, SupportPage, TermsPage, SettingsPage } from '@pages';
+import { AuthPage, VerifyEmailPage } from '@pages';
 import { ToastContainer } from '@ui';
+import { useCurrentUserQuery } from '@hooks';
 
 let sessionBootstrapPromise: Promise<void> | null = null;
 
@@ -24,7 +28,7 @@ function bootstrapSession() {
       .refreshToken()
       .then(response => {
         useAuthStore.getState().refreshTokens({
-          access: response.data.data.accessToken,
+          access: response.accessToken,
         });
       })
       .catch(() => {
@@ -55,7 +59,7 @@ export function RootLayout() {
     return (
       <>
         <main
-          className="grid min-h-screen place-items-center bg-white text-sm text-page-muted"
+          className="grid min-h-screen place-items-center bg-white text-sm text-textMuted"
           aria-busy="true"
         >
           Перевірка сесії…
@@ -75,13 +79,21 @@ export function RootLayout() {
 
 export function RequireAuth() {
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
-  const location = useLocation();
+  const { isLoading, isError } = useCurrentUserQuery();
 
-  return isAuthenticated ? (
-    <Outlet />
-  ) : (
-    <Navigate to="/login" replace state={{ from: location }} />
-  );
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (isLoading) {
+    return <div>Завантаження...</div>;
+  }
+
+  if (isError) {
+    return <div>Не вдалося завантажити дані користувача.</div>;
+  }
+
+  return <Outlet />;
 }
 
 export function PublicOnly() {
@@ -105,7 +117,7 @@ export function DashboardLayout() {
   const activeNav =
     Object.entries(navPaths).find(
       ([, path]) => path === location.pathname
-    )?.[0] ?? 'Огляд';
+    )?.[0] ?? 'Home';
 
   return (
     <MainLayout
@@ -142,5 +154,3 @@ export function RouteFallback() {
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   return <Navigate to={isAuthenticated ? '/' : '/login'} replace />;
 }
-
-export { PrivacyPage, SupportPage, TermsPage, SettingsPage };

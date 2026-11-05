@@ -1,13 +1,12 @@
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Input } from '@ui';
+import { Button, Icon, Input } from '@ui';
 import {
   resetPasswordSchema,
   type ResetPasswordData,
-} from '@schemas/loginSchema';
-import { useResetPassword } from '@hooks/AuthHooks';
-import { useNavigate } from 'react-router-dom';
-import { Icon } from '@ui';
+  useResetPassword,
+} from '@features/auth';
 
 interface ResetPasswordFormProps {
   token: string;

@@ -23,17 +23,17 @@ export const Modal = ({ isOpen, children, onClose }: IModal) => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-page-heading/40 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-text/40 p-4"
       onMouseDown={event => event.target === event.currentTarget && onClose()}
     >
       <div
         aria-modal="true"
-        className="relative w-full max-w-lg rounded-2xl border border-page-border bg-white p-6 shadow-2xl"
+        className="relative w-full max-w-lg rounded-2xl border border-border bg-white p-6 shadow-2xl"
         role="dialog"
       >
         <button
           aria-label="Закрити"
-          className="absolute top-3 right-3 rounded-lg px-3 py-2 text-sm font-bold text-page-muted hover:bg-page-surface"
+          className="absolute top-3 right-3 rounded-lg px-3 py-2 text-sm font-bold text-textMuted hover:bg-panelsColor"
           onClick={onClose}
           type="button"
         >

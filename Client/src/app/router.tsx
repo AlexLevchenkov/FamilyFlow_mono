@@ -1,16 +1,23 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { AuthPage, Calendar, Family, Goals, Home, MyTasks } from '@pages';
 import {
+  AuthPage,
+  Calendar,
+  Family,
+  Goals,
+  Home,
+  MyTasks,
   PrivacyPage,
+  SettingsPage,
+  SupportPage,
+  TermsPage,
+} from '@pages';
+import {
   PublicOnly,
   RequireAuth,
   ResetPasswordRoute,
   RootLayout,
   RouteFallback,
-  SettingsPage,
-  SupportPage,
   TasksLayout,
-  TermsPage,
   VerifyEmailRoute,
 } from './RouteElements';
 

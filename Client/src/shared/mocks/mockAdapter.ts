@@ -2,7 +2,7 @@ import { AxiosError } from 'axios';
 import type { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import { isMockEnabled } from './mockConfig';
 import { matchMockRoute } from './mockRouter';
-import type { MockRequestContext } from './handlers/types';
+import type { MockRequestContext } from './handlers';
 
 const SIMULATED_LATENCY_MS = 180;
 

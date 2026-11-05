@@ -7,13 +7,13 @@ export function FamilyView() {
     <div className="space-y-6">
       <PageHero variant="family">
         <div>
-          <p className="text-xs font-extrabold uppercase tracking-[0.15em] text-[#7054c5]">
+          <p className="text-xs font-extrabold uppercase tracking-[0.15em] text-primary">
             Простір родини Ковалів
           </p>
           <h2 className="mt-3 text-3xl font-extrabold tracking-tight">
             Разом усе простіше
           </h2>
-          <p className="mt-3 max-w-xl text-sm leading-6 text-[#737188]">
+          <p className="mt-3 max-w-xl text-sm leading-6 text-lightText">
             Розподіляйте справи справедливо, залишайтесь на зв’язку та знаходьте
             більше часу одне для одного.
           </p>
@@ -31,23 +31,23 @@ export function FamilyView() {
               size="profile"
             />
             <h3 className="mt-4 text-lg font-extrabold">{person.name}</h3>
-            <p className="mt-1 text-xs font-bold text-[#aaa8b8]">
+            <p className="mt-1 text-xs font-bold text-textPlaceholder">
               {index === 0
                 ? 'Адміністратор'
                 : index === 1
                   ? 'Дорослий'
                   : 'Дитячий профіль'}
             </p>
-            <div className="mt-5 grid grid-cols-2 divide-x divide-[#efedf4] border-t border-[#efedf4] pt-4">
+            <div className="mt-5 grid grid-cols-2 divide-x divide-background border-t border-background pt-4">
               <div>
                 <strong className="block text-lg">{person.tasks}</strong>
-                <small className="text-[10px] font-bold text-[#aaa8b8]">
+                <small className="text-[10px] font-bold text-textPlaceholder">
                   справи
                 </small>
               </div>
               <div>
                 <strong className="block text-lg">{index + 2}</strong>
-                <small className="text-[10px] font-bold text-[#aaa8b8]">
+                <small className="text-[10px] font-bold text-textPlaceholder">
                   виконано
                 </small>
               </div>
@@ -61,7 +61,7 @@ export function FamilyView() {
             <h2 className="text-lg font-black tracking-tight">
               Активність родини
             </h2>
-            <button className="text-xs font-extrabold text-[#7656d0]">
+            <button className="text-xs font-extrabold text-primary">
               Переглянути все
             </button>
           </div>
@@ -82,7 +82,7 @@ export function FamilyView() {
               ],
             ].map(([initial, title, detail, color]) => (
               <div
-                className="flex items-center gap-3 border-b border-[#f0eef5] pb-4 last:border-0 last:pb-0"
+                className="flex items-center gap-3 border-b border-background pb-4 last:border-0 last:pb-0"
                 key={title}
               >
                 <span
@@ -93,11 +93,11 @@ export function FamilyView() {
                 </span>
                 <div className="min-w-0">
                   <p className="text-sm font-extrabold">{title}</p>
-                  <p className="mt-1 truncate text-xs text-[#9997a9]">
+                  <p className="mt-1 truncate text-xs text-textMuted">
                     {detail}
                   </p>
                 </div>
-                <span className="ml-auto text-[10px] font-bold text-[#aaa8b8]">
+                <span className="ml-auto text-[10px] font-bold text-textPlaceholder">
                   сьогодні
                 </span>
               </div>
@@ -106,7 +106,7 @@ export function FamilyView() {
         </Panel>
         <Panel>
           <h2 className="text-lg font-black tracking-tight">Баланс справ</h2>
-          <p className="mt-1 text-sm text-[#9290a4]">
+          <p className="mt-1 text-sm text-lightText">
             Активні задачі цього тижня
           </p>
           <div className="mt-6 space-y-4">
@@ -114,9 +114,9 @@ export function FamilyView() {
               <div key={person.name}>
                 <div className="mb-2 flex justify-between text-xs font-extrabold">
                   <span>{person.name}</span>
-                  <span className="text-[#9997a9]">{person.tasks}</span>
+                  <span className="text-textMuted">{person.tasks}</span>
                 </div>
-                <div className="h-2 overflow-hidden rounded-full bg-[#efedf5]">
+                <div className="h-2 overflow-hidden rounded-full bg-background">
                   <div
                     className="h-full rounded-full"
                     style={{

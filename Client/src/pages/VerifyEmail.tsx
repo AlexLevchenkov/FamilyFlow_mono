@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
-import { useVerifyEmail } from '@hooks/AuthHooks';
 import { Icon } from '@ui';
+import { useVerifyEmail } from '@features/auth';
 
 export const VerifyEmailPage = ({ token }: { token: string }) => {
   const verifyEmailMutation = useVerifyEmail();
@@ -26,25 +26,25 @@ export const VerifyEmailPage = ({ token }: { token: string }) => {
     <main className="grid min-h-screen place-items-center bg-white px-5">
       <section className="w-full max-w-md text-center">
         <div
-          className={`mx-auto mb-6 grid size-16 place-items-center rounded-3xl ${isSuccess ? 'bg-page-success-soft text-page-success' : status === 'error' ? 'bg-red-50 text-red-600' : 'bg-page-lavender text-background2'}`}
+          className={`mx-auto mb-6 grid size-16 place-items-center rounded-3xl ${isSuccess ? 'bg-successSoft text-success' : status === 'error' ? 'bg-red-50 text-red-600' : 'bg-background text-background2'}`}
         >
           <Icon name={isSuccess ? 'check' : 'mail'} size={28} />
         </div>
-        <p className="mb-2 text-xs font-black uppercase tracking-widest text-page-accent-bright">
+        <p className="mb-2 text-xs font-black uppercase tracking-widest text-primary">
           {status === 'loading'
             ? 'Перевірка'
             : isSuccess
               ? 'Готово'
               : 'Безпека акаунта'}
         </p>
-        <h1 className="text-3xl font-black tracking-tight text-page-heading">
+        <h1 className="text-3xl font-black tracking-tight text-text">
           {status === 'loading'
             ? 'Підтверджуємо електронну пошту'
             : isSuccess
               ? 'Пошту підтверджено'
               : 'Не вдалося підтвердити пошту'}
         </h1>
-        <p className="mt-3 text-base leading-relaxed text-page-copy">
+        <p className="mt-3 text-base leading-relaxed text-lightText">
           {status === 'loading'
             ? 'Це займе лише мить.'
             : isSuccess

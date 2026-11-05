@@ -2,8 +2,7 @@ import { isAxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
-import { useLogin } from '@hooks/AuthHooks';
-import { loginSchema, type LoginFormData } from '@schemas/loginSchema';
+import { useLogin, loginSchema, type LoginFormData } from '@features/auth';
 import { useStore } from '@store';
 import { Button, InputCheckbox, Input, Icon } from '@ui';
 
@@ -25,9 +24,8 @@ export const LoginForm = () => {
     login.mutate(data, {
       onSuccess: res => {
         auth.login({
-          accessToken: res.data.data.accessToken,
+          accessToken: res.accessToken,
           rememberMe: data.rememberMe,
-          me: res.data.data.user,
         });
         navigate('/');
       },

@@ -17,7 +17,7 @@ export const InputCheckbox = ({
 }: IInputCheckbox) => {
   return (
     <div className="grid gap-1">
-      <div className="flex items-start gap-2 text-sm font-bold leading-normal text-page-copy">
+      <div className="flex items-start gap-2 text-sm font-bold leading-normal text-lightText">
         <input
           id={id}
           {...register}

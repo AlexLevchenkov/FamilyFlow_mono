@@ -13,18 +13,32 @@ export const API_ENDPOINTS = {
     RESET_PASSWORD: '/auth/reset-password',
     VERIFY_EMAIL: '/auth/verify-email',
   },
+  EVENT: {
+    ROOT: '/event',
+    BY_ID: (id: number) => `/event/${id}`,
+  },
+  GOAL: {
+    ROOT: '/goal',
+    BY_ID: (id: number) => `/goal/${id}`,
+  },
+  TASK: {
+    ROOT: '/task',
+    BY_ID: (id: number) => `/task/${id}`,
+  },
   USER: {
     ROOT: '/user',
-    BY_ID: (id: number | string) => `/user/${id}`,
+    BY_ID: (id: number) => `/user/${id}`,
+    ME: '/user/me',
   },
-  LIST: {
-    ROOT: '/list',
-    BY_ID: (id: number | string) => `/list/${id}`,
-    SHARE: '/list/share',
-  },
-  LIST_ITEM: {
-    ROOT: '/listItem',
-    BY_ID: (id: number | string) => `/listItem/${id}`,
+  FAMILY: {
+    ROOT: '/family',
+    BY_ID: (id: number) => `/family/${id}`,
+    MY: '/family/my',
+    MEMBERS: {
+      ROOT: (familyId: number) => `/family/${familyId}/member`,
+      BY_ID: (familyId: number, userId: number) =>
+        `/family/${familyId}/member/${userId}`,
+    },
   },
 } as const;
 

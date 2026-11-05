@@ -13,7 +13,7 @@ export const ForgotPasswordModal = ({
   const navigate = useNavigate();
   return (
     <Modal isOpen={isOpen} onClose={toggleOpen}>
-      <p className="text-base leading-relaxed text-page-copy">
+      <p className="text-base leading-relaxed text-lightText">
         Ми надіслали лист із посиланням для відновлення пароля. Перейдіть за
         посиланням у листі, щоб продовжити.
       </p>
