@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { familyApi } from '@features/family';
-import { familyKeys } from '@features/family/api/familyKeys';
+import { familyApi, familyKeys } from '@features/family';
 
 export function useFamilyQuery() {
   const { data, isLoading, isError, error, refetch } = useQuery({

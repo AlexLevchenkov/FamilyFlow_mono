@@ -10,7 +10,7 @@ export const familyPaths = {
           content: {
             "application/json": {
               schema: {
-                $ref: "#/components/schemas/FamilyResponse",
+                $ref: "#/components/schemas/MyFamilyResponse",
               },
             },
           },

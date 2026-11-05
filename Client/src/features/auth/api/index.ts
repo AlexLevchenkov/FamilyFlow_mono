@@ -9,6 +9,8 @@ import type {
   RegisterUserBody,
 } from '@types';
 
+export * from './authKeys';
+
 export const authApi = {
   /**
    * Login user (POST /auth/login)

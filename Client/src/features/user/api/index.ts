@@ -10,6 +10,8 @@ import type {
   UpdateUserBody,
 } from '@types';
 
+export * from './userKeys';
+
 export const userApi = {
   /**
    * Search and paginate users (GET /user)

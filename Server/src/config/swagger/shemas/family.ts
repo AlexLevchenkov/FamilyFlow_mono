@@ -79,6 +79,7 @@ const familySample: FamilyModel = {
 };
 
 export const familySchemas = {
+  MyFamilyResponse: interfaceToOpenAPI<FamilyModel | null>(familySample),
   FamilyResponse: interfaceToOpenAPI<FamilyModel>(familySample),
   FamilyMemberResponse: interfaceToOpenAPI<FamilyMemberModel>(parentMember),
   CreateFamilyBody: interfaceToOpenAPI<CreateFamilyBody>({

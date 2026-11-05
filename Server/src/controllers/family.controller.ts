@@ -80,11 +80,11 @@ class FamilyController {
     try {
       const { user } = req;
       const { familyId } = req.validated?.params as FamilyById;
-      const data = await familyService.deleteFamily({
+      await familyService.deleteFamily({
         userId: user.id,
         familyId,
       });
-      apiResponse(res, data, 200);
+      apiResponse(res, null, 204);
     } catch (error: any) {
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";

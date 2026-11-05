@@ -8,6 +8,8 @@
   ],
   "scripts": {
     "dev": "concurrently \"npm --prefix Server run dev\" \"npm --prefix Client run dev\"",
+    "devClient": "npm --prefix Client run dev",
+    "devServer": "npm --prefix Server run dev",
     "dev:mock": "npm --prefix Client run dev:mock",
     "format": "prettier --write \"**/*.{ts,tsx,js,json,css,scss,md}\""
   },

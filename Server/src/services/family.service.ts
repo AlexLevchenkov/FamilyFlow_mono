@@ -113,7 +113,7 @@ class FamilyService {
   async createFamily({
     userId,
     name,
-  }: WithUserId<CreateFamilyBody>): Promise<Family | null> {
+  }: WithUserId<CreateFamilyBody>): Promise<Family> {
     const existingMembership = await prisma.familyMember.findFirst({
       where: { userId },
     });
