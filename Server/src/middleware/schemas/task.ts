@@ -35,19 +35,19 @@ const getTaskSchema = z.object({
 });
 
 const createTaskSchema = z.object({
-  title: z.string().min(1),
+  title: z.coerce.string().min(1),
   type: z.enum(type),
   visibility: z.enum(visibility),
-  date: z.date(),
+  date: z.coerce.date(),
 });
 
 const updateTaskSchema = z.object({
   id: z.coerce.number(),
-  title: z.string().min(1),
-  type: z.enum(type),
-  visibility: z.enum(visibility),
-  status: z.boolean(),
-  date: z.date(),
+  title: z.coerce.string().min(1).optional(),
+  type: z.enum(type).optional(),
+  visibility: z.enum(visibility).optional(),
+  status: z.coerce.boolean().optional(),
+  date: z.coerce.date().optional(),
 });
 
 const deleteTaskSchema = z.object({

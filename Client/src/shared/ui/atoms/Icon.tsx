@@ -94,7 +94,15 @@ const paths: Record<IconName, React.ReactNode> = {
   arrow: <path d="m5 12 6-6M5 12l6 6M5 12h14" />,
 };
 
-export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
+export function Icon({
+  name,
+  size = 20,
+  className = '',
+}: {
+  name: IconName;
+  size?: number;
+  className?: string;
+}) {
   return (
     <svg
       aria-hidden="true"
@@ -106,6 +114,7 @@ export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="1.8"
+      className={className}
     >
       {paths[name]}
     </svg>

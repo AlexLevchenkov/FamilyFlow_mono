@@ -125,24 +125,53 @@ class TaskServices {
     date,
   }: WithUserId<WithId<UpdateTaskBody>>): Promise<TaskModel> {
     const haveTask = await prisma.task.findFirst({
-      where: { userId, id },
+      where: {
+        id,
+        OR: [
+          { userId },
+          {
+            visibility: Visibility.shared,
+            user: {
+              FamilyMember: {
+                some: {
+                  family: {
+                    FamilyMember: {
+                      some: {
+                        userId,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
     });
 
     if (!haveTask) {
       throw notFoundError("Task not found");
     }
 
-    const taskWithThisTitle = await prisma.task.findFirst({
-      where: { userId, title, NOT: { id } },
-    });
+    if (title && title !== haveTask.title) {
+      const taskWithThisTitle = await prisma.task.findFirst({
+        where: { userId: haveTask.userId, title, NOT: { id } },
+      });
 
-    if (!!taskWithThisTitle) {
-      throw alreadyExistError("Task with this title already exist");
+      if (!!taskWithThisTitle) {
+        throw alreadyExistError("Task with this title already exist");
+      }
     }
 
     const updatedTask = await prisma.task.update({
       where: { id },
-      data: { title, type, visibility, status, date },
+      data: {
+        ...(title !== undefined ? { title } : {}),
+        ...(type !== undefined ? { type } : {}),
+        ...(visibility !== undefined ? { visibility } : {}),
+        ...(status !== undefined ? { status: Boolean(status) } : {}),
+        ...(date !== undefined ? { date } : {}),
+      },
     });
 
     return updatedTask;

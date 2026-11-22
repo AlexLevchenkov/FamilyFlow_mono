@@ -43,9 +43,9 @@ export interface CreateTaskBody {
 }
 
 export interface UpdateTaskBody {
-  title: string;
-  type: TaskType;
-  visibility: Visibility;
-  status: boolean;
-  date: Date;
+  title?: string;
+  type?: TaskType;
+  visibility?: Visibility;
+  status?: boolean;
+  date?: Date;
 }

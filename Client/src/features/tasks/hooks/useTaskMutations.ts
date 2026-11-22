@@ -28,15 +28,50 @@ export function useUpdateTaskMutation() {
   return useMutation({
     mutationFn: ({ id, dto }: { id: number; dto: UpdateTaskBody }) =>
       tasksApi.updateTask(id, dto),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: taskKeys.all });
+    onMutate: async ({ id, dto }) => {
+      await queryClient.cancelQueries({ queryKey: taskKeys.all });
+
+      const previousQueries = queryClient.getQueriesData({
+        queryKey: taskKeys.all,
+      });
+
+      queryClient.setQueriesData(
+        { queryKey: taskKeys.all },
+        (oldData: any) => {
+          if (!oldData) return oldData;
+          if (Array.isArray(oldData)) {
+            return oldData.map((item: any) =>
+              item.id === id ? { ...item, ...dto } : item
+            );
+          }
+          if (oldData.data && Array.isArray(oldData.data)) {
+            return {
+              ...oldData,
+              data: oldData.data.map((item: any) =>
+                item.id === id ? { ...item, ...dto } : item
+              ),
+            };
+          }
+          return oldData;
+        }
+      );
+
+      return { previousQueries };
     },
-    onError: (error: any) => {
+    onError: (error: any, _variables, context) => {
+      if (context?.previousQueries) {
+        context.previousQueries.forEach(([queryKey, data]) => {
+          queryClient.setQueryData(queryKey, data);
+        });
+      }
       const message =
         error?.response?.data?.error ||
         error?.message ||
         'Не вдалося оновити справу';
       toast.error(message);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: taskKeys.all });
     },
   });
 }
