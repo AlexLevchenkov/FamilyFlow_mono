@@ -10,6 +10,8 @@ interface IInput {
   placeholder?: string;
   autoComplete?: string;
   icon?: IconName;
+  min?: number | string;
+  max?: number | string;
   minLength?: number;
   required?: boolean;
   register: UseFormRegisterReturn;
@@ -23,6 +25,8 @@ export const Input = ({
   placeholder,
   autoComplete,
   icon,
+  min,
+  max,
   minLength,
   required,
   register,
@@ -47,7 +51,7 @@ export const Input = ({
         </label>
       )}
       <div
-        className={`relative flex h-[52px] items-center pl-3 rounded-[14px] border bg-panelsColor text-textPlaceholder transition duration-150 focus-within:border-focus focus-within:bg-white focus-within:shadow-[0_0_0_4px_var(--color-focusSoft)] focus-within:text-selected ${error ? 'border-red-500 focus-within:border-red-500' : 'border-border'}`}
+        className={`relative flex h-13 items-center pl-3 rounded-[14px] border bg-panelsColor text-textPlaceholder transition duration-150 focus-within:border-focus focus-within:bg-white focus-within:shadow-[0_0_0_4px_var(--color-focusSoft)] focus-within:text-selected ${error ? 'border-red-500 focus-within:border-red-500' : 'border-border'}`}
       >
         {icon && <Icon name={icon} size={19} />}
         <input
@@ -58,6 +62,8 @@ export const Input = ({
           autoComplete={autoComplete}
           minLength={minLength}
           required={required}
+          min={min}
+          max={max}
           aria-invalid={Boolean(error)}
           className="h-full min-w-0 flex-1 border-0 bg-transparent px-3.5 text-base font-bold text-text outline-none placeholder:font-semibold placeholder:text-textPlaceholder"
         />
@@ -72,11 +78,7 @@ export const Input = ({
           </button>
         )}
       </div>
-      {error && (
-        <p className="text-sm text-red-600" role="alert">
-          {error.message}
-        </p>
-      )}
+      {error && <span className="text-xs font-bold text-red-500">{error.message}</span>}
     </div>
   );
 };

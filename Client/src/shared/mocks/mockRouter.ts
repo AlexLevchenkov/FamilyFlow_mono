@@ -47,51 +47,52 @@ register('POST', '/auth/reset-password', authHandlers.resetPassword);
 register('GET', '/auth/verify-email', authHandlers.verifyEmail);
 
 // 2. Event routes
+register('GET', '/event/:id', eventHandlers.getEventById);
 register('GET', '/event', eventHandlers.getEvents);
 register('POST', '/event', eventHandlers.createEvent);
-register('GET', '/event/:id', eventHandlers.getEventById);
 register('PUT', '/event/:id', eventHandlers.updateEvent);
 register('DELETE', '/event/:id', eventHandlers.deleteEvent);
 
 // 3. Family routes
 register('GET', '/family/my', familyHandlers.getMyFamily);
 register('POST', '/family', familyHandlers.createFamily);
-register('GET', '/family/:id', familyHandlers.getFamilyById);
-register('PUT', '/family/:id', familyHandlers.updateFamily);
-register('DELETE', '/family/:id', familyHandlers.deleteFamily);
-register('GET', '/family/:id/members', familyHandlers.getFamilyMembers);
-register('POST', '/family/:id/members', familyHandlers.addFamilyMember);
+register('GET', '/family/:familyId', familyHandlers.getFamilyById);
+register('PUT', '/family/:familyId', familyHandlers.updateFamily);
+register('DELETE', '/family/:familyId', familyHandlers.deleteFamily);
+register('GET', '/family/:familyId/members', familyHandlers.getMembers);
+register('POST', '/family/:familyId/members', familyHandlers.addMember);
 register(
   'PUT',
-  '/family/:id/members/:memberId',
-  familyHandlers.updateFamilyMemberRole
+  '/family/:familyId/members/:memberId',
+  familyHandlers.updateMemberRole
 );
 register(
   'DELETE',
-  '/family/:id/members/:memberId',
-  familyHandlers.removeFamilyMember
+  '/family/:familyId/members/:memberId',
+  familyHandlers.removeMember
 );
 
 // 4. Goal routes
+register('GET', '/goal/:id', goalHandlers.getGoalById);
 register('GET', '/goal', goalHandlers.getGoals);
 register('POST', '/goal', goalHandlers.createGoal);
-register('GET', '/goal/:id', goalHandlers.getGoalById);
 register('PUT', '/goal/:id', goalHandlers.updateGoal);
 register('DELETE', '/goal/:id', goalHandlers.deleteGoal);
 
 // 5. Task routes
+register('GET', '/task/:id', taskHandlers.getTaskById);
 register('GET', '/task', taskHandlers.getTasks);
 register('POST', '/task', taskHandlers.createTask);
-register('GET', '/task/:id', taskHandlers.getTaskById);
 register('PUT', '/task/:id', taskHandlers.updateTask);
 register('DELETE', '/task/:id', taskHandlers.deleteTask);
 
 // 6. User routes
+register('GET', '/user/me', userHandlers.getMe);
+register('GET', '/user/:id', userHandlers.getUserById);
 register('GET', '/user', userHandlers.getUsers);
 register('POST', '/user', userHandlers.register);
 register('PUT', '/user', userHandlers.updateUser);
 register('DELETE', '/user', userHandlers.deleteUser);
-register('GET', '/user/:id', userHandlers.getUserById);
 
 /**
  * Match an incoming request to a mock handler.

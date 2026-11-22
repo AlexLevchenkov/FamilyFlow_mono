@@ -12,12 +12,15 @@ import asyncHandler from "@utils/asyncHandler";
 class TaskController {
   getUserTasks = asyncHandler(async (req, res) => {
     const { user } = req;
-    const { page, limit } = req.validated?.params as GetUserTasksParams;
+    const { page, limit, from, to } = (req.validated?.query ||
+      {}) as GetUserTasksParams;
 
     const data: PaginatedTasksResponse = await taskService.getUserTasks({
       userId: user.id,
       page,
       limit,
+      from,
+      to,
     });
 
     apiResponse(res, data, 200);

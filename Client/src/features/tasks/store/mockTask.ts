@@ -1,4 +1,4 @@
-import type { CreateTaskBody, TaskModel, UpdateTaskBody } from '@types';
+import type { CreateTaskBody, TaskModel, UpdateTaskBody, WithId } from '@types';
 
 export const INITIAL_TASK: TaskModel[] = [
   {
@@ -91,7 +91,7 @@ export class MockTaskDatabase {
     visibility,
     status,
     date,
-  }: UpdateTaskBody) {
+  }: WithId<UpdateTaskBody>) {
     const task = this.getTaskById(id);
     if (!task) return;
     const updatedTask: TaskModel = {

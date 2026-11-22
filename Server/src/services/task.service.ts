@@ -17,30 +17,49 @@ class TaskServices {
     userId,
     page,
     limit,
+    from,
+    to,
   }: WithUserId<GetUserTasksParams>): Promise<PaginatedTasksResponse> {
     const itemsPerPage =
       Number(limit) || Number(process.env.ITEMS_PER_PAGE) || 10;
     const currentPage = Number(page) || 1;
 
+    const fromDate = from ? new Date(from) : undefined;
+    const toDate = to ? new Date(to) : undefined;
+
     const where: Prisma.TaskWhereInput = {
-      OR: [
-        { userId },
+      AND: [
         {
-          visibility: Visibility.shared,
-          user: {
-            FamilyMember: {
-              some: {
-                family: {
-                  FamilyMember: {
-                    some: {
-                      userId,
+          OR: [
+            { userId },
+            {
+              visibility: Visibility.shared,
+              user: {
+                FamilyMember: {
+                  some: {
+                    family: {
+                      FamilyMember: {
+                        some: {
+                          userId,
+                        },
+                      },
                     },
                   },
                 },
               },
             },
-          },
+          ],
         },
+        ...(fromDate || toDate
+          ? [
+              {
+                date: {
+                  ...(fromDate ? { gte: fromDate } : {}),
+                  ...(toDate ? { lte: toDate } : {}),
+                },
+              },
+            ]
+          : []),
       ],
     };
 
@@ -48,7 +67,7 @@ class TaskServices {
       where,
       skip: (currentPage - 1) * itemsPerPage,
       take: itemsPerPage,
-      orderBy: [{ date: "asc", title: "asc" }],
+      orderBy: [{ date: "asc" }, { title: "asc" }],
     });
 
     const total = await prisma.task.count({ where });
@@ -114,7 +133,7 @@ class TaskServices {
     }
 
     const taskWithThisTitle = await prisma.task.findFirst({
-      where: { userId, title },
+      where: { userId, title, NOT: { id } },
     });
 
     if (!!taskWithThisTitle) {
@@ -122,7 +141,7 @@ class TaskServices {
     }
 
     const updatedTask = await prisma.task.update({
-      where: { userId, id },
+      where: { id },
       data: { title, type, visibility, status, date },
     });
 

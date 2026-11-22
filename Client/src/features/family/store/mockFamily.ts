@@ -1,12 +1,14 @@
 import { INITIAL_USERS } from '@features/user/store/mockUser';
 import type {
-  AddFamilyMemberBody,
+  AddMemberBody,
   CreateFamilyBody,
-  DeleteFamilyMemberInput,
   FamilyMemberModel,
   FamilyModel,
-  UpdateFamilyMemberRoleBody,
+  UpdateMemberRoleBody,
   UpdateFamilyBody,
+  FamilyById,
+  FamilyWithMemberId,
+  WithUserId,
 } from '@types';
 
 export const INITIAL_FAMILY: FamilyModel[] = [
@@ -92,7 +94,7 @@ export class MockFamilyDatabase {
     return newFamily;
   }
 
-  public updateFamily({ familyId, name }: UpdateFamilyBody) {
+  public updateFamily({ familyId, name }: UpdateFamilyBody & FamilyById) {
     const family = this.getFamilyById(familyId);
     if (!family) return;
     const updatedFamily: FamilyModel = {
@@ -111,18 +113,18 @@ export class MockFamilyDatabase {
     this.families = this.families.filter(family => family.id !== id);
   }
 
-  public getFamilyMembers(familyId: number) {
+  public getMembers(familyId: number) {
     const family = this.getFamilyById(familyId);
     return family?.members || [];
   }
 
-  public addFamilyMember({
+  public addMember({
     familyId,
-    targetUserId,
+    userId,
     role,
-  }: AddFamilyMemberBody) {
+  }: WithUserId<AddMemberBody> & FamilyById) {
     const family = this.getFamilyById(familyId);
-    if (!family || !targetUserId) return;
+    if (!family || !userId) return;
 
     if (!family.members) {
       family.members = [];
@@ -130,7 +132,7 @@ export class MockFamilyDatabase {
 
     const newMember: FamilyMemberModel = {
       id: family.members.length + 1,
-      userId: targetUserId,
+      userId,
       familyId,
       role: role || 'MEMBER',
       createdAt: new Date(),
@@ -141,11 +143,11 @@ export class MockFamilyDatabase {
     return newMember;
   }
 
-  public updateFamilyMember({
+  public updateMember({
     familyId,
     memberId,
     role,
-  }: UpdateFamilyMemberRoleBody) {
+  }: UpdateMemberRoleBody & FamilyWithMemberId) {
     const family = this.getFamilyById(familyId);
     if (!family) return;
     const member = family.members?.find(member => member.id === memberId);
@@ -156,7 +158,7 @@ export class MockFamilyDatabase {
     return member;
   }
 
-  public removeFamilyMember({ familyId, memberId }: DeleteFamilyMemberInput) {
+  public removeMember({ familyId, memberId }: FamilyWithMemberId) {
     const family = this.getFamilyById(familyId);
     if (!family || !family.members) return;
     family.members = family.members.filter(member => member.id !== memberId);

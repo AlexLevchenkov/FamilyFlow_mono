@@ -12,18 +12,33 @@ import type {
 
 export const eventHandlers = {
   getEvents(ctx: MockRequestContext): MockResponseResult {
-    const { page } = ctx.query;
-    const limit = 20;
+    const { page, limit: queryLimit, from, to } = ctx.query;
+    const limit = Number(queryLimit) || 20;
 
-    const filtered = mockDb.events.getEvents();
-    const start = (Number(page) - 1) * limit;
+    let filtered = mockDb.events.getEvents();
+
+    if (from) {
+      const fromDate = new Date(from);
+      filtered = filtered.filter(e => new Date(e.date) >= fromDate);
+    }
+    if (to) {
+      const toDate = new Date(to);
+      filtered = filtered.filter(e => new Date(e.date) <= toDate);
+    }
+
+    filtered.sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+
+    const currentPage = Number(page) || 1;
+    const start = (currentPage - 1) * limit;
     const paginated = filtered.slice(start, start + limit);
 
     const response: PaginatedEventsResponse = {
       data: paginated,
       pagination: {
         total: filtered.length,
-        page: Number(page),
+        page: currentPage,
         limit,
         totalPages: Math.ceil(filtered.length / limit) || 1,
       },
@@ -42,7 +57,7 @@ export const eventHandlers = {
   },
 
   createEvent(ctx: MockRequestContext<CreateEventBody>): MockResponseResult {
-    const { title, color, date, repeatability } = ctx.body || {};
+    const { title, color, date, repeatability, visibility } = ctx.body || {};
     if (!title || !color || !date || !repeatability) {
       return err('Title, color, date and repeatability are required', 400);
     }
@@ -51,19 +66,21 @@ export const eventHandlers = {
       color,
       date,
       repeatability,
+      visibility: visibility || 'shared',
     });
     return ok(newEvent, 201);
   },
 
   updateEvent(ctx: MockRequestContext<UpdateEventBody>): MockResponseResult {
     const { id } = ctx.params;
-    const { title, color, date, repeatability } = ctx.body || {};
+    const { title, color, date, repeatability, visibility } = ctx.body || {};
     const updated = mockDb.events.updateEvent({
       id: Number(id),
       title: String(title),
       color: String(color),
       date: new Date(date || ''),
-      repeatability: repeatability || 'day',
+      repeatability: repeatability || 'none',
+      visibility: visibility || 'shared',
     });
     if (!updated) {
       return err('Event not found', 404);
@@ -77,3 +94,4 @@ export const eventHandlers = {
     return ok(undefined, 200);
   },
 };
+

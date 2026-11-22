@@ -29,6 +29,8 @@ export interface TaskModel {
 export interface GetUserTasksParams {
   page?: number;
   limit?: number;
+  from?: Date | string;
+  to?: Date | string;
 }
 
 export type PaginatedTasksResponse = PaginatedResponse<TaskModel>;

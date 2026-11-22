@@ -1,10 +1,10 @@
 import prisma from "@config/prisma";
 import type {
-  AddFamilyMemberBody,
+  AddMemberBody,
   CreateFamilyBody,
   FamilyById,
   FamilyWithMemberId,
-  UpdateFamilyMemberRoleBody,
+  UpdateMemberRoleBody,
   UpdateFamilyBody,
   WithUserId,
   FamilyModel,
@@ -18,9 +18,7 @@ import {
 } from "@utils";
 
 class FamilyService {
-  async getCurrentUserFamily({
-    userId,
-  }: WithUserId<{}>): Promise<FamilyModel | null> {
+  async getMyFamily({ userId }: WithUserId<{}>): Promise<FamilyModel | null> {
     const membership = await prisma.familyMember.findFirst({
       where: { userId },
       include: {
@@ -290,7 +288,7 @@ class FamilyService {
     familyId,
     email,
     role = "MEMBER",
-  }: WithUserId<AddFamilyMemberBody> & FamilyById): Promise<FamilyMember> {
+  }: WithUserId<AddMemberBody> & FamilyById): Promise<FamilyMember> {
     const currentMember = await prisma.familyMember.findUnique({
       where: {
         familyId_userId: {
@@ -370,9 +368,7 @@ class FamilyService {
     familyId,
     memberId,
     role,
-  }: WithUserId<
-    FamilyById & UpdateFamilyMemberRoleBody & { memberId: number }
-  >) {
+  }: WithUserId<FamilyById & UpdateMemberRoleBody & { memberId: number }>) {
     const currentMember = await prisma.familyMember.findUnique({
       where: {
         familyId_userId: {

@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useCurrentUserQuery } from '@hooks';
 
-interface UserProps {}
-
 export const ProfileUser = () => {
   const { user, refetch } = useCurrentUserQuery();
   const [hasImageError, setHasImageError] = useState(false);

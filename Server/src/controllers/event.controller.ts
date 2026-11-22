@@ -12,9 +12,17 @@ class EventController {
   async getUserEvents(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { page } = req.validated?.params as GetEventsParams;
+      const { page, limit, from, to } = (req.validated?.query ||
+        req.validated?.params ||
+        {}) as GetEventsParams;
 
-      const data = await eventService.getUserEvents({ userId: user.id, page });
+      const data = await eventService.getUserEvents({
+        userId: user.id,
+        page,
+        limit,
+        from,
+        to,
+      });
       apiResponse(res, data, 200);
     } catch (error: any) {
       const errorMessage =
@@ -39,7 +47,7 @@ class EventController {
   async createEvent(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { title, color, date, repeatability } = req.validated
+      const { title, color, date, repeatability, visibility } = req.validated
         ?.body as CreateEventBody;
 
       const data = await eventService.createEvent({
@@ -48,6 +56,7 @@ class EventController {
         color,
         date,
         repeatability,
+        visibility,
       });
 
       apiResponse(res, data, 201);
@@ -61,7 +70,7 @@ class EventController {
   async updateEvent(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.validated?.params as ById;
-      const { title, color, date, repeatability } = req.validated
+      const { title, color, date, repeatability, visibility } = req.validated
         ?.body as UpdateEventBody;
 
       const data = await eventService.updateEvent({
@@ -70,6 +79,7 @@ class EventController {
         color,
         date,
         repeatability,
+        visibility,
       });
       apiResponse(res, data, 200);
     } catch (error: any) {

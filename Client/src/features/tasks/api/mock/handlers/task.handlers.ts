@@ -57,7 +57,8 @@ export const taskHandlers = {
   },
 
   updateTask(ctx: MockRequestContext<UpdateTaskBody>): MockResponseResult {
-    const { id, title, type, visibility, status, date } = ctx.body || {};
+    const { title, type, visibility, status, date } = ctx.body || {};
+    const id = Number(ctx.params.id);
     if (!id) {
       return err('Task ID is required', 400);
     }

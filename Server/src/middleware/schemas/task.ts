@@ -26,6 +26,8 @@ const getUserTasksSchema = z.object({
     .number()
     .refine(page => page > 0, "Min page value is 1")
     .optional(),
+  from: z.coerce.date().optional(),
+  to: z.coerce.date().optional(),
 });
 
 const getTaskSchema = z.object({

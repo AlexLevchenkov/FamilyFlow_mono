@@ -1,7 +1,94 @@
-import { Icon, PageHero, Panel, PrimaryButton } from '@ui';
-import { goals } from '@mocks/data';
+import { useState } from 'react';
+import { Icon, PageHero, Panel, PrimaryButton, Spinner } from '@ui';
+import { useGoalsQuery } from '@hooks';
+import type { GoalModel, GoalType } from '@types';
+import { GoalModal } from './GoalModal';
+
+const GOAL_TYPE_CONFIG: Record<
+  GoalType,
+  { label: string; color: string }
+> = {
+  AMOUNT: {
+    label: 'Фінансова ціль',
+    color: '#7656d0',
+  },
+  COUNTER: {
+    label: 'Лічильник',
+    color: '#e87891',
+  },
+  STEPS: {
+    label: 'Покрокова ціль',
+    color: '#39b29d',
+  },
+};
+
+function calculateGoalProgress(goal: GoalModel): number {
+  const target = goal.targetValue || 0;
+  const current = goal.currentValue || 0;
+  if (target <= 0) return 0;
+  return Math.min(Math.round((current / target) * 100), 100);
+}
+
+function formatGoalDetail(goal: GoalModel): string {
+  const current = (goal.currentValue ?? 0).toLocaleString('uk-UA');
+  const target = (goal.targetValue ?? 0).toLocaleString('uk-UA');
+
+  if (goal.type === 'AMOUNT') {
+    const currency = goal.currency === 'UAH' ? '₴' : goal.currency || '₴';
+    return `Зібрано ${current} із ${target} ${currency}`;
+  }
+
+  if (goal.type === 'STEPS') {
+    const unit = goal.unit || 'кроків';
+    return `${current} із ${target} ${unit} виконано`;
+  }
+
+  const unit = goal.unit ? ` ${goal.unit}` : '';
+  return `${current} із ${target}${unit} виконано`;
+}
+
+interface EmptyGoalsPlaceholderProps {
+  onCreate: () => void;
+}
+
+function EmptyGoalsPlaceholder({ onCreate }: EmptyGoalsPlaceholderProps) {
+  return (
+    <Panel className="flex flex-col items-center justify-center py-14 text-center">
+      <div className="grid h-14 w-14 place-items-center rounded-2xl bg-primarySoft text-primary">
+        <Icon name="target" size={28} />
+      </div>
+      <h3 className="mt-4 text-lg font-extrabold">У вас ще немає спільних цілей</h3>
+      <p className="mt-2 max-w-md text-sm text-lightText">
+        Зберігайте сімейні бажання, розподіляйте кроки й святкуйте кожне
+        досягнення разом.
+      </p>
+      <PrimaryButton onClick={onCreate} className="mt-6">
+        <Icon name="plus" size={18} /> Створити першу ціль
+      </PrimaryButton>
+    </Panel>
+  );
+}
 
 export function GoalsView() {
+  const { goals = [], isLoading } = useGoalsQuery();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedGoal, setSelectedGoal] = useState<GoalModel | null>(null);
+
+  const handleCreate = () => {
+    setSelectedGoal(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEdit = (goal: GoalModel) => {
+    setSelectedGoal(goal);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedGoal(null);
+  };
+
   return (
     <div className="space-y-6">
       <PageHero variant="goals">
@@ -17,55 +104,88 @@ export function GoalsView() {
             досягнення разом.
           </p>
         </div>
-        <PrimaryButton className="shrink-0">
+        <PrimaryButton onClick={handleCreate} className="shrink-0">
           <Icon name="plus" size={18} /> Нова ціль
         </PrimaryButton>
       </PageHero>
-      <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {goals.map(goal => (
-          <Panel
-            as="article"
-            className="transition-all hover:-translate-y-0.5 hover:border-borderHover hover:shadow-[0_14px_34px_var(--color-shadowSoft)]"
-            key={goal.title}
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div
-                className="grid h-12 w-12 place-items-center rounded-2xl"
-                style={{
-                  backgroundColor: `${goal.color}18`,
-                  color: goal.color,
-                }}
+
+      <Spinner
+        isLoading={isLoading}
+        isEmpty={goals.length === 0}
+        emptyPlaceholder={<EmptyGoalsPlaceholder onCreate={handleCreate} />}
+      >
+        <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {goals.map(goal => {
+            const typeConfig = GOAL_TYPE_CONFIG[goal.type] ?? {
+              label: 'Спільна ціль',
+              color: '#7656d0',
+            };
+            const progress = calculateGoalProgress(goal);
+            const detail = formatGoalDetail(goal);
+
+            return (
+              <Panel
+                as="article"
+                className="transition-all hover:-translate-y-0.5 hover:border-borderHover hover:shadow-[0_14px_34px_var(--color-shadowSoft)]"
+                key={goal.id}
               >
-                <Icon name="target" size={23} />
-              </div>
-              <button aria-label="Більше дій" className="text-textPlaceholder">
-                <Icon name="more" size={19} />
-              </button>
-            </div>
-            <p
-              className="mt-5 text-xs font-extrabold uppercase tracking-wider"
-              style={{ color: goal.color }}
-            >
-              {goal.category}
-            </p>
-            <h3 className="mt-2 text-lg font-extrabold">{goal.title}</h3>
-            <p className="mt-2 text-sm text-lightText">{goal.detail}</p>
-            <div className="mt-6 flex items-center justify-between text-xs font-extrabold">
-              <span className="text-lightText">Прогрес</span>
-              <span>{goal.progress}%</span>
-            </div>
-            <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-background">
-              <div
-                className="h-full rounded-full"
-                style={{
-                  backgroundColor: goal.color,
-                  width: `${goal.progress}%`,
-                }}
-              />
-            </div>
-          </Panel>
-        ))}
-      </section>
+                <div className="flex items-start justify-between gap-3">
+                  <div
+                    className="grid h-12 w-12 place-items-center rounded-2xl"
+                    style={{
+                      backgroundColor: `${typeConfig.color}18`,
+                      color: typeConfig.color,
+                    }}
+                  >
+                    <Icon name="target" size={23} />
+                  </div>
+                  <button
+                    aria-label="Редагувати ціль"
+                    title="Редагувати ціль"
+                    onClick={() => handleEdit(goal)}
+                    className="text-textPlaceholder hover:text-text transition-colors p-1"
+                  >
+                    <Icon name="more" size={19} />
+                  </button>
+                </div>
+
+                <p
+                  className="mt-5 text-xs font-extrabold uppercase tracking-wider"
+                  style={{ color: typeConfig.color }}
+                >
+                  {typeConfig.label}
+                </p>
+
+                <h3 className="mt-2 text-lg font-extrabold">{goal.title}</h3>
+
+                {goal.description && (
+                  <p className="mt-1 line-clamp-2 text-xs text-textMuted">
+                    {goal.description}
+                  </p>
+                )}
+
+                <p className="mt-2 text-sm text-lightText">{detail}</p>
+
+                <div className="mt-6 flex items-center justify-between text-xs font-extrabold">
+                  <span className="text-lightText">Прогрес</span>
+                  <span>{progress}%</span>
+                </div>
+
+                <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-background">
+                  <div
+                    className="h-full rounded-full transition-all duration-300"
+                    style={{
+                      backgroundColor: typeConfig.color,
+                      width: `${progress}%`,
+                    }}
+                  />
+                </div>
+              </Panel>
+            );
+          })}
+        </section>
+      </Spinner>
+
       <Panel
         as="section"
         className="flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-center"
@@ -85,6 +205,12 @@ export function GoalsView() {
           +43% прогресу
         </span>
       </Panel>
+
+      <GoalModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        goal={selectedGoal}
+      />
     </div>
   );
 }

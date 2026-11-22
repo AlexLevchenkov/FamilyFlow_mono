@@ -15,13 +15,29 @@ export function MyTasks() {
     addTask,
     toggleTask,
   } = useTasksContext();
+
+  const todayTasksCount = tasks.filter(t => {
+    if (!t.rawTask?.date) return false;
+    const d = new Date(t.rawTask.date);
+    return (
+      !isNaN(d.getTime()) && d.toDateString() === new Date().toDateString()
+    );
+  }).length;
+
   return (
     <div className="space-y-6">
       <section className="grid gap-4 sm:grid-cols-3">
         {[
           ['Активні', tasks.length - completed, 'Потребують уваги', '#7656d0'],
           ['Виконані', completed, 'Гарний темп', '#39b29d'],
-          ['На сьогодні', 3, '1 справа ввечері', '#e87891'],
+          [
+            'На сьогодні',
+            todayTasksCount,
+            todayTasksCount > 0
+              ? 'Заплановано на день'
+              : 'Немає запланованих на сьогодні',
+            '#e87891',
+          ],
         ].map(([label, value, detail, color]) => (
           <Panel key={label as string}>
             <div

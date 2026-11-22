@@ -17,30 +17,44 @@ const getGoalSchema = z.object({
   id: z.coerce.number(),
 });
 
-const createGoalSchema = z.object({
-  title: z.coerce.string().min(1),
-  description: z.coerce.string().optional(),
-  type: z.enum(type),
-  status: z.enum(goalStatus),
-  currentValue: z.coerce.number(),
-  targetValue: z.coerce.number(),
-  unit: z.coerce.string().optional(),
-  currency: z.coerce.string().optional(),
-  startsAt: z.coerce.date(),
-  dueDate: z.coerce.date(),
-});
+const createGoalSchema = z
+  .object({
+    title: z.coerce.string().min(1),
+    description: z.coerce.string().optional(),
+    type: z.enum(type),
+    status: z.enum(goalStatus),
+    currentValue: z.coerce.number().min(0, "Current value must be at least 0"),
+    targetValue: z.coerce
+      .number()
+      .positive("Target value must be greater than 0"),
+    unit: z.coerce.string().optional(),
+    currency: z.coerce.string().optional(),
+    startsAt: z.coerce.date(),
+    dueDate: z.coerce.date(),
+  })
+  .refine(data => data.currentValue <= data.targetValue, {
+    message: "Current value cannot exceed target value",
+    path: ["currentValue"],
+  });
 
-const updateGoalSchema = z.object({
-  id: z.coerce.number(),
-  title: z.coerce.string().min(1),
-  description: z.coerce.string().optional(),
-  status: z.enum(goalStatus),
-  currentValue: z.coerce.number(),
-  targetValue: z.coerce.number(),
-  unit: z.coerce.string().optional(),
-  currency: z.coerce.string().optional(),
-  dueDate: z.coerce.date(),
-});
+const updateGoalSchema = z
+  .object({
+    id: z.coerce.number(),
+    title: z.coerce.string().min(1),
+    description: z.coerce.string().optional(),
+    status: z.enum(goalStatus),
+    currentValue: z.coerce.number().min(0, "Current value must be at least 0"),
+    targetValue: z.coerce
+      .number()
+      .positive("Target value must be greater than 0"),
+    unit: z.coerce.string().optional(),
+    currency: z.coerce.string().optional(),
+    dueDate: z.coerce.date(),
+  })
+  .refine(data => data.currentValue <= data.targetValue, {
+    message: "Current value cannot exceed target value",
+    path: ["currentValue"],
+  });
 
 const deleteGoalSchema = z.object({
   id: z.coerce.number(),

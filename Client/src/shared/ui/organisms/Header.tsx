@@ -43,12 +43,12 @@ export function Header({ activeNav }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-20 flex h-[78px] items-center justify-between border-b border-background bg-background/90 px-5 backdrop-blur-xl md:px-8 lg:px-10">
+    <header className="sticky top-0 z-20 flex h-20 items-center justify-between border-b border-background bg-background/90 px-5 backdrop-blur-xl md:px-8 lg:px-10">
       <div>
         <p className="text-xs font-bold uppercase tracking-[0.16em] text-textMuted">
           {pageTitle[activeNav]?.eyebrow}
         </p>
-        <h1 className="mt-1 text-[22px] font-extrabold tracking-tight md:text-[26px]">
+        <h1 className="mt-1 text-xl font-extrabold tracking-tight md:text-3xl">
           {pageTitle[activeNav]?.title}
         </h1>
       </div>

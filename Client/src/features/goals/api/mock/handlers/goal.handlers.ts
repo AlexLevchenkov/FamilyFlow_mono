@@ -100,7 +100,7 @@ export const goalHandlers = {
 
   deleteGoal(ctx: MockRequestContext): MockResponseResult {
     const body = (ctx.body || {}) as Record<string, unknown>;
-    const id = Number(ctx.query.id || body.id);
+    const id = Number(ctx.params.id || ctx.query.id || body.id);
     mockDb.goals.deleteGoal(id);
     return ok(undefined, 200);
   },

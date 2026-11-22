@@ -4,7 +4,7 @@ import type { Task } from '../types';
 
 export interface TasksContextValue {
   tasks: Task[];
-  setTasks: Dispatch<SetStateAction<Task[]>>;
+  setTasks?: Dispatch<SetStateAction<Task[]>>;
   visibleTasks: Task[];
   completed: number;
   progress: number;
@@ -16,6 +16,8 @@ export interface TasksContextValue {
   setNewTask: (task: string) => void;
   addTask: () => void;
   toggleTask: (id: number) => void;
+  deleteTask?: (id: number) => void;
+  isLoading?: boolean;
 }
 
 export const TasksContext = createContext<TasksContextValue | null>(null);

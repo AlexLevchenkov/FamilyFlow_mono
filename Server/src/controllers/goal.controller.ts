@@ -12,7 +12,8 @@ class GoalController {
   async getUserGoals(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const { page } = req.validated?.params as GetGoalsParams;
+      const { page } = ((req.validated?.query || req.validated?.params) ||
+        {}) as GetGoalsParams;
 
       const data = await goalService.getUserGoals({ userId: user.id, page });
       apiResponse(res, data, 200);

@@ -15,7 +15,8 @@ model Event {
   title         String
   color         String
   date          DateTime
-  repeatability Repeatability
+  repeatability Repeatability @default(none)
+  visibility    Visibility    @default(shared)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
@@ -23,6 +24,7 @@ model Event {
 }
 
 enum Repeatability {
+  none
   day
   working
   week

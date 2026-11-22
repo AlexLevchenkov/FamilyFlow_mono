@@ -1,13 +1,27 @@
 import { useCallback, useMemo, useState, type ReactNode } from 'react';
-import { initialTasks } from '@mocks/data';
+import { useTasksQuery } from '@hooks';
 import type { Task } from '../types';
+import { mapTaskModelToUiTask } from '../types';
 import { TasksContext } from './TasksContext';
+import {
+  useCreateTaskMutation,
+  useUpdateTaskMutation,
+  useDeleteTaskMutation,
+} from './useTaskMutations';
 
 export function TasksProvider({ children }: { children: ReactNode }) {
-  const [tasks, setTasks] = useState<Task[]>(initialTasks);
-  const [filter, setFilter] = useState('Усі');
+  const { tasks: backendTasks = [], isLoading } = useTasksQuery({ limit: 100 });
+  const createTaskMutation = useCreateTaskMutation();
+  const updateTaskMutation = useUpdateTaskMutation();
+  const deleteTaskMutation = useDeleteTaskMutation();
+
+  const [filter, setFilter] = useState('Всі');
   const [showComposer, setShowComposer] = useState(false);
   const [newTask, setNewTask] = useState('');
+
+  const tasks: Task[] = useMemo(() => {
+    return (backendTasks || []).map(mapTaskModelToUiTask);
+  }, [backendTasks]);
 
   const visibleTasks = useMemo(() => {
     if (filter === 'Виконані') return tasks.filter(task => task.done);
@@ -15,40 +29,65 @@ export function TasksProvider({ children }: { children: ReactNode }) {
     return tasks;
   }, [filter, tasks]);
 
-  const completed = tasks.filter(task => task.done).length;
-  const progress =
-    tasks.length > 0 ? Math.round((completed / tasks.length) * 100) : 0;
+  const completed = useMemo(
+    () => tasks.filter(task => task.done).length,
+    [tasks]
+  );
 
-  const toggleTask = useCallback((id: number) => {
-    setTasks(current =>
-      current.map(task =>
-        task.id === id ? { ...task, done: !task.done } : task
-      )
-    );
-  }, []);
+  const progress = useMemo(
+    () => (tasks.length > 0 ? Math.round((completed / tasks.length) * 100) : 0),
+    [tasks.length, completed]
+  );
+
+  const toggleTask = useCallback(
+    (id: number) => {
+      const task = tasks.find(t => t.id === id);
+      if (!task) return;
+
+      const raw = task.rawTask;
+      updateTaskMutation.mutate({
+        id,
+        dto: {
+          title: raw?.title || task.title,
+          type: raw?.type || task.type || 'home',
+          visibility: raw?.visibility || task.visibility || 'shared',
+          status: !task.done,
+          date: raw?.date ? new Date(raw.date) : new Date(),
+        },
+      });
+    },
+    [tasks, updateTaskMutation]
+  );
 
   const addTask = useCallback(() => {
     if (!newTask.trim()) return;
-    setTasks(current => [
-      ...current,
+
+    createTaskMutation.mutate(
       {
-        id: Date.now(),
         title: newTask.trim(),
-        meta: 'Особиста справа',
-        time: 'Сьогодні',
-        category: 'Нове',
-        color: '#8b63de',
-        done: false,
+        type: 'personal',
+        visibility: 'shared',
+        date: new Date(),
       },
-    ]);
-    setNewTask('');
-    setShowComposer(false);
-  }, [newTask]);
+      {
+        onSuccess: () => {
+          setNewTask('');
+          setShowComposer(false);
+        },
+      }
+    );
+  }, [newTask, createTaskMutation]);
+
+  const deleteTask = useCallback(
+    (id: number) => {
+      deleteTaskMutation.mutate(id);
+    },
+    [deleteTaskMutation]
+  );
 
   const value = useMemo(
     () => ({
       tasks,
-      setTasks,
       visibleTasks,
       completed,
       progress,
@@ -60,6 +99,8 @@ export function TasksProvider({ children }: { children: ReactNode }) {
       setNewTask,
       addTask,
       toggleTask,
+      deleteTask,
+      isLoading,
     }),
     [
       tasks,
@@ -71,6 +112,8 @@ export function TasksProvider({ children }: { children: ReactNode }) {
       newTask,
       addTask,
       toggleTask,
+      deleteTask,
+      isLoading,
     ]
   );
 

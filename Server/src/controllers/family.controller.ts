@@ -3,19 +3,18 @@ import apiResponse from "@utils/response";
 import familyService from "@services/family.service";
 import {
   CreateFamilyBody,
-  FamilyModel,
   FamilyById,
   UpdateFamilyBody,
-  AddFamilyMemberBody,
-  UpdateFamilyMemberRoleBody,
+  AddMemberBody,
+  UpdateMemberRoleBody,
   FamilyWithMemberId,
 } from "@familyflow/contracts";
 
 class FamilyController {
-  async getCurrentUserFamily(req: Request, res: Response): Promise<void> {
+  async getMyFamily(req: Request, res: Response): Promise<void> {
     try {
       const { user } = req;
-      const data = await familyService.getCurrentUserFamily({
+      const data = await familyService.getMyFamily({
         userId: user.id,
       });
       apiResponse(res, data, 200);
@@ -112,7 +111,7 @@ class FamilyController {
     try {
       const { user } = req;
       const { familyId } = req.validated?.params as FamilyById;
-      const { email, role } = req.validated?.body as AddFamilyMemberBody;
+      const { email, role } = req.validated?.body as AddMemberBody;
 
       const data = await familyService.addMember({
         userId: user.id,
@@ -133,7 +132,7 @@ class FamilyController {
       const { user } = req;
       const { familyId, memberId } = req.validated
         ?.params as FamilyWithMemberId;
-      const { role } = req.validated?.body as UpdateFamilyMemberRoleBody;
+      const { role } = req.validated?.body as UpdateMemberRoleBody;
 
       const data = await familyService.updateMemberRole({
         userId: user.id,

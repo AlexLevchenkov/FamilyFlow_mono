@@ -7,6 +7,7 @@ export * from './NavItem';
 export * from './Panel';
 export * from './Popup';
 export * from './PrimaryButton';
+export * from './Spinner';
 export * from './Toast';
 export * from './ToastStore';
 

@@ -199,7 +199,7 @@ export const familyPaths = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/AddFamilyMemberBody",
+              $ref: "#/components/schemas/AddMemberBody",
             },
           },
         },
@@ -250,7 +250,7 @@ export const familyPaths = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/UpdateFamilyMemberRoleBody",
+              $ref: "#/components/schemas/UpdateMemberRoleBody",
             },
           },
         },

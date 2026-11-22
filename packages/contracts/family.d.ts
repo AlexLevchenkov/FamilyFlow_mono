@@ -41,11 +41,11 @@ export interface UpdateFamilyBody {
   name: string;
 }
 
-export interface AddFamilyMemberBody {
+export interface AddMemberBody {
   email: string;
   role?: FamilyRole;
 }
 
-export interface UpdateFamilyMemberRoleBody {
+export interface UpdateMemberRoleBody {
   role: FamilyRole;
 }

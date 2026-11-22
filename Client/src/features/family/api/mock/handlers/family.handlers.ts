@@ -1,19 +1,15 @@
-import { mockDb } from '@mocks/database';
-import { ok, err } from '@mocks/handlers/types';
+import { mockDb, ok, err } from '@mocks';
+import type { MockRequestContext, MockResponseResult } from '@mocks';
 import type {
-  MockRequestContext,
-  MockResponseResult,
-} from '@mocks/handlers/types';
-import type {
-  AddFamilyMemberBody,
+  AddMemberBody,
   CreateFamilyBody,
-  DeleteFamilyMemberInput,
-  UpdateFamilyMemberRoleBody,
+  UpdateMemberRoleBody,
   UpdateFamilyBody,
+  FamilyWithMemberId,
 } from '@types';
 
 export const familyHandlers = {
-  getMyFamily(ctx: any): MockResponseResult {
+  getMyFamily(): MockResponseResult {
     const family = mockDb.families.getMyFamily(1);
     return ok(family, 200);
   },
@@ -41,7 +37,8 @@ export const familyHandlers = {
   },
 
   updateFamily(ctx: MockRequestContext<UpdateFamilyBody>): MockResponseResult {
-    const { familyId, name } = ctx.body || {};
+    const { name } = ctx.body || {};
+    const familyId = Number(ctx.params.familyId);
 
     if (!familyId || !name) {
       return err('Family ID and name are required', 400);
@@ -65,24 +62,28 @@ export const familyHandlers = {
     return ok(undefined, 200);
   },
 
-  getFamilyMembers(ctx: MockRequestContext): MockResponseResult {
+  getMembers(ctx: MockRequestContext): MockResponseResult {
     const familyId = Number(ctx.params.familyId);
-    const members = mockDb.families.getFamilyMembers(familyId);
+    const members = mockDb.families.getMembers(familyId);
     return ok(members, 200);
   },
 
-  addFamilyMember(
-    ctx: MockRequestContext<AddFamilyMemberBody>
-  ): MockResponseResult {
-    const { familyId, targetUserId, role } = ctx.body || {};
+  addMember(ctx: MockRequestContext<AddMemberBody>): MockResponseResult {
+    const { email, role } = ctx.body || {};
+    const familyId = Number(ctx.params.familyId);
 
-    if (!familyId || !targetUserId) {
+    if (!familyId) {
       return err('Family ID and target user ID are required', 400);
     }
 
-    const member = mockDb.families.addFamilyMember({
+    if (!email || !role) {
+      return err('No email or role', 400);
+    }
+
+    const member = mockDb.families.addMember({
       familyId,
-      targetUserId,
+      userId: 1,
+      email,
       role,
     });
     if (!member) {
@@ -91,16 +92,18 @@ export const familyHandlers = {
     return ok(member, 200);
   },
 
-  updateFamilyMemberRole(
-    ctx: MockRequestContext<UpdateFamilyMemberRoleBody>
+  updateMemberRole(
+    ctx: MockRequestContext<UpdateMemberRoleBody>
   ): MockResponseResult {
-    const { familyId, memberId, role } = ctx.body || {};
+    const familyId = Number(ctx.params.familyId);
+    const memberId = Number(ctx.params.memberId);
+    const { role } = ctx.body || {};
 
     if (!familyId || !memberId) {
       return err('Family ID and member ID are required', 400);
     }
 
-    const members = mockDb.families.getFamilyMembers(familyId);
+    const members = mockDb.families.getMembers(familyId);
 
     const thisUser = members.find(member => member.id === memberId);
 
@@ -108,7 +111,7 @@ export const familyHandlers = {
       return err('Member not found', 404);
     }
 
-    const member = mockDb.families.updateFamilyMember({
+    const member = mockDb.families.updateMember({
       familyId,
       memberId,
       role: role || thisUser.role,
@@ -121,8 +124,8 @@ export const familyHandlers = {
     return ok(member, 200);
   },
 
-  removeFamilyMember(
-    ctx: MockRequestContext<DeleteFamilyMemberInput>
+  removeMember(
+    ctx: MockRequestContext<FamilyWithMemberId>
   ): MockResponseResult {
     const { familyId, memberId } = ctx.body || {};
 
@@ -130,7 +133,7 @@ export const familyHandlers = {
       return err('Family ID and member ID are required', 400);
     }
 
-    mockDb.families.removeFamilyMember({ familyId, memberId });
+    mockDb.families.removeMember({ familyId, memberId });
     return ok(undefined, 200);
   },
 };

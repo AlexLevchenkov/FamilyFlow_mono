@@ -23,10 +23,8 @@ export const ForgotPasswordForm = () => {
 
   const onSubmit = (data: ForgotPasswordBody) => {
     forgotPassword.mutate(data, {
-      onSuccess: res => {
-        if (res.status === 200) {
-          setShowSuccess(true);
-        }
+      onSuccess: () => {
+        setShowSuccess(true);
       },
     });
   };

@@ -1,8 +1,9 @@
 import z from "zod";
 import { makeValidator } from "@utils/validation";
-import { Repeatability } from "@familyflow/contracts";
+import { Repeatability, Visibility } from "@familyflow/contracts";
 
 const repeatability = [
+  "none",
   "day",
   "working",
   "week",
@@ -11,8 +12,19 @@ const repeatability = [
   "year",
 ] as Repeatability[];
 
+const visibility = ["shared", "personal", "secret"] as Visibility[];
+
 const getUserEventsSchema = z.object({
-  page: z.coerce.number().refine(page => page > 0, "Min page value is 1"),
+  page: z.coerce
+    .number()
+    .refine(page => page > 0, "Min page value is 1")
+    .optional(),
+  limit: z.coerce
+    .number()
+    .refine(limit => limit > 0, "Min limit value is 1")
+    .optional(),
+  from: z.coerce.date().optional(),
+  to: z.coerce.date().optional(),
 });
 
 const getEventSchema = z.object({
@@ -24,6 +36,7 @@ const createEventSchema = z.object({
   color: z.coerce.string().optional(),
   date: z.coerce.date().optional(),
   repeatability: z.enum(repeatability).optional(),
+  visibility: z.enum(visibility).optional(),
 });
 
 const updateEventSchema = z.object({
@@ -31,7 +44,8 @@ const updateEventSchema = z.object({
   title: z.coerce.string().min(1),
   color: z.coerce.string(),
   date: z.coerce.date(),
-  repeatability: z.enum(repeatability),
+  repeatability: z.enum(repeatability).optional(),
+  visibility: z.enum(visibility).optional(),
 });
 
 const deleteEventSchema = z.object({

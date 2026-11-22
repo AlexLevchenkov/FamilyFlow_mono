@@ -134,7 +134,7 @@ class GoalServices {
       where: { createdById: userId, title },
     });
 
-    if (!!goalWithThisTitle) {
+    if (!!goalWithThisTitle && id != goalWithThisTitle.id) {
       throw alreadyExistError("Goal with this title already exist");
     }
 

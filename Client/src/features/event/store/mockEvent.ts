@@ -13,6 +13,7 @@ export const INITIAL_EVENTS: EventModel[] = [
     color: 'blue',
     date: new Date('2026-10-23T10:00:00.000Z'),
     repeatability: 'day',
+    visibility: 'shared',
     createdAt: new Date('2026-10-22T10:00:00.000Z'),
     updatedAt: new Date('2026-10-22T10:00:00.000Z'),
   },
@@ -23,6 +24,7 @@ export const INITIAL_EVENTS: EventModel[] = [
     color: 'green',
     date: new Date('2026-10-23T11:00:00.000Z'),
     repeatability: 'week',
+    visibility: 'shared',
     createdAt: new Date('2026-10-22T11:00:00.000Z'),
     updatedAt: new Date('2026-10-22T11:00:00.000Z'),
   },
@@ -33,6 +35,7 @@ export const INITIAL_EVENTS: EventModel[] = [
     color: 'red',
     date: new Date('2026-10-23T12:00:00.000Z'),
     repeatability: 'month',
+    visibility: 'shared',
     createdAt: new Date('2026-10-22T12:00:00.000Z'),
     updatedAt: new Date('2026-10-22T12:00:00.000Z'),
   },
@@ -43,6 +46,7 @@ export const INITIAL_EVENTS: EventModel[] = [
     color: 'yellow',
     date: new Date('2026-10-23T13:00:00.000Z'),
     repeatability: 'year',
+    visibility: 'shared',
     createdAt: new Date('2026-10-22T13:00:00.000Z'),
     updatedAt: new Date('2026-10-22T13:00:00.000Z'),
   },
@@ -76,7 +80,8 @@ export class MockEventsDatabase {
       title,
       color,
       date,
-      repeatability,
+      repeatability: repeatability || 'none',
+      visibility: 'shared',
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -97,7 +102,7 @@ export class MockEventsDatabase {
     event.title = title;
     event.color = color;
     event.date = date;
-    event.repeatability = repeatability;
+    event.repeatability = repeatability || event.repeatability;
     event.updatedAt = new Date();
   }
 

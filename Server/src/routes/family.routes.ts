@@ -12,7 +12,7 @@ import {
 
 const familyRouter = Router();
 
-familyRouter.get("/my", familyController.getCurrentUserFamily);
+familyRouter.get("/my", familyController.getMyFamily);
 familyRouter.post("/", validateCreateFamily, familyController.createFamily);
 familyRouter.get(
   "/:familyId",
