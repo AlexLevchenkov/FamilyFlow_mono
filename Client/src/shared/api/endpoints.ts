@@ -35,9 +35,9 @@ export const API_ENDPOINTS = {
     BY_ID: (id: number) => `/family/${id}`,
     MY: '/family/my',
     MEMBERS: {
-      ROOT: (familyId: number) => `/family/${familyId}/member`,
-      BY_ID: (familyId: number, userId: number) =>
-        `/family/${familyId}/member/${userId}`,
+      ROOT: (familyId: number) => `/family/${familyId}/members`,
+      BY_ID: (familyId: number, memberId: number) =>
+        `/family/${familyId}/members/${memberId}`,
     },
   },
 } as const;

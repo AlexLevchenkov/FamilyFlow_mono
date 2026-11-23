@@ -1,11 +1,13 @@
 import { Panel } from '@ui';
-import { TaskListPanel, useTasksContext } from '@features/tasks';
+import { TaskListPanel, useTasksManager } from '@features/tasks';
 
 export function MyTasks() {
   const {
     tasks,
     visibleTasks,
     completed,
+    activeCount,
+    todayTasksCount,
     filter,
     setFilter,
     showComposer,
@@ -14,21 +16,13 @@ export function MyTasks() {
     setNewTask,
     addTask,
     toggleTask,
-  } = useTasksContext();
-
-  const todayTasksCount = tasks.filter(t => {
-    if (!t.rawTask?.date) return false;
-    const d = new Date(t.rawTask.date);
-    return (
-      !isNaN(d.getTime()) && d.toDateString() === new Date().toDateString()
-    );
-  }).length;
+  } = useTasksManager({ limit: 100 });
 
   return (
     <div className="space-y-6">
       <section className="grid gap-4 sm:grid-cols-3">
         {[
-          ['Активні', tasks.length - completed, 'Потребують уваги', '#7656d0'],
+          ['Активні', activeCount, 'Потребують уваги', '#7656d0'],
           ['Виконані', completed, 'Гарний темп', '#39b29d'],
           [
             'На сьогодні',
@@ -55,7 +49,7 @@ export function MyTasks() {
 
       <TaskListPanel
         title="Усі справи"
-        description="Плануйте особисті й сімейні задачі в одному списку"
+        description={`${completed} з ${tasks.length} вже виконано`}
         visibleTasks={visibleTasks}
         filter={filter}
         setFilter={setFilter}
@@ -66,6 +60,7 @@ export function MyTasks() {
         addTask={addTask}
         toggleTask={toggleTask}
         showHeaderAdd
+        groupByDay={true}
       />
     </div>
   );

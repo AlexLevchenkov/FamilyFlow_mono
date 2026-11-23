@@ -91,6 +91,11 @@ const paths: Record<IconName, React.ReactNode> = {
       <circle cx="12" cy="12" r="2.5" />
     </>
   ),
+  trash: (
+    <>
+      <path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5" />
+    </>
+  ),
   arrow: <path d="m5 12 6-6M5 12l6 6M5 12h14" />,
 };
 

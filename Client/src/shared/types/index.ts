@@ -18,4 +18,5 @@ export type IconName =
   | 'mail'
   | 'lock'
   | 'eye'
+  | 'trash'
   | 'arrow';

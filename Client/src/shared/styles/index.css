@@ -41,6 +41,7 @@ body {
   --color-border: #ebe9f2;
   --color-borderHover: #ded8ee;
   --color-borderStrong: #c9c6d5;
+  --color-page-control-border: #c9c6d5;
 
   /* Focus */
   --color-focus: #9a7cde;
