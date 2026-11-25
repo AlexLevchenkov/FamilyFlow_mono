@@ -167,6 +167,7 @@ export function Family() {
                 const name =
                   member.user?.name ||
                   member.user?.email ||
+                  member.email ||
                   'Член родини';
                 const initials =
                   name
@@ -192,6 +193,11 @@ export function Family() {
                       <p className="mt-1 truncate text-xs text-textMuted" title={member.user.email}>
                         {member.user.email}
                       </p>
+                    )}
+                    {member.activated === false && (
+                      <span className="mt-3 inline-flex rounded-full bg-[#fff3df] px-3 py-1 text-xs font-extrabold text-[#b77a21]">
+                        Очікує реєстрації
+                      </span>
                     )}
 
                     {member.role === 'OWNER' ? (

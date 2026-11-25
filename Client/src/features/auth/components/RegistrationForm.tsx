@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { isAxiosError } from 'axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Icon, Input, Popup } from '@ui';
@@ -14,6 +14,9 @@ export const RegistrationForm = () => {
   const [showSuccessfulPopup, setShowSuccessfulPopup] = useState(false);
   const registration = useRegistration();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const inviteToken = searchParams.get('invite') || undefined;
+  const invitedEmail = searchParams.get('email') || undefined;
 
   const {
     register,
@@ -22,10 +25,18 @@ export const RegistrationForm = () => {
     setError,
   } = useForm<RegistrationData>({
     resolver: zodResolver(registrationSchema),
+    defaultValues: {
+      email: invitedEmail || '',
+    },
   });
 
   const onSubmit = (data: RegistrationData) => {
-    registration.mutate(data, {
+    registration.mutate(
+      {
+        ...data,
+        inviteToken,
+      },
+      {
       onSuccess: () => setShowSuccessfulPopup(true),
       onError: error => {
         if (isAxiosError(error)) {
@@ -37,7 +48,8 @@ export const RegistrationForm = () => {
           }
         }
       },
-    });
+      }
+    );
   };
 
   return (

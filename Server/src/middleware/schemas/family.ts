@@ -43,7 +43,6 @@ const deleteFamilySchema = z.object({
 const addFamilyMemberSchema = z
   .object({
     familyId: familyIdParamSchema,
-    userId: z.coerce.number().int().positive(),
     email: z
       .string()
       .trim()
@@ -54,7 +53,6 @@ const addFamilyMemberSchema = z
   })
   .refine(
     data =>
-      data.userId !== undefined ||
       (data.email !== undefined && data.email.length > 0),
     {
       message: "Must provide either userId or email to add a member",
@@ -68,7 +66,7 @@ const updateFamilyMemberRoleSchema = z.object({
 });
 
 const deleteFamilyMemberSchema = z.object({
-  id: familyIdParamSchema,
+  familyId: familyIdParamSchema,
   memberId: memberIdParamSchema,
 });
 

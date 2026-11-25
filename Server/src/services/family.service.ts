@@ -8,13 +8,15 @@ import type {
   UpdateFamilyBody,
   WithUserId,
   FamilyModel,
+  FamilyMemberModel,
 } from "@familyflow/contracts";
-import { Family, FamilyMember } from "@prisma/client";
+import { randomUUID } from "crypto";
 import {
   alreadyExistError,
   badRequestError,
   forbiddenError,
   notFoundError,
+  sendFamilyInvitation,
 } from "@utils";
 
 class FamilyService {
@@ -111,7 +113,7 @@ class FamilyService {
   async createFamily({
     userId,
     name,
-  }: WithUserId<CreateFamilyBody>): Promise<Family> {
+  }: WithUserId<CreateFamilyBody>): Promise<FamilyModel> {
     const existingMembership = await prisma.familyMember.findFirst({
       where: { userId },
     });
@@ -173,7 +175,7 @@ class FamilyService {
     userId,
     familyId,
     name,
-  }: WithUserId<UpdateFamilyBody> & FamilyById): Promise<Family> {
+  }: WithUserId<UpdateFamilyBody> & FamilyById): Promise<FamilyModel> {
     const membership = await prisma.familyMember.findUnique({
       where: {
         familyId_userId: {
@@ -251,7 +253,7 @@ class FamilyService {
   async getMembers({
     userId,
     familyId,
-  }: WithUserId<FamilyById>): Promise<FamilyMember[]> {
+  }: WithUserId<FamilyById>): Promise<FamilyMemberModel[]> {
     const membership = await prisma.familyMember.findUnique({
       where: {
         familyId_userId: {
@@ -288,7 +290,7 @@ class FamilyService {
     familyId,
     email,
     role = "MEMBER",
-  }: WithUserId<AddMemberBody> & FamilyById): Promise<FamilyMember> {
+  }: WithUserId<AddMemberBody> & FamilyById): Promise<FamilyMemberModel> {
     const currentMember = await prisma.familyMember.findUnique({
       where: {
         familyId_userId: {
@@ -318,7 +320,40 @@ class FamilyService {
     });
 
     if (!targetUser) {
-      throw notFoundError("User not found");
+      const existingPending = await prisma.familyMember.findFirst({
+        where: {
+          familyId,
+          email,
+          activated: false,
+        },
+      });
+
+      if (existingPending) {
+        const inviteToken = existingPending.inviteToken || randomUUID();
+        if (!existingPending.inviteToken) {
+          await prisma.familyMember.update({
+            where: { id: existingPending.id },
+            data: { inviteToken },
+          });
+        }
+        await sendFamilyInvitation(email, inviteToken);
+        return existingPending;
+      }
+
+      const inviteToken = randomUUID();
+      const pendingMember = await prisma.familyMember.create({
+        data: {
+          familyId,
+          userId: null,
+          email,
+          inviteToken,
+          activated: false,
+          role: role || "MEMBER",
+        },
+      });
+
+      await sendFamilyInvitation(email, inviteToken);
+      return pendingMember;
     }
 
     const existingInFamily = await prisma.familyMember.findUnique({
@@ -346,6 +381,8 @@ class FamilyService {
       data: {
         familyId,
         userId: targetUser.id,
+        email,
+        activated: true,
         role: role || "MEMBER",
       },
       include: {
@@ -388,10 +425,7 @@ class FamilyService {
 
     const targetMember = await prisma.familyMember.findUnique({
       where: {
-        familyId_userId: {
-          familyId,
-          userId: memberId,
-        },
+        id: memberId,
       },
     });
 
@@ -427,10 +461,7 @@ class FamilyService {
 
     const updated = await prisma.familyMember.update({
       where: {
-        familyId_userId: {
-          familyId,
-          userId: memberId,
-        },
+        id: memberId,
       },
       data: { role },
       include: {
@@ -455,10 +486,7 @@ class FamilyService {
   }: WithUserId<FamilyWithMemberId>) {
     const currentMember = await prisma.familyMember.findUnique({
       where: {
-        familyId_userId: {
-          familyId,
-          userId,
-        },
+        id: userId
       },
     });
 
@@ -468,10 +496,7 @@ class FamilyService {
 
     const targetMember = await prisma.familyMember.findUnique({
       where: {
-        familyId_userId: {
-          familyId,
-          userId: memberId,
-        },
+        id: memberId
       },
     });
 
@@ -514,10 +539,7 @@ class FamilyService {
 
     await prisma.familyMember.delete({
       where: {
-        familyId_userId: {
-          familyId,
-          userId: memberId,
-        },
+        id: memberId
       },
     });
 

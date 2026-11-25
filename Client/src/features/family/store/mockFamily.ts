@@ -120,21 +120,24 @@ export class MockFamilyDatabase {
 
   public addMember({
     familyId,
-    userId,
+    email,
     role,
   }: WithUserId<AddMemberBody> & FamilyById) {
     const family = this.getFamilyById(familyId);
-    if (!family || !userId) return;
+    if (!family) return;
 
     if (!family.members) {
       family.members = [];
     }
 
+    const existingUser = INITIAL_USERS.find(user => user.email === email);
     const newMember: FamilyMemberModel = {
       id: family.members.length + 1,
-      userId,
+      userId: existingUser?.id || null,
       familyId,
       role: role || 'MEMBER',
+      activated: Boolean(existingUser),
+      email,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

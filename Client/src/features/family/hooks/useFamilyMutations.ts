@@ -79,7 +79,7 @@ export function useAddMemberMutation() {
     }) => familyApi.addMember(familyId, dto),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: familyKeys.all });
-      toast.success('Учасника успішно додано!');
+      toast.success('Запрошення надіслано або учасника успішно додано!');
     },
     onError: (error: unknown) => {
       const message = getMutationErrorMessage(error, 'Не вдалося додати учасника');

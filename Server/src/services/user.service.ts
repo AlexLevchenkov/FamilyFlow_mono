@@ -61,6 +61,7 @@ class UserService {
     email,
     password,
     name,
+    inviteToken,
   }: RegisterUserBody): Promise<UserPublic> {
     const haveUser = await prisma.user.findFirst({
       where: {
@@ -74,14 +75,44 @@ class UserService {
 
     const newAccessToken = crypto.randomUUID();
 
-    const user = await prisma.user.create({
-      data: {
-        email: email,
-        password: bcryptjs.hashSync(password, 10),
-        name: name,
-        resetToken: newAccessToken,
-        emailVerified: false,
-      },
+    const user = await prisma.$transaction(async tx => {
+      const createdUser = await tx.user.create({
+        data: {
+          email,
+          password: bcryptjs.hashSync(password, 10),
+          name,
+          resetToken: newAccessToken,
+          emailVerified: false,
+        },
+      });
+
+      const pendingMember = inviteToken
+        ? await tx.familyMember.findFirst({
+            where: {
+              inviteToken,
+              email,
+              activated: false,
+            },
+          })
+        : await tx.familyMember.findFirst({
+            where: {
+              email,
+              activated: false,
+            },
+          });
+
+      if (pendingMember) {
+        await tx.familyMember.update({
+          where: { id: pendingMember.id },
+          data: {
+            userId: createdUser.id,
+            activated: true,
+            inviteToken: null,
+          },
+        });
+      }
+
+      return createdUser;
     });
 
     await sendCheckEmail(email, newAccessToken);

@@ -12,6 +12,7 @@ const registerSchema = z.object({
   email: z.string().email(),
   password: passwordSchema,
   name: z.string().min(3).max(30),
+  inviteToken: z.string().trim().min(1).optional(),
 });
 
 const updateUserSchema = z.object({

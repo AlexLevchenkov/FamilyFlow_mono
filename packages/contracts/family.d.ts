@@ -9,12 +9,14 @@ export interface FamilyMemberUser {
 
 export interface FamilyMemberModel {
   id: number;
-  userId: number;
+  userId: number | null;
   familyId: number;
   role: FamilyRole;
+  activated?: boolean;
+  email?: string | null;
   createdAt: Date;
   updatedAt: Date;
-  user?: FamilyMemberUser;
+  user?: FamilyMemberUser | null;
 }
 
 export interface FamilyModel {

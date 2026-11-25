@@ -48,12 +48,14 @@ class UserController {
 
   async register(req: Request, res: Response) {
     try {
-      const { email, password, name } = req.validated?.body as RegisterUserBody;
+      const { email, password, name, inviteToken } = req.validated
+        ?.body as RegisterUserBody;
 
       const user: UserPublic = await userService.register({
         email,
         password,
         name,
+        inviteToken,
       });
       apiResponse(res, user, 201);
     } catch (error: any) {
