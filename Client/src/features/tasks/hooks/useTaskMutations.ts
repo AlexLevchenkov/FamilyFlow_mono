@@ -1,7 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { getApiErrorMessage } from '@api';
 import { tasksApi, taskKeys } from '@features/tasks';
-import type { CreateTaskBody, UpdateTaskBody } from '@types';
+import type {
+  CreateTaskBody,
+  PaginatedTasksResponse,
+  TaskModel,
+  UpdateTaskBody,
+} from '@types';
 import { toast } from '@ui';
+
+type TaskQueryData = TaskModel | PaginatedTasksResponse;
 
 export function useCreateTaskMutation() {
   const queryClient = useQueryClient();
@@ -12,12 +20,8 @@ export function useCreateTaskMutation() {
       queryClient.invalidateQueries({ queryKey: taskKeys.all });
       toast.success('Справу успішно додано!');
     },
-    onError: (error: any) => {
-      const message =
-        error?.response?.data?.error ||
-        error?.message ||
-        'Не вдалося створити справу';
-      toast.error(message);
+    onError: (error: unknown) => {
+      toast.error(getApiErrorMessage(error, 'Не вдалося створити справу'));
     },
   });
 }
@@ -31,44 +35,35 @@ export function useUpdateTaskMutation() {
     onMutate: async ({ id, dto }) => {
       await queryClient.cancelQueries({ queryKey: taskKeys.all });
 
-      const previousQueries = queryClient.getQueriesData({
+      const previousQueries = queryClient.getQueriesData<TaskQueryData>({
         queryKey: taskKeys.all,
       });
 
-      queryClient.setQueriesData(
+      queryClient.setQueriesData<TaskQueryData>(
         { queryKey: taskKeys.all },
-        (oldData: any) => {
+        oldData => {
           if (!oldData) return oldData;
-          if (Array.isArray(oldData)) {
-            return oldData.map((item: any) =>
-              item.id === id ? { ...item, ...dto } : item
-            );
-          }
-          if (oldData.data && Array.isArray(oldData.data)) {
+          if ('data' in oldData) {
             return {
               ...oldData,
-              data: oldData.data.map((item: any) =>
+              data: oldData.data.map(item =>
                 item.id === id ? { ...item, ...dto } : item
               ),
             };
           }
-          return oldData;
+          return oldData.id === id ? { ...oldData, ...dto } : oldData;
         }
       );
 
       return { previousQueries };
     },
-    onError: (error: any, _variables, context) => {
+    onError: (error: unknown, _variables, context) => {
       if (context?.previousQueries) {
         context.previousQueries.forEach(([queryKey, data]) => {
           queryClient.setQueryData(queryKey, data);
         });
       }
-      const message =
-        error?.response?.data?.error ||
-        error?.message ||
-        'Не вдалося оновити справу';
-      toast.error(message);
+      toast.error(getApiErrorMessage(error, 'Не вдалося оновити справу'));
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: taskKeys.all });
@@ -85,12 +80,8 @@ export function useDeleteTaskMutation() {
       queryClient.invalidateQueries({ queryKey: taskKeys.all });
       toast.success('Справу видалено');
     },
-    onError: (error: any) => {
-      const message =
-        error?.response?.data?.error ||
-        error?.message ||
-        'Не вдалося видалити справу';
-      toast.error(message);
+    onError: (error: unknown) => {
+      toast.error(getApiErrorMessage(error, 'Не вдалося видалити справу'));
     },
   });
 }
