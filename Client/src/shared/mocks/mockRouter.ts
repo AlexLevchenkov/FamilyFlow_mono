@@ -3,6 +3,7 @@ import {
   eventHandlers,
   familyHandlers,
   goalHandlers,
+  searchHandlers,
   taskHandlers,
   userHandlers,
 } from './handlers';
@@ -79,14 +80,17 @@ register('POST', '/goal', goalHandlers.createGoal);
 register('PUT', '/goal/:id', goalHandlers.updateGoal);
 register('DELETE', '/goal/:id', goalHandlers.deleteGoal);
 
-// 5. Task routes
+// 5. Search routes
+register('GET', '/search', searchHandlers.search);
+
+// 6. Task routes
 register('GET', '/task/:id', taskHandlers.getTaskById);
 register('GET', '/task', taskHandlers.getTasks);
 register('POST', '/task', taskHandlers.createTask);
 register('PUT', '/task/:id', taskHandlers.updateTask);
 register('DELETE', '/task/:id', taskHandlers.deleteTask);
 
-// 6. User routes
+// 7. User routes
 register('GET', '/user/me', userHandlers.getMe);
 register('GET', '/user/:id', userHandlers.getUserById);
 register('GET', '/user', userHandlers.getUsers);

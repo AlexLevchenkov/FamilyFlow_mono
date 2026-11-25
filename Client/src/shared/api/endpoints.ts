@@ -21,6 +21,9 @@ export const API_ENDPOINTS = {
     ROOT: '/goal',
     BY_ID: (id: number) => `/goal/${id}`,
   },
+  SEARCH: {
+    ROOT: '/search',
+  },
   TASK: {
     ROOT: '/task',
     BY_ID: (id: number) => `/task/${id}`,

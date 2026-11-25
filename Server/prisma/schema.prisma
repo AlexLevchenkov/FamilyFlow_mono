@@ -1,10 +1,12 @@
 generator client {
   provider = "prisma-client-js"
   engineType = "library"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
   provider = "postgresql"
+  extensions = [pg_trgm]
 }
 
 
@@ -21,6 +23,7 @@ model Event {
   updatedAt     DateTime      @updatedAt
 
   @@index([userId])
+  @@index([title(ops: raw("gin_trgm_ops"))], type: Gin, map: "Event_title_trgm_idx")
 }
 
 enum Repeatability {
@@ -113,6 +116,7 @@ model Goal {
   @@index([familyId, status])
   @@index([createdById])
   @@index([dueDate])
+  @@index([title(ops: raw("gin_trgm_ops"))], type: Gin, map: "Goal_title_trgm_idx")
 }
 
 model GoalStep {
@@ -159,6 +163,7 @@ model Task {
   updatedAt  DateTime   @updatedAt
 
   @@index([userId])
+  @@index([title(ops: raw("gin_trgm_ops"))], type: Gin, map: "Task_title_trgm_idx")
 }
 
 enum Visibility {

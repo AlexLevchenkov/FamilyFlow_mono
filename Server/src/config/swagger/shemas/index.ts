@@ -1,6 +1,7 @@
 import { authSchemas } from "./auth";
 import { eventSchemas } from "./event";
 import { goalSchemas } from "./goal";
+import { searchSchemas } from "./search";
 import { tasksSchemas } from "./task";
 import { usersSchemas } from "./user";
 import { familySchemas } from "./family";
@@ -10,6 +11,7 @@ export const schemas = {
   ...eventSchemas,
   ...familySchemas,
   ...goalSchemas,
+  ...searchSchemas,
   ...tasksSchemas,
   ...usersSchemas,
 };

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useCurrentUserQuery, useFamilyQuery } from '@hooks';
+import { HeaderSearch } from '@features/search';
 import { Icon, IconButton } from '@ui';
 import { formatDate } from '@utils';
 
@@ -53,16 +54,7 @@ export function Header({ activeNav }: HeaderProps) {
         </h1>
       </div>
       <div className="flex items-center gap-2.5">
-        <div className="relative hidden md:block">
-          <span className="absolute left-3 top-3 z-10 text-textMuted">
-            <Icon name="search" size={18} />
-          </span>
-          <input
-            aria-label="Пошук"
-            className="h-10 w-52 rounded-xl border border-border bg-white py-0 pr-3.5 pl-10 text-base font-bold outline-none transition-all duration-150 focus:w-60 focus:border-primaryLight"
-            placeholder="Знайти справу..."
-          />
-        </div>
+        <HeaderSearch />
         <IconButton aria-label="Сповіщення" className="relative">
           {' '}
           {/* TODO Add logic for notification bell  */}
