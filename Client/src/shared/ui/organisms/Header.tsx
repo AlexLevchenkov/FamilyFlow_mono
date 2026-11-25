@@ -55,12 +55,12 @@ export function Header({ activeNav }: HeaderProps) {
       </div>
       <div className="flex items-center gap-2.5">
         <HeaderSearch />
-        <IconButton aria-label="Сповіщення" className="relative">
+        {/* TODO Add logic for notification bell  */}
+        {/* <IconButton aria-label="Сповіщення" className="relative">
           {' '}
-          {/* TODO Add logic for notification bell  */}
           <Icon name="bell" size={20} />
           <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full border-2 border-white bg-danger" />
-        </IconButton>
+        </IconButton> */}
         <button className="hidden h-10 items-center gap-2 rounded-full bg-white px-3 text-sm font-extrabold shadow-sm sm:flex">
           {user?.avatar && !hasImageError ? (
             <img
