@@ -1,5 +1,6 @@
 import { TaskListPanel } from '@features/tasks';
 import type { Task } from '@features/tasks';
+import type { CreateTaskBody, UpdateTaskBody } from '@types';
 
 interface HomeTasksSectionProps {
   tasks: Task[];
@@ -11,8 +12,16 @@ interface HomeTasksSectionProps {
   setShowComposer: (show: boolean) => void;
   newTask: string;
   setNewTask: (task: string) => void;
-  addTask: () => void;
+  addTask: (task: CreateTaskBody, onSuccess?: () => void) => void;
+  editTask: (
+    id: number,
+    task: UpdateTaskBody,
+    onSuccess?: () => void
+  ) => void;
+  deleteTask: (id: number, onSuccess?: () => void) => void;
   toggleTask: (id: number) => void;
+  isSavingTask: boolean;
+  isDeleting: boolean;
   groupByDay?: boolean;
 }
 
@@ -27,7 +36,11 @@ export function HomeTasksSection({
   newTask,
   setNewTask,
   addTask,
+  editTask,
+  deleteTask,
   toggleTask,
+  isSavingTask,
+  isDeleting,
   groupByDay = true,
 }: HomeTasksSectionProps) {
   return (
@@ -42,7 +55,11 @@ export function HomeTasksSection({
       newTask={newTask}
       setNewTask={setNewTask}
       addTask={addTask}
+      editTask={editTask}
+      deleteTask={deleteTask}
       toggleTask={toggleTask}
+      isSavingTask={isSavingTask}
+      isDeleting={isDeleting}
       showFooterAdd
       groupByDay={groupByDay}
     />

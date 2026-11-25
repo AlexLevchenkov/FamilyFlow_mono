@@ -1,6 +1,10 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTasksQuery } from '@hooks';
-import type { GetUserTasksParams } from '@types';
+import type {
+  CreateTaskBody,
+  GetUserTasksParams,
+  UpdateTaskBody,
+} from '@types';
 import type { Task } from '../types';
 import { mapTaskModelToUiTask } from '../types';
 import {
@@ -90,30 +94,31 @@ export function useTasksManager(params?: GetUserTasksParams) {
   );
 
   const addTask = useCallback(
-    (defaultDate?: Date) => {
-      if (!newTask.trim()) return;
-
-      createTaskMutation.mutate(
-        {
-          title: newTask.trim(),
-          type: 'personal',
-          visibility: 'shared',
-          date: defaultDate || new Date(),
+    (task: CreateTaskBody, onSuccess?: () => void) => {
+      createTaskMutation.mutate(task, {
+        onSuccess: () => {
+          setNewTask('');
+          setShowComposer(false);
+          onSuccess?.();
         },
-        {
-          onSuccess: () => {
-            setNewTask('');
-            setShowComposer(false);
-          },
-        }
+      });
+    },
+    [createTaskMutation]
+  );
+
+  const editTask = useCallback(
+    (id: number, task: UpdateTaskBody, onSuccess?: () => void) => {
+      updateTaskMutation.mutate(
+        { id, dto: task },
+        { onSuccess }
       );
     },
-    [newTask, createTaskMutation]
+    [updateTaskMutation]
   );
 
   const deleteTask = useCallback(
-    (id: number) => {
-      deleteTaskMutation.mutate(id);
+    (id: number, onSuccess?: () => void) => {
+      deleteTaskMutation.mutate(id, { onSuccess });
     },
     [deleteTaskMutation]
   );
@@ -133,6 +138,7 @@ export function useTasksManager(params?: GetUserTasksParams) {
     newTask,
     setNewTask,
     addTask,
+    editTask,
     toggleTask,
     deleteTask,
     isLoading,
@@ -142,5 +148,7 @@ export function useTasksManager(params?: GetUserTasksParams) {
     refetch,
     isCreating: createTaskMutation.isPending,
     isUpdating: updateTaskMutation.isPending,
+    isDeleting: deleteTaskMutation.isPending,
+    isSavingTask: createTaskMutation.isPending || updateTaskMutation.isPending,
   };
 }

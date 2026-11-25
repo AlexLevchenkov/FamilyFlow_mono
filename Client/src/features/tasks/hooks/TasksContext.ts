@@ -1,5 +1,6 @@
 import { createContext } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
+import type { CreateTaskBody, UpdateTaskBody } from '@types';
 import type { Task } from '../types';
 
 export interface TasksContextValue {
@@ -14,10 +15,16 @@ export interface TasksContextValue {
   setShowComposer: (show: boolean) => void;
   newTask: string;
   setNewTask: (task: string) => void;
-  addTask: () => void;
+  addTask: (task: CreateTaskBody, onSuccess?: () => void) => void;
+  editTask: (
+    id: number,
+    task: UpdateTaskBody,
+    onSuccess?: () => void
+  ) => void;
   toggleTask: (id: number) => void;
-  deleteTask?: (id: number) => void;
+  deleteTask?: (id: number, onSuccess?: () => void) => void;
   isLoading?: boolean;
+  isDeleting?: boolean;
 }
 
 export const TasksContext = createContext<TasksContextValue | null>(null);

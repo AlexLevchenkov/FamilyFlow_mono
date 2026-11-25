@@ -46,7 +46,11 @@ export function Home() {
     newTask,
     setNewTask,
     addTask,
+    editTask,
+    deleteTask,
     toggleTask,
+    isSavingTask,
+    isDeleting,
   } = useTasksManager({
     from: fromIso,
     to: toIso,
@@ -83,7 +87,11 @@ export function Home() {
           newTask={newTask}
           setNewTask={setNewTask}
           addTask={addTask}
+          editTask={editTask}
+          deleteTask={deleteTask}
           toggleTask={toggleTask}
+          isSavingTask={isSavingTask}
+          isDeleting={isDeleting}
           groupByDay={true}
         />
 

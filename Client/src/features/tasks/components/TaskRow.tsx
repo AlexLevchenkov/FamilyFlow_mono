@@ -4,9 +4,10 @@ import type { Task } from '../types';
 interface TaskRowProps {
   task: Task;
   toggleTask: (id: number) => void;
+  onEdit: (task: Task) => void;
 }
 
-export function TaskRow({ task, toggleTask }: TaskRowProps) {
+export function TaskRow({ task, toggleTask, onEdit }: TaskRowProps) {
   return (
     <article
       className={`flex min-h-12 items-center gap-2 rounded-xl border border-background px-2 py-3
@@ -50,7 +51,12 @@ export function TaskRow({ task, toggleTask }: TaskRowProps) {
       <span className="hidden items-center gap-1.5 text-xs font-bold text-lightText md:flex">
         <Icon name="clock" size={15} /> {task.time}
       </span>
-      <button aria-label="Більше дій" className="text-textPlaceholder cursor-pointer">
+      <button
+        aria-label={`Редагувати справу: ${task.title}`}
+        className="cursor-pointer text-textPlaceholder"
+        type="button"
+        onClick={() => onEdit(task)}
+      >
         <Icon name="more" size={19} />
       </button>
     </article>

@@ -15,7 +15,11 @@ export function MyTasks() {
     newTask,
     setNewTask,
     addTask,
+    editTask,
+    deleteTask,
     toggleTask,
+    isSavingTask,
+    isDeleting,
   } = useTasksManager({ limit: 100 });
 
   return (
@@ -58,7 +62,11 @@ export function MyTasks() {
         newTask={newTask}
         setNewTask={setNewTask}
         addTask={addTask}
+        editTask={editTask}
+        deleteTask={deleteTask}
         toggleTask={toggleTask}
+        isSavingTask={isSavingTask}
+        isDeleting={isDeleting}
         showHeaderAdd
         groupByDay={true}
       />

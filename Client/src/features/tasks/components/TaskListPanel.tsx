@@ -1,7 +1,10 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Icon, Panel, PrimaryButton } from '@ui';
 import { TaskRow } from './TaskRow';
+import { TaskFormModal } from './TaskFormModal';
+import type { TaskFormValues } from './TaskFormModal';
 import type { Task } from '../types';
+import type { CreateTaskBody, TaskModel, UpdateTaskBody } from '@types';
 
 interface TaskListPanelProps {
   title: string;
@@ -13,8 +16,16 @@ interface TaskListPanelProps {
   setShowComposer: (show: boolean) => void;
   newTask: string;
   setNewTask: (task: string) => void;
-  addTask: () => void;
+  addTask: (task: CreateTaskBody, onSuccess?: () => void) => void;
+  editTask: (
+    id: number,
+    task: UpdateTaskBody,
+    onSuccess?: () => void
+  ) => void;
+  deleteTask: (id: number, onSuccess?: () => void) => void;
   toggleTask: (id: number) => void;
+  isSavingTask: boolean;
+  isDeleting: boolean;
   showHeaderAdd?: boolean;
   showFooterAdd?: boolean;
   groupByDay?: boolean;
@@ -107,15 +118,66 @@ export function TaskListPanel({
   newTask,
   setNewTask,
   addTask,
+  editTask,
+  deleteTask,
   toggleTask,
+  isSavingTask,
+  isDeleting,
   showHeaderAdd = false,
   showFooterAdd = false,
   groupByDay = false,
 }: TaskListPanelProps) {
+  const [isTaskFormOpen, setIsTaskFormOpen] = useState(false);
+  const [taskToEdit, setTaskToEdit] = useState<TaskModel>();
+
   const dayGroups = useMemo(() => {
     if (!groupByDay) return [];
     return getDayGroups(visibleTasks);
   }, [groupByDay, visibleTasks]);
+
+  function openCreateTaskForm() {
+    if (!newTask.trim()) return;
+    setTaskToEdit(undefined);
+    setIsTaskFormOpen(true);
+  }
+
+  function openEditTaskForm(task: Task) {
+    if (!task.rawTask) return;
+    setTaskToEdit(task.rawTask);
+    setIsTaskFormOpen(true);
+  }
+
+  function closeTaskForm() {
+    setIsTaskFormOpen(false);
+    setTaskToEdit(undefined);
+  }
+
+  function saveTask(values: TaskFormValues) {
+    if (taskToEdit) {
+      editTask(
+        taskToEdit.id,
+        {
+          title: values.title,
+          type: values.type,
+          visibility: taskToEdit.visibility,
+          status: taskToEdit.status,
+          date: values.date,
+        },
+        closeTaskForm
+      );
+      return;
+    }
+
+    addTask(
+      {
+        title: values.title,
+        type: values.type,
+        visibility: 'shared',
+        date: values.date,
+      },
+      closeTaskForm
+    );
+  }
 
   return (
     <Panel as="section">
@@ -181,7 +243,12 @@ export function TaskListPanel({
               </div>
               <div className="space-y-2.5">
                 {group.tasks.map(task => (
-                  <TaskRow key={task.id} task={task} toggleTask={toggleTask} />
+                  <TaskRow
+                    key={task.id}
+                    task={task}
+                    toggleTask={toggleTask}
+                    onEdit={openEditTaskForm}
+                  />
                 ))}
               </div>
             </div>
@@ -189,7 +256,12 @@ export function TaskListPanel({
         ) : (
           <div className="space-y-2.5">
             {visibleTasks.map(task => (
-              <TaskRow key={task.id} task={task} toggleTask={toggleTask} />
+              <TaskRow
+                key={task.id}
+                task={task}
+                toggleTask={toggleTask}
+                onEdit={openEditTaskForm}
+              />
             ))}
           </div>
         )}
@@ -201,11 +273,15 @@ export function TaskListPanel({
             autoFocus
             className="min-w-0 flex-1 rounded-xl border border-primarySoft bg-white px-4 py-2.5 text-sm font-bold outline-none focus:border-primary"
             onChange={event => setNewTask(event.target.value)}
-            onKeyDown={event => event.key === 'Enter' && addTask()}
+            onKeyDown={event => event.key === 'Enter' && openCreateTaskForm()}
             placeholder="Напишіть нову справу..."
             value={newTask}
           />
-          <PrimaryButton className="justify-center" onClick={addTask}>
+          <PrimaryButton
+            className="justify-center"
+            disabled={!newTask.trim()}
+            onClick={openCreateTaskForm}
+          >
             Додати
           </PrimaryButton>
           <button
@@ -225,6 +301,21 @@ export function TaskListPanel({
         >
           <Icon name="plus" size={18} /> Додати нову справу
         </button>
+      )}
+
+      {isTaskFormOpen && (
+        <TaskFormModal
+          initialTitle={newTask}
+          isOpen={isTaskFormOpen}
+          isDeleting={isDeleting}
+          isPending={isSavingTask}
+          task={taskToEdit}
+          onClose={closeTaskForm}
+          onDelete={() => {
+            if (taskToEdit) deleteTask(taskToEdit.id, closeTaskForm);
+          }}
+          onSubmit={saveTask}
+        />
       )}
     </Panel>
   );
