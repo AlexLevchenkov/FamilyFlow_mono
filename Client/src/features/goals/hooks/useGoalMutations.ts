@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { getApiErrorMessage } from '@api';
 import { goalsApi, goalKeys } from '@features/goals/api';
 import type { CreateGoalBody, UpdateGoalBody } from '@types';
 import { toast } from '@ui';
@@ -12,12 +13,8 @@ export function useCreateGoalMutation() {
       queryClient.invalidateQueries({ queryKey: goalKeys.all });
       toast.success('Ціль успішно створено!');
     },
-    onError: (error: any) => {
-      const message =
-        error?.response?.data?.error ||
-        error?.message ||
-        'Не вдалося створити ціль';
-      toast.error(message);
+    onError: (error: unknown) => {
+      toast.error(getApiErrorMessage(error, 'Не вдалося створити ціль'));
     },
   });
 }
@@ -32,12 +29,8 @@ export function useUpdateGoalMutation() {
       queryClient.invalidateQueries({ queryKey: goalKeys.all });
       toast.success('Зміни успішно збережено!');
     },
-    onError: (error: any) => {
-      const message =
-        error?.response?.data?.error ||
-        error?.message ||
-        'Не вдалося зберегти зміни';
-      toast.error(message);
+    onError: (error: unknown) => {
+      toast.error(getApiErrorMessage(error, 'Не вдалося зберегти зміни'));
     },
   });
 }
@@ -51,12 +44,8 @@ export function useDeleteGoalMutation() {
       queryClient.invalidateQueries({ queryKey: goalKeys.all });
       toast.success('Ціль успішно видалено!');
     },
-    onError: (error: any) => {
-      const message =
-        error?.response?.data?.error ||
-        error?.message ||
-        'Не вдалося видалити ціль';
-      toast.error(message);
+    onError: (error: unknown) => {
+      toast.error(getApiErrorMessage(error, 'Не вдалося видалити ціль'));
     },
   });
 }

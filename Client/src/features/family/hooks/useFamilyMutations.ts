@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import { getApiErrorMessage } from '@api';
 import { familyApi, familyKeys } from '../api';
 import type {
   AddMemberBody,
@@ -8,14 +8,6 @@ import type {
   UpdateMemberRoleBody,
 } from '@types';
 import { toast } from '@ui';
-
-function getMutationErrorMessage(error: unknown, fallback: string) {
-  if (axios.isAxiosError<{ error?: string }>(error)) {
-    return error.response?.data?.error || error.message || fallback;
-  }
-  if (error instanceof Error) return error.message || fallback;
-  return fallback;
-}
 
 export function useCreateFamilyMutation() {
   const queryClient = useQueryClient();
@@ -27,7 +19,7 @@ export function useCreateFamilyMutation() {
       toast.success('Родину успішно створено!');
     },
     onError: (error: unknown) => {
-      const message = getMutationErrorMessage(error, 'Не вдалося створити родину');
+      const message = getApiErrorMessage(error, 'Не вдалося створити родину');
       toast.error(message);
     },
   });
@@ -44,7 +36,7 @@ export function useUpdateFamilyMutation() {
       toast.success('Назву родини оновлено!');
     },
     onError: (error: unknown) => {
-      const message = getMutationErrorMessage(error, 'Не вдалося оновити родину');
+      const message = getApiErrorMessage(error, 'Не вдалося оновити родину');
       toast.error(message);
     },
   });
@@ -60,7 +52,7 @@ export function useDeleteFamilyMutation() {
       toast.success('Родину видалено');
     },
     onError: (error: unknown) => {
-      const message = getMutationErrorMessage(error, 'Не вдалося видалити родину');
+      const message = getApiErrorMessage(error, 'Не вдалося видалити родину');
       toast.error(message);
     },
   });
@@ -70,19 +62,14 @@ export function useAddMemberMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({
-      familyId,
-      dto,
-    }: {
-      familyId: number;
-      dto: AddMemberBody;
-    }) => familyApi.addMember(familyId, dto),
+    mutationFn: ({ familyId, dto }: { familyId: number; dto: AddMemberBody }) =>
+      familyApi.addMember(familyId, dto),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: familyKeys.all });
       toast.success('Запрошення надіслано або учасника успішно додано!');
     },
     onError: (error: unknown) => {
-      const message = getMutationErrorMessage(error, 'Не вдалося додати учасника');
+      const message = getApiErrorMessage(error, 'Не вдалося додати учасника');
       toast.error(message);
     },
   });
@@ -106,7 +93,7 @@ export function useUpdateMemberRoleMutation() {
       toast.success('Роль учасника оновлено!');
     },
     onError: (error: unknown) => {
-      const message = getMutationErrorMessage(error, 'Не вдалося змінити роль');
+      const message = getApiErrorMessage(error, 'Не вдалося змінити роль');
       toast.error(message);
     },
   });
@@ -128,7 +115,7 @@ export function useRemoveMemberMutation() {
       toast.success('Учасника вилучено з родини');
     },
     onError: (error: unknown) => {
-      const message = getMutationErrorMessage(error, 'Не вдалося вилучити учасника');
+      const message = getApiErrorMessage(error, 'Не вдалося вилучити учасника');
       toast.error(message);
     },
   });

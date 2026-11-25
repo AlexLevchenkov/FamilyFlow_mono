@@ -3,7 +3,8 @@ import { useCurrentUserQuery } from '@hooks';
 
 export const ProfileUser = () => {
   const { user, refetch } = useCurrentUserQuery();
-  const [hasImageError, setHasImageError] = useState(false);
+  const [failedAvatar, setFailedAvatar] = useState<string | null>(null);
+  const hasImageError = user?.avatar === failedAvatar;
   const name = user?.name || 'Велком';
   const initials = name
     .split(/\s+/)
@@ -17,10 +18,6 @@ export const ProfileUser = () => {
     refetch();
   }, [refetch]);
 
-  useEffect(() => {
-    setHasImageError(false);
-  }, [user?.avatar]);
-
   return (
     <div className="flex min-w-0 flex-1 items-center gap-3">
       {user?.avatar && !hasImageError ? (
@@ -28,7 +25,7 @@ export const ProfileUser = () => {
           alt={name}
           className="size-10 shrink-0 rounded-full object-cover"
           src={user.avatar}
-          onError={() => setHasImageError(true)}
+          onError={() => setFailedAvatar(user.avatar)}
         />
       ) : (
         <div className="grid size-10 shrink-0 place-items-center rounded-full bg-gradientBlue text-sm font-extrabold text-info">

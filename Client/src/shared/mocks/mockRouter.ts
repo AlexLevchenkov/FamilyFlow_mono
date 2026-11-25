@@ -10,7 +10,7 @@ import {
 import type { MockRequestContext, MockResponseResult } from './handlers';
 
 type RouteHandler = (
-  ctx: MockRequestContext<any>
+  ctx: MockRequestContext<unknown>
 ) => MockResponseResult | Promise<MockResponseResult>;
 
 interface RouteDefinition {
@@ -23,7 +23,13 @@ interface RouteDefinition {
 
 const routes: RouteDefinition[] = [];
 
-function register(method: string, path: string, handler: RouteHandler) {
+function register<T = unknown>(
+  method: string,
+  path: string,
+  handler: (
+    ctx: MockRequestContext<T>
+  ) => MockResponseResult | Promise<MockResponseResult>
+) {
   const paramNames: string[] = [];
   const regexPattern = path.replace(/:([a-zA-Z0-9_]+)/g, (_, paramName) => {
     paramNames.push(paramName);
@@ -34,7 +40,7 @@ function register(method: string, path: string, handler: RouteHandler) {
     method: method.toUpperCase(),
     pattern: new RegExp(`^${regexPattern}$`),
     paramNames,
-    handler,
+    handler: ctx => handler({ ...ctx, body: ctx.body as T | null | undefined }),
     description: `${method.toUpperCase()} ${path}`,
   });
 }

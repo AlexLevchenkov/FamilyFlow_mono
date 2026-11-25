@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { getApiErrorMessage } from '@api';
 import { eventApi, eventKeys } from '@features/event/api';
 import type { CreateEventBody, UpdateEventBody } from '@types';
 import { toast } from '@ui';
@@ -12,12 +13,8 @@ export function useCreateEventMutation() {
       queryClient.invalidateQueries({ queryKey: eventKeys.all });
       toast.success('Подію успішно створено!');
     },
-    onError: (error: any) => {
-      const message =
-        error?.response?.data?.error ||
-        error?.message ||
-        'Не вдалося створити подію';
-      toast.error(message);
+    onError: (error: unknown) => {
+      toast.error(getApiErrorMessage(error, 'Не вдалося створити подію'));
     },
   });
 }
@@ -32,12 +29,8 @@ export function useUpdateEventMutation() {
       queryClient.invalidateQueries({ queryKey: eventKeys.all });
       toast.success('Подію успішно оновлено!');
     },
-    onError: (error: any) => {
-      const message =
-        error?.response?.data?.error ||
-        error?.message ||
-        'Не вдалося оновити подію';
-      toast.error(message);
+    onError: (error: unknown) => {
+      toast.error(getApiErrorMessage(error, 'Не вдалося оновити подію'));
     },
   });
 }
@@ -51,13 +44,8 @@ export function useDeleteEventMutation() {
       queryClient.invalidateQueries({ queryKey: eventKeys.all });
       toast.success('Подію успішно видалено!');
     },
-    onError: (error: any) => {
-      const message =
-        error?.response?.data?.error ||
-        error?.message ||
-        'Не вдалося видалити подію';
-      toast.error(message);
+    onError: (error: unknown) => {
+      toast.error(getApiErrorMessage(error, 'Не вдалося видалити подію'));
     },
   });
 }
-
